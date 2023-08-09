@@ -4,6 +4,7 @@ import React from "react";
 
 const BranchInfoList = ({ branches }) => {
   const { pathname } = useRouter();
+
   return (
     <div>
       <div className="row h6">
@@ -35,7 +36,6 @@ const BranchInfoList = ({ branches }) => {
               </Link>
             }
           </div>
-
           <hr />
         </div>
       ))}

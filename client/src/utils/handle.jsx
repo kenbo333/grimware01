@@ -5,27 +5,30 @@ import { useCallback, useEffect, useState } from "react";
 //パスの変更
 export const usePathChange = () => {
   const router = useRouter();
-
-  const pathChange = (id) => {
-    router.replace({
-      pathname: router.pathname,
-      query: { ...router.query, sel: id },
-    });
+  const pathChange = (id, isShallow) => {
+    //falseでSSRの再レンダリング
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, sel: id },
+      },
+      undefined,
+      { shallow: isShallow }
+    );
   };
 
-  return pathChange;
+  return { pathChange };
 };
 
 //データベースに保存
 export const useSaveData = (formData) => {
   const router = useRouter();
-
   const saveData = useCallback(
     async (e) => {
       e.preventDefault();
       try {
         await apiClient.put(router.asPath, { formData });
-        alert("save");
+        console.log("saved");
       } catch (err) {
         console.log(err);
       }

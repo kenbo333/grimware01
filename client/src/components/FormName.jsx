@@ -249,8 +249,9 @@ export const BirthdateForm = (props) => {
             className="form-select"
             id="birthYear"
             onChange={handleChange}
-            value={birthYear}
+            value={birthYear || ""}
           >
+            <option value=""></option>
             {inputYears.map((inputYear) => (
               <option key={inputYear} value={inputYear}>
                 {inputYear}
@@ -263,8 +264,9 @@ export const BirthdateForm = (props) => {
             className="form-select"
             id="birthMonth"
             onChange={handleChange}
-            value={birthMonth}
+            value={birthMonth || ""}
           >
+            <option value=""></option>
             {inputMonths.map((inputMonth) => (
               <option key={inputMonth} value={inputMonth}>
                 {inputMonth}
@@ -277,8 +279,9 @@ export const BirthdateForm = (props) => {
             className="form-select"
             id="birthDay"
             onChange={handleChange}
-            value={birthDay}
+            value={birthDay || ""}
           >
+            <option value=""></option>
             {inputDays.map((inputDay) => (
               <option key={inputDay} value={inputDay}>
                 {inputDay}
@@ -288,12 +291,16 @@ export const BirthdateForm = (props) => {
         </div>
 
         <div className="col-sm-2">
-          <input
-            type="text"
-            className="form-control"
-            value={`${calculateAge(birthYear, birthMonth, birthDay)}歳`}
-            disabled
-          />
+          {birthYear && birthMonth && birthDay ? (
+            <input
+              type="text"
+              className="form-control"
+              value={`${calculateAge(birthYear, birthMonth, birthDay)}歳`}
+              disabled
+            />
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
     </div>

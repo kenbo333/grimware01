@@ -5,20 +5,22 @@ import Link from "next/link";
 import { getCompany } from "../../../utils/SSR";
 import { AddressForm, NameFrom, NameFrom_kana } from "@/components/FormName";
 import { BranchList } from "@/components/NameList";
-import { useFormUpdate } from "@/utils/handle";
+import { useFormUpdate, usePathChange, useSaveData } from "@/utils/handle";
+import { BranchHeader } from "@/components/Header";
+import apiClient from "../../../../lib/apiClient";
 
 export const getServerSideProps = (context) => getCompany(context);
 
-const branch = ({ company }) => {
+const Branch = ({ company }) => {
   const router = useRouter();
-  const querySel = parseInt(router.query.sel);
+  const querySel = router.query.sel;
   const branches = company.companyBranch;
 
   const selectedBranch = branches.find((item) => item.id === querySel);
   const emps = selectedBranch.companyEmployee;
 
   //オブジェクトから配列を除去
-  const { companyBranch, ...initialData } = selectedBranch;
+  const { companyEmployee, ...initialData } = selectedBranch;
   //inputの表示とオブジェクトの更新
   const { formData, updateObject } = useFormUpdate(initialData);
 
@@ -26,9 +28,37 @@ const branch = ({ company }) => {
   const tabs = { tab1: "詳細", tab2: "社員" };
   const [activeTab, setActiveTab] = useState("tab1");
 
+  //formData保存して更新
+  const { saveData } = useSaveData(formData);
+  const { pathChange } = usePathChange();
+  const handleSave = (e) => {
+    saveData(e);
+    pathChange(formData.id, false);
+  };
+
+  //社員作成
+  const handleCreateBranch = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await apiClient.post("/prime/branch/employee", {
+        fk_companyId: company.id,
+        fk_companyBranchId: selectedBranch.id,
+      });
+      const { id } = response.data;
+      router.push({
+        pathname: `/prime/branch/employee/${selectedBranch.id}`,
+        query: { sel: id },
+      });
+      console.log(id);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <Navbar />
+      <BranchHeader branches={branches} querySel={querySel} />
 
       <div className="container-lg">
         <div className="row">
@@ -97,6 +127,10 @@ const branch = ({ company }) => {
                   formData={formData}
                   updateObject={updateObject}
                 />
+                <hr />
+                <button className="btn btn-info" onClick={handleSave}>
+                  保存
+                </button>
               </div>
 
               {/* tab2 */}
@@ -134,6 +168,14 @@ const branch = ({ company }) => {
                       <hr />
                     </div>
                   ))}
+
+                  <button
+                    type="button"
+                    className="btn btn-success"
+                    onClick={handleCreateBranch}
+                  >
+                    新規登録
+                  </button>
                 </div>
               </div>
             </div>
@@ -144,4 +186,4 @@ const branch = ({ company }) => {
   );
 };
 
-export default branch;
+export default Branch;

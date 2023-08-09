@@ -3,7 +3,6 @@ const app = express();
 // const authRoute = require("./routers/auth");
 // const postsRoute = require("./routers/posts");
 // const usersRoute = require("./routers/users");
-const companyRoute = require("./routers/company");
 const primeRoute = require("./routers/prime");
 // const subRoute = require("./routers/sub");
 
@@ -19,7 +18,6 @@ app.use(express.json());
 // app.use("/api/auth", authRoute);
 // app.use("/api/posts", postsRoute);
 // app.use("/api/users", usersRoute);
-app.use("/api/company", companyRoute);
 app.use("/api/prime", primeRoute);
 // app.use("/api/sub", subRoute);
 

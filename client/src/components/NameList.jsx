@@ -2,14 +2,14 @@ import { usePathChange } from "@/utils/handle";
 import { useState } from "react";
 
 export const CompanyList = ({ companies, querySel }) => {
-  const pathChange = usePathChange();
+  const { pathChange } = usePathChange();
   // 検索用
   const [searchText, setSearchText] = useState("");
   const handleChange = (event) => {
     setSearchText(event.target.value);
   };
   const filteredCompanies = companies?.filter((company) =>
-    company.companyName.includes(searchText)
+    company.companyName?.includes(searchText)
   );
 
   return (
@@ -18,6 +18,7 @@ export const CompanyList = ({ companies, querySel }) => {
       <div className="my-2">
         <input
           type="text"
+          name="searchText"
           autoFocus
           placeholder="検索"
           value={searchText}
@@ -27,33 +28,35 @@ export const CompanyList = ({ companies, querySel }) => {
       </div>
 
       {/* 会社リスト */}
-      <div className="list-group">
-        {filteredCompanies?.map((company) => (
-          <button
-            key={company.id}
-            type="button"
-            className={`list-group-item ${
-              querySel === company.id ? "active" : ""
-            }`}
-            onClick={() => pathChange(company.id)}
-          >
-            {`${company.id} ${company.companyName}`}
-          </button>
-        ))}
+      <div className="overflow-auto" style={{ height: "750px" }}>
+        <div className="list-group">
+          {filteredCompanies?.map((company) => (
+            <button
+              key={company.id}
+              type="button"
+              className={`list-group-item ${
+                querySel === company.id ? "active" : ""
+              }`}
+              onClick={() => pathChange(company.id, true)}
+            >
+              {`${company.id} ${company.companyName}`}
+            </button>
+          ))}
+        </div>
       </div>
     </>
   );
 };
 
 export const BranchList = ({ branches, querySel }) => {
-  const pathChange = usePathChange();
+  const { pathChange } = usePathChange();
   // 検索用
   const [searchText, setSearchText] = useState("");
   const handleChange = (event) => {
     setSearchText(event.target.value);
   };
   const filteredBranches = branches?.filter((branch) =>
-    branch.branchName.includes(searchText)
+    branch.branchName?.includes(searchText)
   );
 
   return (
@@ -70,7 +73,7 @@ export const BranchList = ({ branches, querySel }) => {
         />
       </div>
 
-      {/* 会社リスト */}
+      {/* 店社リスト */}
       <div className="list-group">
         {filteredBranches?.map((branch) => (
           <button
@@ -79,7 +82,7 @@ export const BranchList = ({ branches, querySel }) => {
             className={`list-group-item ${
               querySel === branch.id ? "active" : ""
             }`}
-            onClick={() => pathChange(branch.id)}
+            onClick={() => pathChange(branch.id, true)}
           >
             {`${branch.id} ${branch.branchName}`}
           </button>
@@ -90,7 +93,7 @@ export const BranchList = ({ branches, querySel }) => {
 };
 
 export const EmpList = ({ emps, querySel }) => {
-  const pathChange = usePathChange();
+  const { pathChange } = usePathChange();
   // 検索用
   const [searchText, setSearchText] = useState("");
   const handleChange = (event) => {
@@ -115,14 +118,14 @@ export const EmpList = ({ emps, querySel }) => {
         />
       </div>
 
-      {/* 会社リスト */}
+      {/* 社員リスト */}
       <div className="list-group">
         {filteredEmps?.map((emp) => (
           <button
             key={emp.id}
             type="button"
             className={`list-group-item ${querySel === emp.id ? "active" : ""}`}
-            onClick={() => pathChange(emp.id)}
+            onClick={() => pathChange(emp.id, true)}
           >
             {`${emp.lastName} ${emp.firstName}`}
           </button>

@@ -8,59 +8,59 @@ datasource db {
 }
 
 model Company {
-  id               Int               @id @default(autoincrement())
-  companyName      String
-  companyName_kana String
-  f_ownCompany     Boolean
-  f_status         Boolean
-  f_prime          Boolean
-  f_sub            Boolean
-  f_purchase       Boolean
-  firstName        String?
-  firstName_kana   String?
-  lastName         String?
-  lastName_kana    String?
+  id               String            @id @default(uuid())
+  f_ownCompany     Boolean           @default(false)
+  f_status         Boolean           @default(true)
+  f_prime          Boolean           @default(false)
+  f_sub            Boolean           @default(false)
+  f_purchase       Boolean           @default(false)
+  companyName      String            @default("")
+  companyName_kana String            @default("")
+  firstName        String            @default("")
+  firstName_kana   String            @default("")
+  lastName         String            @default("")
+  lastName_kana    String            @default("")
   companyBranch    CompanyBranch[]
   companyEmployee  CompanyEmployee[]
 }
 
 model CompanyBranch {
-  id              Int               @id @default(autoincrement())
-  fk_companyId    Int
-  branchName      String
-  branchName_kana String
-  f_status        Boolean
-  postcode        String?
-  address1        String?
-  address2        String?
-  tel             String?
-  fax             String?
-  email           String?
+  id              String            @id @default(uuid())
+  fk_companyId    String
+  f_status        Boolean           @default(true)
+  branchName      String            @default("")
+  branchName_kana String            @default("")
+  postcode        String            @default("")
+  address1        String            @default("")
+  address2        String            @default("")
+  tel             String            @default("")
+  fax             String            @default("")
+  email           String            @default("")
   company         Company           @relation(fields: [fk_companyId], references: [id])
   companyEmployee CompanyEmployee[]
 }
 
 model CompanyEmployee {
-  id                 Int           @id @default(autoincrement())
-  fk_companyId       Int
-  fk_companyBranchId Int
-  firstName          String
-  lastName           String
-  firstName_kana     String?
-  lastName_kana      String?
-  f_status           Boolean
-  birthYear          Int?
-  birthMonth         Int?
-  birthDay           Int?
-  employmentStatus   String?
-  postcode           String?
-  address1           String?
-  address2           String?
-  tel                String?
-  fax                String?
-  email              String?
-  department         String?
-  position           String?
+  id                 String        @id @default(uuid())
+  fk_companyId       String
+  fk_companyBranchId String
+  f_status           Boolean       @default(true)
+  firstName          String        @default("")
+  lastName           String        @default("")
+  firstName_kana     String        @default("")
+  lastName_kana      String        @default("")
+  birthYear          String        @default("")
+  birthMonth         String        @default("")
+  birthDay           String        @default("")
+  employmentStatus   String        @default("")
+  postcode           String        @default("")
+  address1           String        @default("")
+  address2           String        @default("")
+  tel                String        @default("")
+  fax                String        @default("")
+  email              String        @default("")
+  department         String        @default("")
+  position           String        @default("")
   companyBranch      CompanyBranch @relation(fields: [fk_companyBranchId], references: [id])
   company            Company       @relation(fields: [fk_companyId], references: [id])
 }

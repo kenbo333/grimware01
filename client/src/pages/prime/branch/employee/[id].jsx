@@ -9,14 +9,15 @@ import {
   FullNameForm,
   NameFrom,
 } from "@/components/FormName";
-import { useFormUpdate } from "@/utils/handle";
+import { useFormUpdate, usePathChange, useSaveData } from "@/utils/handle";
 import { EmpList } from "@/components/NameList";
+import { EmployeeHeader } from "@/components/Header";
 
 export const getServerSideProps = (context) => getCompany(context);
 
-const employee = ({ company }) => {
+const Employee = ({ company }) => {
   const router = useRouter();
-  const querySel = parseInt(router.query.sel);
+  const querySel = router.query.sel;
   const branch = company;
   const emps = branch.companyEmployee;
 
@@ -31,9 +32,30 @@ const employee = ({ company }) => {
   const tabs = { tab1: "詳細", tab2: "備考" };
   const [activeTab, setActiveTab] = useState("tab1");
 
+  //formData保存して更新
+  const { saveData } = useSaveData(formData);
+  const { pathChange } = usePathChange();
+  const handleSave = (e) => {
+    saveData(e);
+    //所属が変更の場合クエリを変更
+    if (initialData.fk_companyBranchId === formData.fk_companyBranchId) {
+      pathChange(formData.id, false);
+    } else {
+      const index = emps.findIndex((item) => item.id === querySel);
+      if (index) {
+        pathChange(emps[index - 1].id, false);
+      } else {
+        // pathChange("", false);
+      }
+    }
+    // const index = emps.findIndex((item) => item.id === querySel);
+    // console.log(emps[index - 1]);
+  };
+
   return (
     <div>
       <Navbar />
+      <EmployeeHeader emps={emps} querySel={querySel} />
 
       <div className="container-lg">
         <div className="row">
@@ -120,6 +142,12 @@ const employee = ({ company }) => {
                 </div>
 
                 <AddressForm formData={formData} updateObject={updateObject} />
+
+                <hr />
+
+                <button className="btn btn-info" onClick={handleSave}>
+                  保存
+                </button>
               </div>
 
               {/* tab2 */}
@@ -140,4 +168,4 @@ const employee = ({ company }) => {
   );
 };
 
-export default employee;
+export default Employee;
