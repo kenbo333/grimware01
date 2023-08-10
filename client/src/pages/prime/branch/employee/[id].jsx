@@ -45,11 +45,9 @@ const Employee = ({ company }) => {
       if (index) {
         pathChange(emps[index - 1].id, false);
       } else {
-        // pathChange("", false);
+        pathChange("", false);
       }
     }
-    // const index = emps.findIndex((item) => item.id === querySel);
-    // console.log(emps[index - 1]);
   };
 
   return (
