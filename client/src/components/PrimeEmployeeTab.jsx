@@ -7,7 +7,7 @@ import { useFormUpdate, usePathChange, useSaveData } from "@/utils/handle";
 import apiClient from "../../lib/apiClient";
 import { useRouter } from "next/router";
 
-const PrimeDetail = ({ selectedCompany }) => {
+const PrimeEmployeeTab = ({ selectedCompany }) => {
   const branches = selectedCompany.companyBranch;
   const emps = selectedCompany.companyEmployee;
   const router = useRouter();
@@ -129,4 +129,4 @@ const PrimeDetail = ({ selectedCompany }) => {
   );
 };
 
-export default PrimeDetail;
+export default PrimeEmployeeTab;

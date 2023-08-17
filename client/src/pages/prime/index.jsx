@@ -1,4 +1,4 @@
-import PrimeDetail from "@/components/PrimeDetail";
+import PrimeCompanyTab from "@/components/PrimeCompanyTab";
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/router";
 import { getCompanies } from "../../utils/SSR";
@@ -12,7 +12,6 @@ const company = (props) => {
   const { companies } = props;
   const router = useRouter();
   const querySel = router.query.sel;
-  const selectedCompany = companies.find((item) => item.id === querySel);
 
   return (
     <>
@@ -28,12 +27,7 @@ const company = (props) => {
           <div className="col-8">
             {querySel ? (
               <div>
-                <div className="my-3">
-                  <div>会社id: {selectedCompany?.id}</div>
-                  <div>会社名: {selectedCompany?.companyName}</div>
-                </div>
-
-                <PrimeDetail selectedCompany={selectedCompany} />
+                <PrimeCompanyTab companies={companies} querySel={querySel} />
               </div>
             ) : (
               <div></div>

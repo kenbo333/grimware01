@@ -84,7 +84,7 @@ export const BranchList = ({ branches, querySel }) => {
             }`}
             onClick={() => pathChange(branch.id, true)}
           >
-            {`${branch.id} ${branch.branchName}`}
+            {`${branch.branchName}`}
           </button>
         ))}
       </div>

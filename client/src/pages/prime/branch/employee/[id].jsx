@@ -12,10 +12,12 @@ import {
 import { useFormUpdate, usePathChange, useSaveData } from "@/utils/handle";
 import { EmpList } from "@/components/NameList";
 import { EmployeeHeader } from "@/components/Header";
+import { SelectStatus } from "@/components/SelectStatus";
 
 export const getServerSideProps = (context) => getCompany(context);
 
 const Employee = ({ company }) => {
+  // console.log(company);
   const router = useRouter();
   const querySel = router.query.sel;
   const branch = company;
@@ -37,10 +39,15 @@ const Employee = ({ company }) => {
   const { pathChange } = usePathChange();
   const handleSave = (e) => {
     saveData(e);
-    //所属が変更の場合クエリを変更
-    if (initialData.fk_companyBranchId === formData.fk_companyBranchId) {
+    //所属とstatusが不変時
+    if (
+      selectedEmp.fk_companyBranchId === formData.fk_companyBranchId &&
+      selectedEmp.f_status === formData.f_status
+    ) {
+      //再レンダリング
       pathChange(formData.id, false);
     } else {
+      //変更時、selを上に移動
       const index = emps.findIndex((item) => item.id === querySel);
       if (index) {
         pathChange(emps[index - 1].id, false);
@@ -62,11 +69,16 @@ const Employee = ({ company }) => {
           </div>
 
           <div className="col-8">
-            <div className="my-3">
-              <div className="h1">{branch.company.companyName}</div>
-              <div className="h4">{branch.branchName}</div>
-              <div className="h4">
-                {selectedEmp.lastName} {selectedEmp.firstName}
+            <div className="d-flex justify-content-between my-3">
+              <div>
+                <div className="h1">{branch.company.companyName}</div>
+                <div className="h4">{branch.branchName}</div>
+                <div className="h4">
+                  {selectedEmp.lastName} {selectedEmp.firstName}
+                </div>
+              </div>
+              <div>
+                <SelectStatus formData={formData} updateObject={updateObject} />
               </div>
             </div>
 

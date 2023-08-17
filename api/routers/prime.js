@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 //元請会社取得
 router.get("/", async (req, res) => {
   const companies = await prisma.company.findMany({
-    where: { f_prime: true },
+    where: { f_prime: true, f_status: true },
     include: {
       companyBranch: true,
       companyEmployee: {
@@ -24,7 +24,12 @@ router.get("/branch/:id", async (req, res) => {
   const { id } = req.params;
   const company = await prisma.company.findUnique({
     where: { id },
-    include: { companyBranch: { include: { companyEmployee: true } } },
+    include: {
+      companyBranch: {
+        where: { f_status: true },
+        include: { companyEmployee: true },
+      },
+    },
   });
 
   return res.json(company);
@@ -47,7 +52,7 @@ router.get("/branch/employee/:branchId", async (req, res) => {
           },
         },
       },
-      companyEmployee: true,
+      companyEmployee: { where: { f_status: true } },
     },
   });
 
