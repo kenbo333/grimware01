@@ -5,12 +5,24 @@ const prisma = new PrismaClient();
 //------------get-------------------------------------------------
 //元請会社取得
 router.get("/", async (req, res) => {
+  let isStatus = true;
+  if (req.query.isStatus === "false") {
+    isStatus = false;
+  }
+
   const companies = await prisma.company.findMany({
-    where: { f_prime: true, f_status: true },
+    where: { f_prime: true, f_status: isStatus },
     include: {
-      companyBranch: true,
+      companyBranch: { where: { f_status: true } },
       companyEmployee: {
-        include: { companyBranch: { select: { branchName: true } } },
+        where: {
+          f_status: true,
+        },
+        include: {
+          companyBranch: {
+            select: { branchName: true },
+          },
+        },
       },
     },
     orderBy: { id: "asc" },
@@ -21,13 +33,24 @@ router.get("/", async (req, res) => {
 
 //1社取得
 router.get("/branch/:id", async (req, res) => {
+  let isStatus = true;
+  if (req.query.isStatus === "false") {
+    isStatus = false;
+  }
   const { id } = req.params;
+
   const company = await prisma.company.findUnique({
     where: { id },
     include: {
       companyBranch: {
-        where: { f_status: true },
-        include: { companyEmployee: true },
+        where: { f_status: isStatus },
+        include: {
+          companyEmployee: {
+            where: {
+              f_status: true,
+            },
+          },
+        },
       },
     },
   });
@@ -37,14 +60,21 @@ router.get("/branch/:id", async (req, res) => {
 
 //店社取得
 router.get("/branch/employee/:branchId", async (req, res) => {
+  let isStatus = true;
+  if (req.query.isStatus === "false") {
+    isStatus = false;
+  }
   const { branchId } = req.params;
+
   const branch = await prisma.companyBranch.findUnique({
     where: { id: branchId },
-    include: {
+    select: {
+      branchName: true,
       company: {
         select: {
           companyName: true,
           companyBranch: {
+            where: { f_status: true },
             select: {
               id: true,
               branchName: true,
@@ -52,7 +82,7 @@ router.get("/branch/employee/:branchId", async (req, res) => {
           },
         },
       },
-      companyEmployee: { where: { f_status: true } },
+      companyEmployee: { where: { f_status: isStatus } },
     },
   });
 
@@ -60,129 +90,86 @@ router.get("/branch/employee/:branchId", async (req, res) => {
 });
 
 //------create------------------------------------------
-//会社作成
-router.post("/", async (req, res) => {
+const createEntity = async (model, data, res) => {
   try {
-    const newCompany = await prisma.company.create({
-      data: req.body,
-    });
-    return res.status(201).json(newCompany);
+    const newEntity = await model.create({ data });
+    return res.status(201).json(newEntity);
   } catch (err) {
-    return console.log(err);
+    console.log(err);
+    return res.status(500).json({ error: "Failed to create entity" });
   }
+};
+
+// 会社作成
+router.post("/", (req, res) => {
+  createEntity(prisma.company, req.body, res);
 });
 
-//支店作成
-router.post("/branch", async (req, res) => {
-  try {
-    const newBranch = await prisma.CompanyBranch.create({
-      data: req.body,
-    });
-    return res.status(201).json(newBranch);
-  } catch (err) {
-    return console.log(err);
-  }
+// 支店作成
+router.post("/branch/:id", (req, res) => {
+  createEntity(prisma.companyBranch, req.body, res);
 });
 
-//社員作成
-router.post("/branch/employee", async (req, res) => {
-  try {
-    const newEmp = await prisma.companyEmployee.create({
-      data: req.body,
-    });
-    return res.status(201).json(newEmp);
-  } catch (err) {
-    return console.log(err);
-  }
-});
-
-//------update-------------------------------------------------
-//会社情報アップデート
-router.put("/", async (req, res) => {
-  const { formData } = req.body;
-  try {
-    const putCompany = await prisma.company.update({
-      where: {
-        id: req.query.sel,
-      },
-      data: formData,
-    });
-    return res.status(200).json(putCompany);
-  } catch (err) {
-    return console.log(err);
-  }
-});
-
-//店社情報アップデート
-router.put("/branch/:id", async (req, res) => {
-  const { formData } = req.body;
-  try {
-    const putBranch = await prisma.companyBranch.update({
-      where: {
-        id: req.query.sel,
-      },
-      data: formData,
-    });
-    return res.status(200).json(putBranch);
-  } catch (err) {
-    return console.log(err);
-  }
-});
-
-//社員情報アップデート
-router.put("/branch/employee/:id", async (req, res) => {
-  const { formData } = req.body;
-  try {
-    const putEmp = await prisma.companyEmployee.update({
-      where: {
-        id: req.query.sel,
-      },
-      data: formData,
-    });
-    return res.status(200).json(putEmp);
-  } catch (err) {
-    return console.log(err);
-  }
+// 社員作成
+router.post("/branch/employee/:id", (req, res) => {
+  createEntity(prisma.companyEmployee, req.body, res);
 });
 
 //-------delete----------------------------------------------
-//会社削除
-router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
+const deleteEntity = async (model, id, res) => {
   try {
-    const deleteCompany = await prisma.company.delete({
+    await model.delete({
       where: { id },
     });
-    return res.json(deleteCompany);
+    return res.status(204).send();
   } catch (err) {
-    return console.log(err);
+    console.log(err);
+    return res.status(500).json({ error: "Failed to delete entity" });
   }
+};
+
+// 会社削除
+router.delete("/", (req, res) => {
+  deleteEntity(prisma.company, req.query.sel, res);
 });
 
-//店社削除
-router.delete("/branch/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const deleteBranch = await prisma.companyBranch.delete({
-      where: { id },
-    });
-    return res.json(deleteBranch);
-  } catch (err) {
-    return console.log(err);
-  }
+// 店社削除
+router.delete("/branch/:id", (req, res) => {
+  deleteEntity(prisma.companyBranch, req.query.sel, res);
 });
 
-//社員削除
-router.delete("/branch/employee/:id", async (req, res) => {
-  const { id } = req.params;
+// 社員削除
+router.delete("/branch/employee/:id", (req, res) => {
+  deleteEntity(prisma.companyEmployee, req.query.sel, res);
+});
+
+//------update-------------------------------------------------
+const updateEntity = async (model, id, data, res) => {
   try {
-    const deleteEmployee = await prisma.companyEmployee.delete({
+    const updatedEntity = await model.update({
       where: { id },
+      data,
     });
-    return res.json(deleteEmployee);
+    return res.status(200).json(updatedEntity);
   } catch (err) {
-    return console.log(err);
+    console.log(err);
+    return res.status(500).json({ error: "Failed to update entity" });
   }
+};
+
+// 会社情報アップデート
+router.put("/", (req, res) => {
+  updateEntity(prisma.company, req.query.sel, req.body.formData, res);
+});
+
+// 店社情報アップデート
+router.put("/branch/:id", (req, res) => {
+  updateEntity(prisma.companyBranch, req.query.sel, req.body.formData, res);
+});
+
+// 社員情報アップデート
+router.put("/branch/employee/:id", (req, res) => {
+  updateEntity(prisma.companyEmployee, req.query.sel, req.body.formData, res);
 });
 
 module.exports = router;

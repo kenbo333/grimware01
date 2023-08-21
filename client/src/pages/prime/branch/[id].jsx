@@ -2,7 +2,7 @@ import Navbar from "@/components/Navbar";
 import { useRouter } from "next/router";
 import { getCompany } from "../../../utils/SSR";
 import { BranchList } from "@/components/NameList";
-import { BranchHeader } from "@/components/Header";
+import { Header } from "@/components/Header";
 import PrimeBranchTab from "@/components/PrimeBranchTab";
 
 export const getServerSideProps = (context) => getCompany(context);
@@ -16,7 +16,7 @@ const Branch = ({ company }) => {
   return (
     <>
       <Navbar />
-      <BranchHeader branches={branches} querySel={querySel} />
+      <Header items={branches} type="branch" querySel={querySel} />
 
       <div className="container-lg">
         <div className="row">

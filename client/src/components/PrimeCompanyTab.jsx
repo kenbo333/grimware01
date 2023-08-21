@@ -22,8 +22,8 @@ const PrimeCompanyTab = ({ companies, querySel }) => {
   //formData保存して更新
   const { saveData } = useSaveData(formData);
   const { pathChange } = usePathChange();
-  const handleSave = (e) => {
-    saveData(e);
+  const handleSave = () => {
+    saveData();
     //元請会社のチェック||statusが不変時
     if (
       company.f_prime === formData.f_prime &&
@@ -47,10 +47,9 @@ const PrimeCompanyTab = ({ companies, querySel }) => {
   const [activeTab, setActiveTab] = useState("tab1");
 
   //店社作成
-  const handleCreateBranch = async (e) => {
-    e.preventDefault();
+  const handleCreateBranch = async () => {
     try {
-      const response = await apiClient.post("/prime/branch/", {
+      const response = await apiClient.post("/prime/branch/1", {
         fk_companyId: company.id,
       });
       const { id } = response.data;
@@ -68,7 +67,6 @@ const PrimeCompanyTab = ({ companies, querySel }) => {
     <div>
       <div className="d-flex justify-content-between my-3">
         <div>
-          <div>会社id: {company.id}</div>
           <div className="h3">{company.companyName}</div>
         </div>
         <div>
@@ -116,7 +114,7 @@ const PrimeCompanyTab = ({ companies, querySel }) => {
               updateCheckbox={updateCheckbox}
             />
             <hr />
-            <button className="btn btn-info" onClick={handleSave}>
+            <button type="button" className="btn btn-info" onClick={handleSave}>
               保存
             </button>
           </form>

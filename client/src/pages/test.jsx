@@ -1,12 +1,12 @@
 import React from "react";
 
-const foo = "aoir";
-
 const MyComponent = () => {
   return (
-    <div>
-      <div>{foo}</div>
-    </div>
+    <form>
+      <div>
+        <button></button>
+      </div>
+    </form>
   );
 };
 

@@ -1,54 +1,66 @@
 import React, { useState } from "react";
-import { FullNameForm, NameFrom_kana } from "./FormName";
-import { TransactionType } from "./FormCheckbox";
-import BranchInfoList from "./BranchInfoList";
-import EmpInfoList from "./EmpInfoList";
+import { SelectStatus } from "./SelectStatus";
 import { useFormUpdate, usePathChange, useSaveData } from "@/utils/handle";
-import apiClient from "../../lib/apiClient";
-import { useRouter } from "next/router";
+import {
+  AddressForm,
+  BirthdateForm,
+  FormSelect,
+  FullNameForm,
+  NameFrom,
+} from "./FormName";
 
-const PrimeEmployeeTab = ({ selectedCompany }) => {
-  const branches = selectedCompany.companyBranch;
-  const emps = selectedCompany.companyEmployee;
-  const router = useRouter();
+const PrimeEmployeeTab = (props) => {
+  const { branch, emps, querySel } = props;
+
+  const emp = emps.find((item) => item.id === querySel);
+
+  //タブ設定
+  const tabs = { tab1: "詳細", tab2: "備考" };
+  const [activeTab, setActiveTab] = useState("tab1");
 
   //オブジェクトから配列を除去
-  const { companyBranch, companyEmployee, ...initialData } = selectedCompany;
+  const { ...initialData } = emp;
   //inputの表示とオブジェクトの更新
-  const { formData, updateObject, updateCheckbox } = useFormUpdate(initialData);
+  const { formData, updateObject } = useFormUpdate(initialData);
 
   //formData保存して更新
   const { saveData } = useSaveData(formData);
   const { pathChange } = usePathChange();
-  const handleSave = (e) => {
-    saveData(e);
-    pathChange(formData.id, false);
-  };
-
-  //タブ設定
-  const tabs = { tab1: "詳細", tab2: "店社", tab3: "社員" };
-  const [activeTab, setActiveTab] = useState("tab1");
-
-  //店社作成
-  const handleCreateBranch = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await apiClient.post("/prime/branch/", {
-        fk_companyId: selectedCompany.id,
-      });
-      const { id } = response.data;
-      router.push({
-        pathname: `/prime/branch/${selectedCompany.id}`,
-        query: { sel: id },
-      });
-      console.log(id);
-    } catch (err) {
-      console.log(err);
+  const handleSave = () => {
+    saveData();
+    //所属とstatusが不変時
+    if (
+      emp.fk_companyBranchId === formData.fk_companyBranchId &&
+      emp.f_status === formData.f_status
+    ) {
+      //再レンダリング
+      pathChange(formData.id, false);
+    } else {
+      //変更時、selを上に移動
+      const index = emps.findIndex((item) => item.id === querySel);
+      if (index) {
+        pathChange(emps[index - 1].id, false);
+      } else {
+        pathChange("", false);
+      }
     }
   };
 
   return (
     <div>
+      <div className="d-flex justify-content-between my-3">
+        <div>
+          <div className="h1">{branch.company.companyName}</div>
+          <div className="h4">{branch.branchName}</div>
+          <div className="h4">
+            {emp.lastName} {emp.firstName}
+          </div>
+        </div>
+        <div>
+          <SelectStatus formData={formData} updateObject={updateObject} />
+        </div>
+      </div>
+
       <ul className="nav nav-tabs">
         {Object.keys(tabs).map((tab) => (
           <li className="nav-item" key={tab}>
@@ -62,7 +74,6 @@ const PrimeEmployeeTab = ({ selectedCompany }) => {
         ))}
       </ul>
 
-      {/* tab */}
       <div className="tab-content">
         {/* tab1 */}
         <div
@@ -72,27 +83,56 @@ const PrimeEmployeeTab = ({ selectedCompany }) => {
           id="tab1"
           role="tabpanel"
         >
-          <form>
-            <NameFrom_kana
-              title="会社名"
-              nameKey="companyName"
+          <div className="mb-2">
+            <FormSelect
+              title="所属"
+              formData={formData}
+              updateObject={updateObject}
+              branches={branch.company.companyBranch}
+            />
+          </div>
+          <div className="mb-2">
+            <BirthdateForm formData={formData} updateObject={updateObject} />
+          </div>
+          <FullNameForm
+            title="氏名"
+            formData={formData}
+            updateObject={updateObject}
+          />
+          <div className="mb-2">
+            <NameFrom
+              title="役職"
+              nameKey="employmentStatus"
               formData={formData}
               updateObject={updateObject}
             />
-            <FullNameForm
-              title="代表者"
+            <NameFrom
+              title="部署"
+              nameKey="department"
               formData={formData}
               updateObject={updateObject}
             />
-            <TransactionType
+            <NameFrom
+              title="TEL"
+              nameKey="tel"
               formData={formData}
-              updateCheckbox={updateCheckbox}
+              updateObject={updateObject}
             />
-            <hr />
-            <button className="btn btn-info" onClick={handleSave}>
-              保存
-            </button>
-          </form>
+            <NameFrom
+              title="Email"
+              nameKey="email"
+              formData={formData}
+              updateObject={updateObject}
+            />
+          </div>
+
+          <AddressForm formData={formData} updateObject={updateObject} />
+
+          <hr />
+
+          <button type="button" className="btn btn-info" onClick={handleSave}>
+            保存
+          </button>
         </div>
 
         {/* tab2 */}
@@ -103,26 +143,7 @@ const PrimeEmployeeTab = ({ selectedCompany }) => {
           id="tab2"
           role="tabpanel"
         >
-          <BranchInfoList branches={branches} />
-
-          <button
-            type="button"
-            className="btn btn-success"
-            onClick={handleCreateBranch}
-          >
-            新規登録
-          </button>
-        </div>
-
-        {/* tab3 */}
-        <div
-          className={`tab-pane fade ${
-            activeTab === "tab3" ? "show active" : ""
-          } my-3`}
-          id="tab3"
-          role="tabpanel"
-        >
-          <EmpInfoList emps={emps} />
+          tab2
         </div>
       </div>
     </div>

@@ -39,7 +39,7 @@ export const CompanyList = ({ companies, querySel }) => {
               }`}
               onClick={() => pathChange(company.id, true)}
             >
-              {`${company.id} ${company.companyName}`}
+              {`${company.companyName}`}
             </button>
           ))}
         </div>
@@ -92,7 +92,7 @@ export const BranchList = ({ branches, querySel }) => {
   );
 };
 
-export const EmpList = ({ emps, querySel }) => {
+export const EmployeeList = ({ emps, querySel }) => {
   const { pathChange } = usePathChange();
   // 検索用
   const [searchText, setSearchText] = useState("");

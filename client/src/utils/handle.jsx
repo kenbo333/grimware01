@@ -23,18 +23,14 @@ export const usePathChange = () => {
 //データベースに保存
 export const useSaveData = (formData) => {
   const router = useRouter();
-  const saveData = useCallback(
-    async (e) => {
-      e.preventDefault();
-      try {
-        await apiClient.put(router.asPath, { formData });
-        console.log("saved");
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    [router, formData]
-  );
+  const saveData = useCallback(async () => {
+    try {
+      await apiClient.put(router.asPath, { formData });
+      console.log("saved");
+    } catch (err) {
+      console.log(err);
+    }
+  }, [router, formData]);
 
   return { saveData };
 };

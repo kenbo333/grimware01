@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar";
 import { useRouter } from "next/router";
 import { getCompanies } from "../../utils/SSR";
 import { CompanyList } from "@/components/NameList";
-import { CompanyHeader } from "@/components/Header";
+import { Header } from "@/components/Header";
 
 export const getServerSideProps = (context) => getCompanies(context);
 
@@ -16,7 +16,7 @@ const company = (props) => {
   return (
     <>
       <Navbar />
-      <CompanyHeader companies={companies} querySel={querySel} />
+      <Header items={companies} type="company" querySel={querySel} />
 
       <div className="container-lg">
         <div className="row">

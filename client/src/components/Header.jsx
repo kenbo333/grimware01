@@ -1,17 +1,31 @@
 import React from "react";
 import { usePathChange } from "@/utils/handle";
 import apiClient from "../../lib/apiClient";
+import { useRouter } from "next/router";
 
-export const CompanyHeader = ({ companies, querySel }) => {
+export const Header = ({ items, type, querySel }) => {
   const { pathChange } = usePathChange();
+  const router = useRouter();
+  const isStatus = router.query.isStatus === "false";
 
   //新規作成
-  const createCompany = async (e) => {
-    e.preventDefault();
+  const createItem = async () => {
+    let data = {};
+    if (type === "company") {
+      data = { f_prime: true };
+    } else if (type === "branch") {
+      data = {
+        fk_companyId: items[0].fk_companyId,
+      };
+    } else if (type === "employee") {
+      data = {
+        fk_companyId: items[0].fk_companyId,
+        fk_companyBranchId: items[0].fk_companyBranchId,
+      };
+    }
+
     try {
-      const response = await apiClient.post("/prime", {
-        f_prime: true,
-      });
+      const response = await apiClient.post(router.asPath, data);
       const { id } = response.data;
       pathChange(id, false);
       console.log(`create:${id}`);
@@ -22,16 +36,13 @@ export const CompanyHeader = ({ companies, querySel }) => {
   };
 
   //削除
-  const deleteCompany = async (e) => {
-    e.preventDefault();
+  const deleteItem = async () => {
     try {
-      //選択した配列番号を取得
-      const index = companies.findIndex((item) => item.id === querySel);
-      //削除
-      await apiClient.delete(`/prime/${querySel}`);
+      const index = items.findIndex((item) => item.id === querySel);
+      await apiClient.delete(router.asPath);
       //一番上以外は前の会社を選択
       if (index) {
-        pathChange(companies[index - 1].id, false);
+        pathChange(items[index - 1].id, false);
       } else {
         pathChange("", false);
       }
@@ -42,124 +53,46 @@ export const CompanyHeader = ({ companies, querySel }) => {
     }
   };
 
-  return (
-    <form className="bg-secondary">
-      <div className="d-flex justify-content-end">
-        <button className="btn btn-success m-1" onClick={createCompany}>
-          新規作成
-        </button>
-        <button className="btn btn-danger m-1" onClick={deleteCompany}>
-          削除
-        </button>
-      </div>
-    </form>
-  );
-};
-
-//---------------------------------------
-export const BranchHeader = ({ branches, querySel }) => {
-  const { pathChange } = usePathChange();
-
-  //新規作成
-  const createBranch = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await apiClient.post("/prime/branch", {
-        fk_companyId: branches[0].fk_companyId,
+  //status一覧の変更
+  const changeList = () => {
+    if (isStatus) {
+      router.push(router.asPath.split("?")[0]);
+    } else {
+      router.push({
+        pathname: router.asPath.split("?")[0],
+        query: { isStatus: false },
       });
-      const { id } = response.data;
-      pathChange(id, false);
-      console.log(`create:${id}`);
-    } catch (err) {
-      alert("err");
-      console.log(err);
-    }
-  };
-
-  //削除
-  const deleteBranch = async (e) => {
-    e.preventDefault();
-    try {
-      //選択した配列番号を取得
-      const index = branches.findIndex((item) => item.id === querySel);
-      //削除
-      await apiClient.delete(`/prime/branch/${querySel}`);
-      //一番上以外は前の会社を選択
-      if (index) {
-        pathChange(branches[index - 1].id, false);
-      } else {
-        pathChange("", false);
-      }
-      console.log("delete");
-    } catch (err) {
-      alert("err");
-      console.log(err);
     }
   };
 
   return (
     <form className="bg-secondary">
       <div className="d-flex justify-content-end">
-        <button className="btn btn-success m-1" onClick={createBranch}>
-          新規作成
+        {isStatus ? (
+          <div></div>
+        ) : (
+          <button
+            type="button"
+            className="btn btn-success m-1"
+            onClick={createItem}
+          >
+            新規作成
+          </button>
+        )}
+
+        <button
+          type="button"
+          className="btn btn-primary m-1"
+          onClick={changeList}
+        >
+          {isStatus ? "取引中一覧へ" : "停止中一覧へ"}
         </button>
-        <button className="btn btn-danger m-1" onClick={deleteBranch}>
-          削除
-        </button>
-      </div>
-    </form>
-  );
-};
 
-//---------------------------------------
-export const EmployeeHeader = ({ emps, querySel }) => {
-  const { pathChange } = usePathChange();
-
-  //新規作成
-  const createEmployee = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await apiClient.post("/prime/branch/employee", {
-        fk_companyId: emps[0].fk_companyId,
-        fk_companyBranchId: emps[0].fk_companyBranchId,
-      });
-      const { id } = response.data;
-      pathChange(id, false);
-      console.log(`create:${id}`);
-    } catch (err) {
-      alert("err");
-      console.log(err);
-    }
-  };
-
-  //削除
-  const deleteEmployee = async (e) => {
-    e.preventDefault();
-    try {
-      //選択した配列番号を取得
-      const index = emps.findIndex((item) => item.id === querySel);
-      //削除
-      await apiClient.delete(`/prime/branch/employee/${querySel}`);
-      //一番上以外は前の会社を選択
-      if (index) {
-        pathChange(emps[index - 1].id, false);
-      } else {
-        pathChange("", false);
-      }
-      console.log("delete");
-    } catch (err) {
-      alert("err");
-      console.log(err);
-    }
-  };
-
-  return (
-    <form className="bg-secondary">
-      <div className="d-flex justify-content-end">
-        <button className="btn btn-success m-1" onClick={createEmployee}>
-          新規作成
-        </button>
-        <button className="btn btn-danger m-1" onClick={deleteEmployee}>
+        <button
+          type="button"
+          className="btn btn-danger m-1"
+          onClick={deleteItem}
+        >
           削除
         </button>
       </div>

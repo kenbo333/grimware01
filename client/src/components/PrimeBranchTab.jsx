@@ -24,8 +24,8 @@ const PrimeBranchTab = ({ branches, querySel, companyName }) => {
   //formData保存して更新
   const { saveData } = useSaveData(formData);
   const { pathChange } = usePathChange();
-  const handleSave = (e) => {
-    saveData(e);
+  const handleSave = () => {
+    saveData();
     //statusが不変時
     if (branch.f_status === formData.f_status) {
       //再レンダリング
@@ -42,12 +42,11 @@ const PrimeBranchTab = ({ branches, querySel, companyName }) => {
   };
 
   //社員作成
-  const handleCreateBranch = async (e) => {
-    e.preventDefault();
+  const handleCreateBranch = async () => {
     try {
-      const response = await apiClient.post("/prime/branch/employee", {
-        fk_companyId: selectedBranch.fk_companyId,
-        fk_companyBranchId: selectedBranch.id,
+      const response = await apiClient.post("/prime/branch/employee/1", {
+        fk_companyId: branch.fk_companyId,
+        fk_companyBranchId: branch.id,
       });
       const { id } = response.data;
       router.push({
@@ -125,7 +124,7 @@ const PrimeBranchTab = ({ branches, querySel, companyName }) => {
             updateObject={updateObject}
           />
           <hr />
-          <button className="btn btn-info" onClick={handleSave}>
+          <button type="button" className="btn btn-info" onClick={handleSave}>
             保存
           </button>
         </div>
