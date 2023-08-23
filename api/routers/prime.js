@@ -41,7 +41,8 @@ router.get("/branch/:id", async (req, res) => {
 
   const company = await prisma.company.findUnique({
     where: { id },
-    include: {
+    select: {
+      companyName: true,
       companyBranch: {
         where: { f_status: isStatus },
         include: {
@@ -89,6 +90,7 @@ router.get("/branch/employee/:branchId", async (req, res) => {
   return res.json(branch);
 });
 
+//
 //------create------------------------------------------
 const createEntity = async (model, data, res) => {
   try {
@@ -115,6 +117,7 @@ router.post("/branch/employee/:id", (req, res) => {
   createEntity(prisma.companyEmployee, req.body, res);
 });
 
+//
 //-------delete----------------------------------------------
 const deleteEntity = async (model, id, res) => {
   try {
@@ -143,6 +146,7 @@ router.delete("/branch/employee/:id", (req, res) => {
   deleteEntity(prisma.companyEmployee, req.query.sel, res);
 });
 
+//
 //------update-------------------------------------------------
 const updateEntity = async (model, id, data, res) => {
   try {

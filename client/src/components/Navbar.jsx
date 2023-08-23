@@ -12,7 +12,7 @@ const Navbar = () => {
           <Link href="/sub">下請会社</Link>
         </div>
         <div className="p-2 bd-highlight">
-          {/* <Link href="/company">About</Link> */}
+          <Link href="/car">車両</Link>
         </div>
       </div>
     </nav>

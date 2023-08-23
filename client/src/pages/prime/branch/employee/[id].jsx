@@ -1,17 +1,17 @@
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/router";
-import { getCompany } from "../../../../utils/SSR";
-import { EmployeeList } from "@/components/NameList";
+import { getData } from "../../../../utils/SSR";
+import { EmployeeList, ItemList } from "@/components/ItemList";
 import { Header } from "@/components/Header";
 import PrimeEmployeeTab from "@/components/PrimeEmployeeTab";
 
-export const getServerSideProps = (context) => getCompany(context);
+export const getServerSideProps = (context) => getData(context);
 
-const Employee = ({ company }) => {
-  // console.log(company);
+const Employee = (props) => {
+  // console.log(props.data);
   const router = useRouter();
   const querySel = router.query.sel;
-  const branch = company;
+  const branch = props.data;
   const emps = branch.companyEmployee;
 
   return (
@@ -22,7 +22,7 @@ const Employee = ({ company }) => {
       <div className="container-lg">
         <div className="row">
           <div className="col-4">
-            <EmployeeList emps={emps} querySel={querySel} />
+            <ItemList items={emps} type="employee" querySel={querySel} />
           </div>
 
           {querySel ? (

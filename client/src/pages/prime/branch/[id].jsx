@@ -1,15 +1,16 @@
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/router";
-import { getCompany } from "../../../utils/SSR";
-import { BranchList } from "@/components/NameList";
+import { getData } from "../../../utils/SSR";
+import { ItemList } from "@/components/ItemList";
 import { Header } from "@/components/Header";
 import PrimeBranchTab from "@/components/PrimeBranchTab";
 
-export const getServerSideProps = (context) => getCompany(context);
+export const getServerSideProps = (context) => getData(context);
 
-const Branch = ({ company }) => {
-  // console.log(company);
-  const branches = company.companyBranch;
+const Branch = (props) => {
+  // console.log(props.data);
+  const branches = props.data.companyBranch;
+  const company = props.data;
   const router = useRouter();
   const querySel = router.query.sel;
 
@@ -21,22 +22,20 @@ const Branch = ({ company }) => {
       <div className="container-lg">
         <div className="row">
           <div className="col-4">
-            <BranchList branches={branches} querySel={querySel} />
+            <ItemList items={branches} type="branch" querySel={querySel} />
           </div>
 
-          <div className="col-8">
-            {querySel ? (
-              <div>
-                <PrimeBranchTab
-                  branches={branches}
-                  querySel={querySel}
-                  companyName={company.companyName}
-                />
-              </div>
-            ) : (
-              <div></div>
-            )}
-          </div>
+          {querySel ? (
+            <div className="col-8">
+              <PrimeBranchTab
+                branches={branches}
+                querySel={querySel}
+                companyName={company.companyName}
+              />
+            </div>
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
     </>

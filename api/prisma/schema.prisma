@@ -7,6 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//company
 model Company {
   id               String            @id @default(uuid())
   f_ownCompany     Boolean           @default(false)
@@ -63,4 +64,50 @@ model CompanyEmployee {
   position           String        @default("")
   companyBranch      CompanyBranch @relation(fields: [fk_companyBranchId], references: [id])
   company            Company       @relation(fields: [fk_companyId], references: [id])
+}
+
+//car
+model Car {
+  id                    String    @id @default(uuid())
+  fk_fuelType           String    @default("")
+  f_status              Boolean   @default(true)
+  carName               String    @default("")
+  frameNumber           String    @default("")
+  model                 String    @default("")
+  fuelConsumption       String    @default("")
+  carNumbar             String    @default("")
+  firstRegistration     String    @default("")
+  etcNumber             String    @default("")
+  inspectionStartDate   DateTime?
+  inspectionEndDate     DateTime?
+  compInsCompanyName    String    @default("")
+  compInsNumber         String    @default("")
+  compInsStartDate      DateTime?
+  compInsEndDate        DateTime?
+  compInsContractorName String    @default("")
+  volInsCompanyName     String    @default("")
+  volInsNumber          String    @default("")
+  volInsStartDate       DateTime?
+  volInsEndDate         DateTime?
+  volInsContractorName  String    @default("")
+  volInsAgeRequirement  String    @default("")
+  volInsPersonal        String    @default("")
+  volInsProperty        String    @default("")
+  volInsPassenger       String    @default("")
+  volInsCar             String    @default("")
+}
+
+model CarMaintenance {
+  id       String    @id @default(uuid())
+  fk_car   String
+  date     DateTime?
+  odometer String    @default("")
+  cost     String    @default("")
+  content  String    @default("")
+}
+
+model CarFuelType {
+  id       String @id @default(uuid())
+  fuelType String @default("")
+  price    String @default("")
 }
