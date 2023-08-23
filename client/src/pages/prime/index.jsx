@@ -24,15 +24,13 @@ const Company = (props) => {
             <ItemList items={companies} type="company" querySel={querySel} />
           </div>
 
-          <div className="col-8">
-            {querySel ? (
-              <div>
-                <PrimeCompanyTab companies={companies} querySel={querySel} />
-              </div>
-            ) : (
-              <div></div>
-            )}
-          </div>
+          {querySel ? (
+            <div className="col-8">
+              <PrimeCompanyTab companies={companies} querySel={querySel} />
+            </div>
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
     </>

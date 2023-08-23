@@ -1,16 +1,9 @@
 export const NameFrom_kana = (props) => {
   //title,nameKey,formData,updateObject
-  let nameKey;
-  let nameKey_kana;
-  let value;
-  let value_kana;
-
-  if (props.nameKey) {
-    nameKey = props.nameKey;
-    nameKey_kana = `${nameKey}_kana`;
-    value = props.formData[nameKey];
-    value_kana = props.formData[nameKey_kana];
-  }
+  const nameKey = props.nameKey;
+  const nameKey_kana = `${props.nameKey}_kana`;
+  const value = props.formData[nameKey];
+  const value_kana = props.formData[nameKey_kana];
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -34,7 +27,7 @@ export const NameFrom_kana = (props) => {
         </div>
       </div>
 
-      <div className="row mb-2">
+      <div className="row">
         <label className="col-form-label col-sm-2" htmlFor={nameKey}>
           {props.title}
         </label>
@@ -55,13 +48,8 @@ export const NameFrom_kana = (props) => {
 //
 export const NameFrom = (props) => {
   //title,nameKey,formData,updateObject
-  let nameKey;
-  let value;
-
-  if (props.title) {
-    nameKey = props.nameKey;
-    value = props.formData[nameKey];
-  }
+  const nameKey = props.nameKey;
+  const value = props.formData[nameKey];
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -124,7 +112,7 @@ export const FullNameForm = (props) => {
         </div>
       </div>
 
-      <div className="row mb-2">
+      <div className="row">
         <label className="col-form-label col-sm-2" htmlFor="lastName">
           {props.title}
         </label>
@@ -191,7 +179,7 @@ export const AddressForm = (props) => {
           />
         </div>
       </div>
-      <div className="row mb-2">
+      <div className="row">
         <label className="col-sm-2"></label>
         <div className="col-sm-10">
           <input
@@ -308,9 +296,9 @@ export const BirthdateForm = (props) => {
 };
 
 export const FormSelect = (props) => {
-  //title,formData,updateObject,branches
-  const { fk_companyBranchId } = props.formData;
-  const branches = props.branches;
+  //title,items,nameKey,formData,updateObject
+  const { title, items, nameKey } = props;
+  const value = props.formData[nameKey];
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -319,19 +307,19 @@ export const FormSelect = (props) => {
 
   return (
     <div className="row">
-      <label className="col-form-label col-sm-2" htmlFor="fk_companyBranchId">
-        所属
+      <label className="col-form-label col-sm-2" htmlFor={title}>
+        {title}
       </label>
       <div className="col-sm">
         <select
           className="form-select"
-          id="fk_companyBranchId"
+          id={title}
           onChange={handleChange}
-          value={fk_companyBranchId}
+          value={value}
         >
-          {branches.map((branch) => (
-            <option key={branch.id} value={branch.id}>
-              {branch.branchName}
+          {items.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.branchName}
             </option>
           ))}
         </select>

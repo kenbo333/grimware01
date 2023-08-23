@@ -11,17 +11,23 @@ export const Header = ({ items, type, querySel }) => {
   //新規作成
   const createItem = async () => {
     let data = {};
-    if (type === "company") {
-      data = { f_prime: true };
-    } else if (type === "branch") {
-      data = {
-        fk_companyId: items[0].fk_companyId,
-      };
-    } else if (type === "employee") {
-      data = {
-        fk_companyId: items[0].fk_companyId,
-        fk_companyBranchId: items[0].fk_companyBranchId,
-      };
+    switch (type) {
+      case "company":
+        data = { f_prime: true };
+        break;
+
+      case "branch":
+        data = {
+          fk_companyId: items[0].fk_companyId,
+        };
+        break;
+
+      case "employee":
+        data = {
+          fk_companyId: items[0].fk_companyId,
+          fk_companyBranchId: items[0].fk_companyBranchId,
+        };
+        break;
     }
 
     try {

@@ -3,12 +3,10 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 //------------get-------------------------------------------------
+const getIsStatus = (query) => query.isStatus !== "false";
 //元請会社取得
 router.get("/", async (req, res) => {
-  let isStatus = true;
-  if (req.query.isStatus === "false") {
-    isStatus = false;
-  }
+  const isStatus = getIsStatus(req.query);
 
   const companies = await prisma.company.findMany({
     where: { f_prime: true, f_status: isStatus },
@@ -27,16 +25,12 @@ router.get("/", async (req, res) => {
     },
     orderBy: { id: "asc" },
   });
-
-  return res.json(companies);
+  return res.status(200).json(companies);
 });
 
 //1社取得
 router.get("/branch/:id", async (req, res) => {
-  let isStatus = true;
-  if (req.query.isStatus === "false") {
-    isStatus = false;
-  }
+  const isStatus = getIsStatus(req.query);
   const { id } = req.params;
 
   const company = await prisma.company.findUnique({
@@ -55,16 +49,13 @@ router.get("/branch/:id", async (req, res) => {
       },
     },
   });
-
-  return res.json(company);
+  return res.status(200).json(company);
 });
 
 //店社取得
 router.get("/branch/employee/:branchId", async (req, res) => {
-  let isStatus = true;
-  if (req.query.isStatus === "false") {
-    isStatus = false;
-  }
+  const isStatus = getIsStatus(req.query);
+
   const { branchId } = req.params;
 
   const branch = await prisma.companyBranch.findUnique({
@@ -86,8 +77,7 @@ router.get("/branch/employee/:branchId", async (req, res) => {
       companyEmployee: { where: { f_status: isStatus } },
     },
   });
-
-  return res.json(branch);
+  return res.status(200).json(branch);
 });
 
 //
@@ -97,7 +87,7 @@ const createEntity = async (model, data, res) => {
     const newEntity = await model.create({ data });
     return res.status(201).json(newEntity);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.status(500).json({ error: "Failed to create entity" });
   }
 };
@@ -126,7 +116,7 @@ const deleteEntity = async (model, id, res) => {
     });
     return res.status(204).send();
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.status(500).json({ error: "Failed to delete entity" });
   }
 };
@@ -156,7 +146,7 @@ const updateEntity = async (model, id, data, res) => {
     });
     return res.status(200).json(updatedEntity);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.status(500).json({ error: "Failed to update entity" });
   }
 };

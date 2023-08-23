@@ -7,7 +7,7 @@ import {
   FormSelect,
   FullNameForm,
   NameFrom,
-} from "./FormName";
+} from "./InputForm";
 
 const PrimeEmployeeTab = (props) => {
   const { branch, emps, querySel } = props;
@@ -88,17 +88,20 @@ const PrimeEmployeeTab = (props) => {
               title="所属"
               formData={formData}
               updateObject={updateObject}
-              branches={branch.company.companyBranch}
+              items={branch.company.companyBranch}
+              nameKey={"fk_companyBranchId"}
             />
           </div>
           <div className="mb-2">
             <BirthdateForm formData={formData} updateObject={updateObject} />
           </div>
-          <FullNameForm
-            title="氏名"
-            formData={formData}
-            updateObject={updateObject}
-          />
+          <div className="mb-2">
+            <FullNameForm
+              title="氏名"
+              formData={formData}
+              updateObject={updateObject}
+            />
+          </div>
           <div className="mb-2">
             <NameFrom
               title="役職"
@@ -125,8 +128,9 @@ const PrimeEmployeeTab = (props) => {
               updateObject={updateObject}
             />
           </div>
-
-          <AddressForm formData={formData} updateObject={updateObject} />
+          <div>
+            <AddressForm formData={formData} updateObject={updateObject} />
+          </div>
 
           <hr />
 

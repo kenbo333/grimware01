@@ -1,4 +1,4 @@
-import { FullNameForm, NameFrom_kana } from "./FormName";
+import { FullNameForm, NameFrom_kana } from "./InputForm";
 import { TransactionType } from "./FormCheckbox";
 import BranchInfoList from "./BranchInfoList";
 import EmpInfoList from "./EmpInfoList";
@@ -98,22 +98,30 @@ const PrimeCompanyTab = ({ companies, querySel }) => {
           role="tabpanel"
         >
           <form>
-            <NameFrom_kana
-              title="会社名"
-              nameKey="companyName"
-              formData={formData}
-              updateObject={updateObject}
-            />
-            <FullNameForm
-              title="代表者"
-              formData={formData}
-              updateObject={updateObject}
-            />
-            <TransactionType
-              formData={formData}
-              updateCheckbox={updateCheckbox}
-            />
+            <div className="mb-2">
+              <NameFrom_kana
+                title="会社名"
+                nameKey="companyName"
+                formData={formData}
+                updateObject={updateObject}
+              />
+            </div>
+            <div className="mb-2">
+              <FullNameForm
+                title="代表者"
+                formData={formData}
+                updateObject={updateObject}
+              />
+            </div>
+            <div>
+              <TransactionType
+                formData={formData}
+                updateCheckbox={updateCheckbox}
+              />
+            </div>
+
             <hr />
+
             <button type="button" className="btn btn-info" onClick={handleSave}>
               保存
             </button>

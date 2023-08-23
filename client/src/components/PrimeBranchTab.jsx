@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AddressForm, NameFrom, NameFrom_kana } from "./FormName";
+import { AddressForm, NameFrom, NameFrom_kana } from "./InputForm";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useFormUpdate, usePathChange, useSaveData } from "@/utils/handle";
@@ -94,36 +94,42 @@ const PrimeBranchTab = ({ branches, querySel, companyName }) => {
           id="tab1"
           role="tabpanel"
         >
-          <NameFrom_kana
-            title={"店社名"}
-            nameKey={"branchName"}
-            formData={formData}
-            updateObject={updateObject}
-          />
+          <div className="mb-2">
+            <NameFrom_kana
+              title={"店社名"}
+              nameKey={"branchName"}
+              formData={formData}
+              updateObject={updateObject}
+            />
+          </div>
 
-          <div className="my-2">
+          <div className="mb-2">
             <AddressForm formData={formData} updateObject={updateObject} />
           </div>
 
-          <NameFrom
-            title="TEL"
-            nameKey="tel"
-            formData={formData}
-            updateObject={updateObject}
-          />
-          <NameFrom
-            title="FAX"
-            nameKey="fax"
-            formData={formData}
-            updateObject={updateObject}
-          />
-          <NameFrom
-            title="Email"
-            nameKey="email"
-            formData={formData}
-            updateObject={updateObject}
-          />
+          <div>
+            <NameFrom
+              title="TEL"
+              nameKey="tel"
+              formData={formData}
+              updateObject={updateObject}
+            />
+            <NameFrom
+              title="FAX"
+              nameKey="fax"
+              formData={formData}
+              updateObject={updateObject}
+            />
+            <NameFrom
+              title="Email"
+              nameKey="email"
+              formData={formData}
+              updateObject={updateObject}
+            />
+          </div>
+
           <hr />
+
           <button type="button" className="btn btn-info" onClick={handleSave}>
             保存
           </button>

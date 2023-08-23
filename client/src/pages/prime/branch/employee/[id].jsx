@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/router";
 import { getData } from "../../../../utils/SSR";
-import { EmployeeList, ItemList } from "@/components/ItemList";
+import { ItemList } from "@/components/ItemList";
 import { Header } from "@/components/Header";
 import PrimeEmployeeTab from "@/components/PrimeEmployeeTab";
 

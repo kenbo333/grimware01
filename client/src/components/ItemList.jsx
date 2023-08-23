@@ -34,6 +34,12 @@ export const ItemList = ({ items, type, querySel }) => {
           item.firstName.includes(searchText)
       );
       break;
+
+    case "car":
+      titles = ["carName"];
+      filteredItems = items?.filter((item) =>
+        item.carName?.includes(searchText)
+      );
   }
 
   return (

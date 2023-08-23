@@ -75,7 +75,7 @@ model Car {
   frameNumber           String    @default("")
   model                 String    @default("")
   fuelConsumption       String    @default("")
-  carNumbar             String    @default("")
+  carNumber             String    @default("")
   firstRegistration     String    @default("")
   etcNumber             String    @default("")
   inspectionStartDate   DateTime?
