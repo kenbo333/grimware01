@@ -1,5 +1,5 @@
 import { FullNameForm, NameFrom_kana } from "./InputForm";
-import { TransactionType } from "./FormCheckbox";
+import { TransactionType } from "./InputCheckboxForm";
 import BranchInfoList from "./BranchInfoList";
 import EmpInfoList from "./EmpInfoList";
 import { useFormUpdate, usePathChange, useSaveData } from "@/utils/handle";
@@ -8,7 +8,8 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { SelectStatus } from "./SelectStatus";
 
-const PrimeCompanyTab = ({ companies, querySel }) => {
+const PrimeCompanyTab = (props) => {
+  const { companies, querySel } = props;
   const company = companies.find((item) => item.id === querySel);
   const branches = company.companyBranch;
   const emps = company.companyEmployee;
@@ -17,7 +18,8 @@ const PrimeCompanyTab = ({ companies, querySel }) => {
   //オブジェクトから配列を除去
   const { companyBranch, companyEmployee, ...initialData } = company;
   //inputの表示とオブジェクトの更新
-  const { formData, updateObject, updateCheckbox } = useFormUpdate(initialData);
+  const formUtils = useFormUpdate(initialData);
+  const { formData } = formUtils;
 
   //formData保存して更新
   const { saveData } = useSaveData(formData);
@@ -70,7 +72,7 @@ const PrimeCompanyTab = ({ companies, querySel }) => {
           <div className="h3">{company.companyName}</div>
         </div>
         <div>
-          <SelectStatus formData={formData} updateObject={updateObject} />
+          <SelectStatus formUtils={formUtils} />
         </div>
       </div>
 
@@ -102,22 +104,14 @@ const PrimeCompanyTab = ({ companies, querySel }) => {
               <NameFrom_kana
                 title="会社名"
                 nameKey="companyName"
-                formData={formData}
-                updateObject={updateObject}
+                formUtils={formUtils}
               />
             </div>
             <div className="mb-2">
-              <FullNameForm
-                title="代表者"
-                formData={formData}
-                updateObject={updateObject}
-              />
+              <FullNameForm title="代表者" formUtils={formUtils} />
             </div>
             <div>
-              <TransactionType
-                formData={formData}
-                updateCheckbox={updateCheckbox}
-              />
+              <TransactionType formUtils={formUtils} />
             </div>
 
             <hr />

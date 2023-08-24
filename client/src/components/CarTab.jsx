@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { SelectStatus } from "./SelectStatus";
 import { useFormUpdate, usePathChange, useSaveData } from "@/utils/handle";
-import { NameFrom } from "./InputForm";
+import { NameFrom, StartEndForm } from "./InputForm";
 
-const CarTab = ({ cars, querySel }) => {
+const CarTab = (props) => {
+  const { cars, querySel } = props;
   const car = cars.find((item) => item.id === querySel);
 
   //オブジェクトから配列を除去
@@ -16,7 +17,7 @@ const CarTab = ({ cars, querySel }) => {
   const { pathChange } = usePathChange();
   const handleSave = () => {
     saveData();
-    //元請会社のチェック||statusが不変時
+    //statusが不変時
     if (car.f_status === formData.f_status) {
       //再レンダリング
       pathChange(formData.id, false);
@@ -68,12 +69,55 @@ const CarTab = ({ cars, querySel }) => {
           role="tabpanel"
         >
           <form>
-            <NameFrom
-              title="車両名"
-              nameKey="carName"
-              formData={formData}
-              updateObject={updateObject}
-            />
+            <div className="mb-2">
+              <NameFrom
+                title="車両名"
+                nameKey="carName"
+                formData={formData}
+                updateObject={updateObject}
+              />
+            </div>
+            <div className="mb-2">
+              <NameFrom
+                title="車両番号"
+                nameKey="carNumber"
+                formData={formData}
+                updateObject={updateObject}
+              />
+              <NameFrom
+                title="車体番号"
+                nameKey="frameNumber"
+                formData={formData}
+                updateObject={updateObject}
+              />
+              <NameFrom
+                title="型式"
+                nameKey="model"
+                formData={formData}
+                updateObject={updateObject}
+              />
+            </div>
+            <div className="mb-2">
+              <NameFrom
+                title="初度登録年月"
+                nameKey="firstRegistration"
+                formData={formData}
+                updateObject={updateObject}
+              />
+              <StartEndForm
+                title="車検"
+                startKey={"inspectionStartDate"}
+                endKey={"inspectionEndDate"}
+                formData={formData}
+                updateObject={updateObject}
+              />
+              {/* <NameFrom
+                title="初度登録年月"
+                nameKey="firstRegistration"
+                formData={formData}
+                updateObject={updateObject}
+              /> */}
+            </div>
 
             <hr />
             <button type="button" className="btn btn-info" onClick={handleSave}>

@@ -1,10 +1,11 @@
 export const SelectStatus = (props) => {
-  //formData,updateObject
-  const { f_status } = props.formData;
+  //formUtils
+  const { formData, updateObject } = props.formUtils;
+  const { f_status } = formData;
 
   const handleChange = (event) => {
     const { id, value } = event.target;
-    props.updateObject(id, value === "true");
+    updateObject(id, value === "true");
   };
   return (
     <select

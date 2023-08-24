@@ -1,7 +1,8 @@
 import { usePathChange } from "@/utils/handle";
 import { useState } from "react";
 
-export const ItemList = ({ items, type, querySel }) => {
+export const ItemList = (props) => {
+  const { items, type, querySel } = props;
   const { pathChange } = usePathChange();
   // 検索用
   const [searchText, setSearchText] = useState("");

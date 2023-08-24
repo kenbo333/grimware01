@@ -1,6 +1,7 @@
 import React from "react";
 
-const EmpInfoList = ({ emps }) => {
+const EmpInfoList = (props) => {
+  const { emps } = props;
   return (
     <div>
       <div className="row h6">

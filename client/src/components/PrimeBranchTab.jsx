@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { AddressForm, NameFrom, NameFrom_kana } from "./InputForm";
+import { NameFrom, NameFrom_kana } from "./InputForm";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useFormUpdate, usePathChange, useSaveData } from "@/utils/handle";
 import apiClient from "../../lib/apiClient";
 import { SelectStatus } from "./SelectStatus";
+import { AddressForm } from "./InputAddressForm";
 
-const PrimeBranchTab = ({ branches, querySel, companyName }) => {
-  // console.log(branches);
+const PrimeBranchTab = (props) => {
+  const { branches, querySel, companyName } = props;
   const branch = branches.find((item) => item.id === querySel);
   const emps = branch.companyEmployee;
   const router = useRouter();
@@ -15,7 +16,8 @@ const PrimeBranchTab = ({ branches, querySel, companyName }) => {
   //オブジェクトから配列を除去
   const { companyEmployee, ...initialData } = branch;
   //inputの表示とオブジェクトの更新
-  const { formData, updateObject } = useFormUpdate(initialData);
+  const formUtils = useFormUpdate(initialData);
+  const { formData } = formUtils;
 
   //タブ設定
   const tabs = { tab1: "詳細", tab2: "社員" };
@@ -67,7 +69,7 @@ const PrimeBranchTab = ({ branches, querySel, companyName }) => {
           <div className="h4">{branch.branchName}</div>
         </div>
         <div>
-          <SelectStatus formData={formData} updateObject={updateObject} />
+          <SelectStatus formUtils={formUtils} />
         </div>
       </div>
 
@@ -98,34 +100,18 @@ const PrimeBranchTab = ({ branches, querySel, companyName }) => {
             <NameFrom_kana
               title={"店社名"}
               nameKey={"branchName"}
-              formData={formData}
-              updateObject={updateObject}
+              formUtils={formUtils}
             />
           </div>
 
           <div className="mb-2">
-            <AddressForm formData={formData} updateObject={updateObject} />
+            <AddressForm formUtils={formUtils} />
           </div>
 
           <div>
-            <NameFrom
-              title="TEL"
-              nameKey="tel"
-              formData={formData}
-              updateObject={updateObject}
-            />
-            <NameFrom
-              title="FAX"
-              nameKey="fax"
-              formData={formData}
-              updateObject={updateObject}
-            />
-            <NameFrom
-              title="Email"
-              nameKey="email"
-              formData={formData}
-              updateObject={updateObject}
-            />
+            <NameFrom title="TEL" nameKey="tel" formUtils={formUtils} />
+            <NameFrom title="FAX" nameKey="fax" formUtils={formUtils} />
+            <NameFrom title="Email" nameKey="email" formUtils={formUtils} />
           </div>
 
           <hr />

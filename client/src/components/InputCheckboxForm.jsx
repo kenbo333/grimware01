@@ -5,9 +5,11 @@ const options = [
 ];
 
 export const TransactionType = (props) => {
+  //formUtils
+  const { formData, updateCheckbox } = props.formUtils;
   const handleChange = (event) => {
     const { id } = event.target;
-    props.updateCheckbox(id);
+    updateCheckbox(id);
   };
 
   return (
@@ -20,7 +22,7 @@ export const TransactionType = (props) => {
               className="form-check-input"
               type="checkbox"
               id={option.value}
-              checked={props.formData[option.value] || false}
+              checked={formData[option.value] || false}
               onChange={handleChange}
             />
             <label className="form-check-label" htmlFor={option.value}>

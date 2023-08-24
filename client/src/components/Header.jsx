@@ -3,7 +3,8 @@ import { usePathChange } from "@/utils/handle";
 import apiClient from "../../lib/apiClient";
 import { useRouter } from "next/router";
 
-export const Header = ({ items, type, querySel }) => {
+export const Header = (props) => {
+  const { items, type, querySel } = props;
   const { pathChange } = usePathChange();
   const router = useRouter();
   const isStatus = router.query.isStatus === "false";

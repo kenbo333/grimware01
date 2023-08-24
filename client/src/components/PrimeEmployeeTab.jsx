@@ -1,17 +1,12 @@
 import React, { useState } from "react";
 import { SelectStatus } from "./SelectStatus";
 import { useFormUpdate, usePathChange, useSaveData } from "@/utils/handle";
-import {
-  AddressForm,
-  BirthdateForm,
-  FormSelect,
-  FullNameForm,
-  NameFrom,
-} from "./InputForm";
+import { SelectForm, FullNameForm, NameFrom } from "./InputForm";
+import { BirthdateForm } from "./InputBirthdateForm";
+import { AddressForm } from "./InputAddressForm";
 
 const PrimeEmployeeTab = (props) => {
   const { branch, emps, querySel } = props;
-
   const emp = emps.find((item) => item.id === querySel);
 
   //タブ設定
@@ -21,7 +16,8 @@ const PrimeEmployeeTab = (props) => {
   //オブジェクトから配列を除去
   const { ...initialData } = emp;
   //inputの表示とオブジェクトの更新
-  const { formData, updateObject } = useFormUpdate(initialData);
+  const formUtils = useFormUpdate(initialData);
+  const { formData } = formUtils;
 
   //formData保存して更新
   const { saveData } = useSaveData(formData);
@@ -57,7 +53,7 @@ const PrimeEmployeeTab = (props) => {
           </div>
         </div>
         <div>
-          <SelectStatus formData={formData} updateObject={updateObject} />
+          <SelectStatus formUtils={formUtils} />
         </div>
       </div>
 
@@ -84,52 +80,32 @@ const PrimeEmployeeTab = (props) => {
           role="tabpanel"
         >
           <div className="mb-2">
-            <FormSelect
+            <SelectForm
               title="所属"
-              formData={formData}
-              updateObject={updateObject}
               items={branch.company.companyBranch}
               nameKey={"fk_companyBranchId"}
+              viewKey={"branchName"}
+              formUtils={formUtils}
             />
           </div>
           <div className="mb-2">
-            <BirthdateForm formData={formData} updateObject={updateObject} />
+            <BirthdateForm formUtils={formUtils} />
           </div>
           <div className="mb-2">
-            <FullNameForm
-              title="氏名"
-              formData={formData}
-              updateObject={updateObject}
-            />
+            <FullNameForm title="氏名" formUtils={formUtils} />
           </div>
           <div className="mb-2">
             <NameFrom
               title="役職"
               nameKey="employmentStatus"
-              formData={formData}
-              updateObject={updateObject}
+              formUtils={formUtils}
             />
-            <NameFrom
-              title="部署"
-              nameKey="department"
-              formData={formData}
-              updateObject={updateObject}
-            />
-            <NameFrom
-              title="TEL"
-              nameKey="tel"
-              formData={formData}
-              updateObject={updateObject}
-            />
-            <NameFrom
-              title="Email"
-              nameKey="email"
-              formData={formData}
-              updateObject={updateObject}
-            />
+            <NameFrom title="部署" nameKey="department" formUtils={formUtils} />
+            <NameFrom title="TEL" nameKey="tel" formUtils={formUtils} />
+            <NameFrom title="Email" nameKey="email" formUtils={formUtils} />
           </div>
           <div>
-            <AddressForm formData={formData} updateObject={updateObject} />
+            <AddressForm formUtils={formUtils} />
           </div>
 
           <hr />
