@@ -1,15 +1,30 @@
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/router";
-import { getData } from "../../utils/SSR";
 import { ItemList } from "@/components/ItemList";
 import { Header } from "@/components/Header";
-import CarTab from "@/components/CarTab";
+import TabCar from "@/components/TabCar";
+import apiClient from "../../../lib/apiClient";
 
-export const getServerSideProps = (context) => getData(context);
+export const getServerSideProps = async (context) => {
+  try {
+    const [carData, fuelData] = await Promise.all([
+      apiClient.get(context.resolvedUrl),
+      apiClient.get("/car/fuel"),
+    ]);
+    return {
+      props: {
+        cars: carData.data,
+        fuels: fuelData.data,
+      },
+    };
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 const Company = (props) => {
-  // console.log(props.data);
-  const cars = props.data;
+  // console.log(props.fuels);
+  const { cars, fuels } = props;
   const router = useRouter();
   const querySel = router.query.sel;
 
@@ -26,7 +41,7 @@ const Company = (props) => {
 
           {querySel ? (
             <div className="col-8">
-              <CarTab cars={cars} querySel={querySel} />
+              <TabCar cars={cars} querySel={querySel} fuels={fuels} />
             </div>
           ) : (
             <div></div>

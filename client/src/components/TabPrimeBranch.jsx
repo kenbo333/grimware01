@@ -7,7 +7,7 @@ import apiClient from "../../lib/apiClient";
 import { SelectStatus } from "./SelectStatus";
 import { AddressForm } from "./InputAddressForm";
 
-const PrimeBranchTab = (props) => {
+const TabPrimeBranch = (props) => {
   const { branches, querySel, companyName } = props;
   const branch = branches.find((item) => item.id === querySel);
   const emps = branch.companyEmployee;
@@ -44,7 +44,7 @@ const PrimeBranchTab = (props) => {
   };
 
   //社員作成
-  const handleCreateBranch = async () => {
+  const handleCreate = async () => {
     try {
       const response = await apiClient.post("/prime/branch/employee/1", {
         fk_companyId: branch.fk_companyId,
@@ -57,7 +57,7 @@ const PrimeBranchTab = (props) => {
       });
       console.log(id);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -158,7 +158,7 @@ const PrimeBranchTab = (props) => {
             <button
               type="button"
               className="btn btn-success"
-              onClick={handleCreateBranch}
+              onClick={handleCreate}
             >
               新規登録
             </button>
@@ -169,4 +169,4 @@ const PrimeBranchTab = (props) => {
   );
 };
 
-export default PrimeBranchTab;
+export default TabPrimeBranch;

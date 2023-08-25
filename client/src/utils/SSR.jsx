@@ -9,6 +9,6 @@ export const getData = async (context) => {
       },
     };
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };

@@ -1,4 +1,4 @@
-import PrimeCompanyTab from "@/components/PrimeCompanyTab";
+import TabPrimeCompany from "@/components/TabPrimeCompany";
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/router";
 import { getData } from "../../utils/SSR";
@@ -26,7 +26,7 @@ const Company = (props) => {
 
           {querySel ? (
             <div className="col-8">
-              <PrimeCompanyTab companies={companies} querySel={querySel} />
+              <TabPrimeCompany companies={companies} querySel={querySel} />
             </div>
           ) : (
             <div></div>

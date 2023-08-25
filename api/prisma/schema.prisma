@@ -68,33 +68,34 @@ model CompanyEmployee {
 
 //car
 model Car {
-  id                    String    @id @default(uuid())
-  fk_fuelType           String    @default("")
-  f_status              Boolean   @default(true)
-  carName               String    @default("")
-  frameNumber           String    @default("")
-  model                 String    @default("")
-  fuelConsumption       String    @default("")
-  carNumber             String    @default("")
-  firstRegistration     String    @default("")
-  etcNumber             String    @default("")
+  id                    String           @id @default(uuid())
+  fk_fuelType           String           @default("")
+  f_status              Boolean          @default(true)
+  carName               String           @default("")
+  frameNumber           String           @default("")
+  model                 String           @default("")
+  fuelConsumption       String           @default("")
+  carNumber             String           @default("")
+  firstRegistration     String           @default("")
+  etcNumber             String           @default("")
   inspectionStartDate   DateTime?
   inspectionEndDate     DateTime?
-  compInsCompanyName    String    @default("")
-  compInsNumber         String    @default("")
+  compInsCompanyName    String           @default("")
+  compInsNumber         String           @default("")
   compInsStartDate      DateTime?
   compInsEndDate        DateTime?
-  compInsContractorName String    @default("")
-  volInsCompanyName     String    @default("")
-  volInsNumber          String    @default("")
+  compInsContractorName String           @default("")
+  volInsCompanyName     String           @default("")
+  volInsNumber          String           @default("")
   volInsStartDate       DateTime?
   volInsEndDate         DateTime?
-  volInsContractorName  String    @default("")
-  volInsAgeRequirement  String    @default("")
-  volInsPersonal        String    @default("")
-  volInsProperty        String    @default("")
-  volInsPassenger       String    @default("")
-  volInsCar             String    @default("")
+  volInsContractorName  String           @default("")
+  volInsAgeRequirement  String           @default("")
+  volInsPersonal        String           @default("")
+  volInsProperty        String           @default("")
+  volInsPassenger       String           @default("")
+  volInsCar             String           @default("")
+  carMaintenance        CarMaintenance[]
 }
 
 model CarMaintenance {
@@ -104,6 +105,7 @@ model CarMaintenance {
   odometer String    @default("")
   cost     String    @default("")
   content  String    @default("")
+  car      Car       @relation(fields: [fk_car], references: [id])
 }
 
 model CarFuelType {

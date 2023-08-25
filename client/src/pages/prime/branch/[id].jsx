@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { getData } from "../../../utils/SSR";
 import { ItemList } from "@/components/ItemList";
 import { Header } from "@/components/Header";
-import PrimeBranchTab from "@/components/PrimeBranchTab";
+import TabPrimeBranch from "@/components/TabPrimeBranch";
 
 export const getServerSideProps = (context) => getData(context);
 
@@ -27,7 +27,7 @@ const Branch = (props) => {
 
           {querySel ? (
             <div className="col-8">
-              <PrimeBranchTab
+              <TabPrimeBranch
                 branches={branches}
                 querySel={querySel}
                 companyName={company.companyName}

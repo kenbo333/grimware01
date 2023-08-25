@@ -1,6 +1,6 @@
 import React from "react";
 
-const EmpInfoList = (props) => {
+const InfoListEmployee = (props) => {
   const { emps } = props;
   return (
     <div>
@@ -30,4 +30,4 @@ const EmpInfoList = (props) => {
   );
 };
 
-export default EmpInfoList;
+export default InfoListEmployee;

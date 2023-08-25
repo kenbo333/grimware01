@@ -145,8 +145,8 @@ export const FullNameForm = (props) => {
 
 //---------------------------------------------------------------------------
 export const SelectForm = (props) => {
-  //title,items,nameKey,viewKey,formUtils
-  const { title, items, nameKey, viewKey } = props;
+  //title,items,nameKey,viewKey,isAllowEmpty,formUtils
+  const { title, items, nameKey, viewKey, isAllowEmpty } = props;
   const { formData, updateObject } = props.formUtils;
   const value = formData[nameKey];
 
@@ -167,6 +167,7 @@ export const SelectForm = (props) => {
           onChange={handleChange}
           value={value}
         >
+          {isAllowEmpty && <option value=""></option>}
           {items.map((item) => (
             <option key={item.id} value={item.id}>
               {item[viewKey]}
@@ -181,12 +182,13 @@ export const SelectForm = (props) => {
 //---------------------------------------------------------------------
 export const StartEndForm = (props) => {
   const { title, startKey, endKey } = props;
-  const startValue = props.formData[startKey];
-  const endValue = props.formData[endKey];
+  const { formData, updateObject } = props.formUtils;
+  const startValue = formData[startKey];
+  const endValue = formData[endKey];
 
   const handleChange = (event) => {
     const { id, value } = event.target;
-    props.updateObject(id, value);
+    updateObject(id, value);
   };
   return (
     <div>

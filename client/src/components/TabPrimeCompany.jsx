@@ -1,14 +1,14 @@
 import { FullNameForm, NameFrom_kana } from "./InputForm";
 import { TransactionType } from "./InputCheckboxForm";
-import BranchInfoList from "./BranchInfoList";
-import EmpInfoList from "./EmpInfoList";
+import InfoListBranch from "./InfoListBranch";
+import InfoListEmployee from "./InfoListEmployee";
 import { useFormUpdate, usePathChange, useSaveData } from "@/utils/handle";
 import apiClient from "../../lib/apiClient";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { SelectStatus } from "./SelectStatus";
 
-const PrimeCompanyTab = (props) => {
+const TabPrimeCompany = (props) => {
   const { companies, querySel } = props;
   const company = companies.find((item) => item.id === querySel);
   const branches = company.companyBranch;
@@ -49,7 +49,7 @@ const PrimeCompanyTab = (props) => {
   const [activeTab, setActiveTab] = useState("tab1");
 
   //店社作成
-  const handleCreateBranch = async () => {
+  const handleCreate = async () => {
     try {
       const response = await apiClient.post("/prime/branch/1", {
         fk_companyId: company.id,
@@ -61,7 +61,7 @@ const PrimeCompanyTab = (props) => {
       });
       console.log(`create${id}`);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -131,12 +131,12 @@ const PrimeCompanyTab = (props) => {
           role="tabpanel"
         >
           {branches.length ? (
-            <BranchInfoList branches={branches} />
+            <InfoListBranch branches={branches} />
           ) : (
             <button
               type="button"
               className="btn btn-success"
-              onClick={handleCreateBranch}
+              onClick={handleCreate}
             >
               新規登録
             </button>
@@ -152,7 +152,7 @@ const PrimeCompanyTab = (props) => {
           role="tabpanel"
         >
           {emps.length ? (
-            <EmpInfoList emps={emps} />
+            <InfoListEmployee emps={emps} />
           ) : (
             <div>登録されていません</div>
           )}
@@ -162,4 +162,4 @@ const PrimeCompanyTab = (props) => {
   );
 };
 
-export default PrimeCompanyTab;
+export default TabPrimeCompany;

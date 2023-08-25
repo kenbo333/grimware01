@@ -12,11 +12,22 @@ router.get("/", async (req, res) => {
       where: {
         f_status: isStatus,
       },
+      include: { carMaintenance: true },
     });
     return res.status(200).json(items);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Failed to fetch cars." });
+  }
+});
+
+router.get("/fuel", async (req, res) => {
+  try {
+    const items = await prisma.carFuelType.findMany({});
+    return res.status(200).json(items);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Failed to fetch carFuelType." });
   }
 });
 

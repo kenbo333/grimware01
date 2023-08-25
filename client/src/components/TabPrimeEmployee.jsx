@@ -5,7 +5,7 @@ import { SelectForm, FullNameForm, NameFrom } from "./InputForm";
 import { BirthdateForm } from "./InputBirthdateForm";
 import { AddressForm } from "./InputAddressForm";
 
-const PrimeEmployeeTab = (props) => {
+const TabPrimeEmployee = (props) => {
   const { branch, emps, querySel } = props;
   const emp = emps.find((item) => item.id === querySel);
 
@@ -85,6 +85,7 @@ const PrimeEmployeeTab = (props) => {
               items={branch.company.companyBranch}
               nameKey={"fk_companyBranchId"}
               viewKey={"branchName"}
+              isArrowEmpty={false}
               formUtils={formUtils}
             />
           </div>
@@ -130,4 +131,4 @@ const PrimeEmployeeTab = (props) => {
   );
 };
 
-export default PrimeEmployeeTab;
+export default TabPrimeEmployee;

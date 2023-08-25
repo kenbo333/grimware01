@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 
-const BranchInfoList = (props) => {
+const InfoListBranch = (props) => {
   const { branches } = props;
   const { pathname } = useRouter();
 
@@ -44,4 +44,4 @@ const BranchInfoList = (props) => {
   );
 };
 
-export default BranchInfoList;
+export default InfoListBranch;

@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { getData } from "../../../../utils/SSR";
 import { ItemList } from "@/components/ItemList";
 import { Header } from "@/components/Header";
-import PrimeEmployeeTab from "@/components/PrimeEmployeeTab";
+import TabPrimeEmployee from "@/components/TabPrimeEmployee";
 
 export const getServerSideProps = (context) => getData(context);
 
@@ -27,7 +27,7 @@ const Employee = (props) => {
 
           {querySel ? (
             <div className="col-8">
-              <PrimeEmployeeTab
+              <TabPrimeEmployee
                 emps={emps}
                 querySel={querySel}
                 branch={branch}
