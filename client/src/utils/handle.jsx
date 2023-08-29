@@ -27,8 +27,8 @@ export const useSaveData = (formData) => {
     try {
       await apiClient.put(router.asPath, { formData });
       console.log("saved");
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
     }
   }, [router, formData]);
 

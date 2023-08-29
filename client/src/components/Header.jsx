@@ -36,9 +36,9 @@ export const Header = (props) => {
       const { id } = response.data;
       pathChange(id, false);
       console.log(`create:${id}`);
-    } catch (err) {
-      alert("err");
-      console.log(err);
+    } catch (error) {
+      alert("error");
+      console.log(error);
     }
   };
 
@@ -54,9 +54,9 @@ export const Header = (props) => {
         pathChange("", false);
       }
       console.log("delete");
-    } catch (err) {
-      alert("err");
-      console.log(err);
+    } catch (error) {
+      alert("error");
+      console.log(error);
     }
   };
 

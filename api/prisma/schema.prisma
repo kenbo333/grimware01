@@ -78,17 +78,17 @@ model Car {
   carNumber             String           @default("")
   firstRegistration     String           @default("")
   etcNumber             String           @default("")
-  inspectionStartDate   DateTime?
-  inspectionEndDate     DateTime?
+  inspectionStartDate   String           @default("")
+  inspectionEndDate     String           @default("")
   compInsCompanyName    String           @default("")
   compInsNumber         String           @default("")
-  compInsStartDate      DateTime?
-  compInsEndDate        DateTime?
+  compInsStartDate      String           @default("")
+  compInsEndDate        String           @default("")
   compInsContractorName String           @default("")
   volInsCompanyName     String           @default("")
   volInsNumber          String           @default("")
-  volInsStartDate       DateTime?
-  volInsEndDate         DateTime?
+  volInsStartDate       String           @default("")
+  volInsEndDate         String           @default("")
   volInsContractorName  String           @default("")
   volInsAgeRequirement  String           @default("")
   volInsPersonal        String           @default("")
@@ -99,13 +99,13 @@ model Car {
 }
 
 model CarMaintenance {
-  id       String    @id @default(uuid())
+  id       String @id @default(uuid())
   fk_car   String
-  date     DateTime?
-  odometer String    @default("")
-  cost     String    @default("")
-  content  String    @default("")
-  car      Car       @relation(fields: [fk_car], references: [id])
+  date     String @default("")
+  odometer String @default("")
+  cost     String @default("")
+  content  String @default("")
+  car      Car    @relation(fields: [fk_car], references: [id])
 }
 
 model CarFuelType {

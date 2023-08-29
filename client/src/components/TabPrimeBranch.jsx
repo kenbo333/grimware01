@@ -56,8 +56,8 @@ const TabPrimeBranch = (props) => {
         query: { sel: id },
       });
       console.log(id);
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
     }
   };
 

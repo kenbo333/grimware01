@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { SelectStatus } from "./SelectStatus";
 import { useFormUpdate, usePathChange, useSaveData } from "@/utils/handle";
 import { NameFrom, SelectForm, StartEndForm } from "./InputForm";
+import InfoListCarMaintenance from "./InfoListCarMaintenance";
 
 const TabCar = (props) => {
   const { cars, querySel, fuels } = props;
   const car = cars.find((item) => item.id === querySel);
 
   //オブジェクトから配列を除去
-  const { ...initialData } = car;
+  const { carMaintenance, ...initialData } = car;
   //inputの表示とオブジェクトの更新
   const formUtils = useFormUpdate(initialData);
   const { formData } = formUtils;
@@ -32,8 +33,6 @@ const TabCar = (props) => {
       }
     }
   };
-
-  const handleClick = () => {};
 
   //タブ設定
   const tabs = { tab1: "詳細", tab2: "保険", tab3: "整備履歴", tab4: "備考" };
@@ -220,43 +219,10 @@ const TabCar = (props) => {
           id="tab3"
           role="tabpanel"
         >
-          <div>
-            <div className="row h6">
-              <div className="col-3">日付/備考</div>
-              <div className="col-3">内容</div>
-              <div className="col-3">距離</div>
-              <div className="col-3">金額</div>
-            </div>
-
-            <hr />
-
-            {car.carMaintenance?.map((item) => (
-              <div key={item.id}>
-                <div className="row">
-                  <div className="col-3">
-                    {item.date}
-                    {/* <input type="text" className="form-control" id="date" /> */}
-                  </div>
-                  <div className="col-3">{item.content}</div>
-                  <div className="col-3">{item.odometer}</div>
-                  <div className="col-3">{item.cost}</div>
-                  <div className="row">
-                    <div className="col-12">
-                      --------------------------備考----------------------------
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-
-            <button
-              type="button"
-              className="btn btn-success"
-              onClick={handleClick}
-            >
-              新規登録
-            </button>
-          </div>
+          <InfoListCarMaintenance
+            carMaintenance={carMaintenance}
+            carId={car.id}
+          />
         </div>
       </div>
     </div>

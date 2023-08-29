@@ -17,13 +17,13 @@ export const getServerSideProps = async (context) => {
         fuels: fuelData.data,
       },
     };
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 };
 
 const Company = (props) => {
-  // console.log(props.fuels);
+  // console.log(props.cars);
   const { cars, fuels } = props;
   const router = useRouter();
   const querySel = router.query.sel;

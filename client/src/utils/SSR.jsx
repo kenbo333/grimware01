@@ -8,7 +8,7 @@ export const getData = async (context) => {
         data: response.data,
       },
     };
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 };

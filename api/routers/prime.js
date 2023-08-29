@@ -86,8 +86,8 @@ const createEntity = async (model, data, res) => {
   try {
     const newEntity = await model.create({ data });
     return res.status(201).json(newEntity);
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     return res.status(500).json({ error: "Failed to create entity" });
   }
 };
@@ -115,8 +115,8 @@ const deleteEntity = async (model, id, res) => {
       where: { id },
     });
     return res.status(204).send();
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     return res.status(500).json({ error: "Failed to delete entity" });
   }
 };
@@ -145,8 +145,8 @@ const updateEntity = async (model, id, data, res) => {
       data,
     });
     return res.status(200).json(updatedEntity);
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     return res.status(500).json({ error: "Failed to update entity" });
   }
 };

@@ -60,8 +60,8 @@ const TabPrimeCompany = (props) => {
         query: { sel: id },
       });
       console.log(`create${id}`);
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
     }
   };
 
