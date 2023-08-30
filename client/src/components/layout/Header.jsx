@@ -1,6 +1,6 @@
 import React from "react";
-import { usePathChange } from "@/utils/handle";
-import apiClient from "../../lib/apiClient";
+import { usePathChange } from "@/components/containers/handle";
+import apiClient from "../../../lib/apiClient";
 import { useRouter } from "next/router";
 
 export const Header = (props) => {

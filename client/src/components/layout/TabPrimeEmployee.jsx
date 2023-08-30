@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import { SelectStatus } from "./SelectStatus";
-import { useFormUpdate, usePathChange, useSaveData } from "@/utils/handle";
-import { SelectForm, FullNameForm, NameFrom } from "./InputForm";
-import { BirthdateForm } from "./InputBirthdateForm";
-import { AddressForm } from "./InputAddressForm";
+import { SelectStatus } from "../forms/SelectStatus";
+import {
+  useFormUpdate,
+  usePathChange,
+  useSaveData,
+} from "@/components/containers/handle";
+import { SelectForm, FullNameForm, NameFrom } from "../forms/InputForm";
+import { BirthdateForm } from "../forms/InputBirthdateForm";
+import { AddressForm } from "../forms/InputAddressForm";
 
 const TabPrimeEmployee = (props) => {
   const { branch, emps, querySel } = props;

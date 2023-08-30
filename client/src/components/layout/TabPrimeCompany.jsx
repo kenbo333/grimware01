@@ -1,12 +1,16 @@
-import { FullNameForm, NameFrom_kana } from "./InputForm";
-import { TransactionType } from "./InputCheckboxForm";
+import { FullNameForm, NameFrom_kana } from "../forms/InputForm";
+import { TransactionType } from "../forms/InputCheckboxForm";
 import InfoListBranch from "./InfoListBranch";
 import InfoListEmployee from "./InfoListEmployee";
-import { useFormUpdate, usePathChange, useSaveData } from "@/utils/handle";
-import apiClient from "../../lib/apiClient";
+import {
+  useFormUpdate,
+  usePathChange,
+  useSaveData,
+} from "@/components/containers/handle";
+import apiClient from "../../../lib/apiClient";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { SelectStatus } from "./SelectStatus";
+import { SelectStatus } from "../forms/SelectStatus";
 
 const TabPrimeCompany = (props) => {
   const { companies, querySel } = props;

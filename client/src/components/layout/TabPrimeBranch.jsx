@@ -1,11 +1,15 @@
 import { useState } from "react";
-import { NameFrom, NameFrom_kana } from "./InputForm";
+import { NameFrom, NameFrom_kana } from "../forms/InputForm";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useFormUpdate, usePathChange, useSaveData } from "@/utils/handle";
-import apiClient from "../../lib/apiClient";
-import { SelectStatus } from "./SelectStatus";
-import { AddressForm } from "./InputAddressForm";
+import {
+  useFormUpdate,
+  usePathChange,
+  useSaveData,
+} from "@/components/containers/handle";
+import apiClient from "../../../lib/apiClient";
+import { SelectStatus } from "../forms/SelectStatus";
+import { AddressForm } from "../forms/InputAddressForm";
 
 const TabPrimeBranch = (props) => {
   const { branches, querySel, companyName } = props;

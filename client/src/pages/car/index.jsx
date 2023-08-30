@@ -1,7 +1,7 @@
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/layout/Navbar";
 import { useRouter } from "next/router";
-import { ItemList } from "@/components/ItemList";
-import { Header } from "@/components/Header";
+import { ItemList } from "@/components/layout/ItemList";
+import { Header } from "@/components/layout/Header";
 import TabCar from "@/components/TabCar";
 import apiClient from "../../../lib/apiClient";
 

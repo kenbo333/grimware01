@@ -1,8 +1,12 @@
 import React, { useState } from "react";
-import { SelectStatus } from "./SelectStatus";
-import { useFormUpdate, usePathChange, useSaveData } from "@/utils/handle";
-import { NameFrom, SelectForm, StartEndForm } from "./InputForm";
-import InfoListCarMaintenance from "./InfoListCarMaintenance";
+import { SelectStatus } from "./forms/SelectStatus";
+import {
+  useFormUpdate,
+  usePathChange,
+  useSaveData,
+} from "@/components/containers/handle";
+import { NameFrom, SelectForm, StartEndForm } from "./forms/InputForm";
+import InfoListCarMaintenance from "./layout/InfoListCarMaintenance";
 
 const TabCar = (props) => {
   const { cars, querySel, fuels } = props;

@@ -1,9 +1,9 @@
-import TabPrimeCompany from "@/components/TabPrimeCompany";
-import Navbar from "@/components/Navbar";
+import TabPrimeCompany from "@/components/layout/TabPrimeCompany";
+import Navbar from "@/components/layout/Navbar";
 import { useRouter } from "next/router";
 import { getData } from "../../utils/SSR";
-import { ItemList } from "@/components/ItemList";
-import { Header } from "@/components/Header";
+import { ItemList } from "@/components/layout/ItemList";
+import { Header } from "@/components/layout/Header";
 
 export const getServerSideProps = (context) => getData(context);
 
