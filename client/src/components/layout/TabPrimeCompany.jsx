@@ -6,15 +6,15 @@ import {
   useFormUpdate,
   usePathChange,
   useSaveData,
-} from "@/components/containers/handle";
+} from "@/components/containers/handleItem";
 import apiClient from "../../../lib/apiClient";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { SelectStatus } from "../forms/SelectStatus";
 
 const TabPrimeCompany = (props) => {
-  const { companies, querySel } = props;
-  const company = companies.find((item) => item.id === querySel);
+  const { companies, sel } = props;
+  const company = companies.find((item) => item.id === sel);
   const branches = company.companyBranch;
   const emps = company.companyEmployee;
   const router = useRouter();
@@ -29,17 +29,17 @@ const TabPrimeCompany = (props) => {
   const { saveData } = useSaveData(formData);
   const { pathChange } = usePathChange();
   const handleSave = () => {
-    saveData();
+    saveData(`/companies/${sel}`);
     //元請会社のチェック||statusが不変時
     if (
-      company.f_prime === formData.f_prime &&
-      company.f_status === formData.f_status
+      company.isPrime === formData.isPrime &&
+      company.isStatus === formData.isStatus
     ) {
       //再レンダリング
       pathChange(formData.id, false);
     } else {
       //変更時、selを上に移動
-      const index = companies.findIndex((item) => item.id === querySel);
+      const index = companies.findIndex((item) => item.id === sel);
       if (index) {
         pathChange(companies[index - 1].id, false);
       } else {
@@ -55,14 +55,11 @@ const TabPrimeCompany = (props) => {
   //店社作成
   const handleCreate = async () => {
     try {
-      const response = await apiClient.post("/prime/branch/1", {
-        fk_companyId: company.id,
+      const response = await apiClient.post(`/companies/1/branches`, {
+        fk_companyId: sel,
       });
       const { id } = response.data;
-      router.push({
-        pathname: `/prime/branch/${company.id}`,
-        query: { sel: id },
-      });
+      // router.push(`${router.asPath}/branches/${branchId}`);
       console.log(`create${id}`);
     } catch (error) {
       console.error(error);
@@ -96,71 +93,75 @@ const TabPrimeCompany = (props) => {
       {/* tab */}
       <div className="tab-content">
         {/* tab1 */}
-        <div
-          className={`tab-pane fade ${
-            activeTab === "tab1" ? "show active" : ""
-          } my-3`}
-          id="tab1"
-          role="tabpanel"
-        >
-          <form>
-            <div className="mb-2">
-              <NameFrom_kana
-                title="会社名"
-                nameKey="companyName"
-                formUtils={formUtils}
-              />
-            </div>
-            <div className="mb-2">
-              <FullNameForm title="代表者" formUtils={formUtils} />
-            </div>
-            <div>
-              <TransactionType formUtils={formUtils} />
-            </div>
+        {activeTab === "tab1" && (
+          <div
+            className="tab-pane fade show active my-3"
+            id="tab1"
+            role="tabpanel"
+          >
+            <form>
+              <div className="mb-2">
+                <NameFrom_kana
+                  title="会社名"
+                  nameKey="companyName"
+                  formUtils={formUtils}
+                />
+              </div>
+              <div className="mb-2">
+                <FullNameForm title="代表者" formUtils={formUtils} />
+              </div>
+              <div>
+                <TransactionType formUtils={formUtils} />
+              </div>
 
-            <hr />
+              <hr />
 
-            <button type="button" className="btn btn-info" onClick={handleSave}>
-              保存
-            </button>
-          </form>
-        </div>
+              <button
+                type="button"
+                className="btn btn-info"
+                onClick={handleSave}
+              >
+                保存
+              </button>
+            </form>
+          </div>
+        )}
 
         {/* tab2 */}
-        <div
-          className={`tab-pane fade ${
-            activeTab === "tab2" ? "show active" : ""
-          } my-3`}
-          id="tab2"
-          role="tabpanel"
-        >
-          {branches.length ? (
-            <InfoListBranch branches={branches} />
-          ) : (
-            <button
-              type="button"
-              className="btn btn-success"
-              onClick={handleCreate}
-            >
-              新規登録
-            </button>
-          )}
-        </div>
+        {activeTab === "tab2" && (
+          <div
+            className="tab-pane fade show active my-3"
+            id="tab2"
+            role="tabpanel"
+          >
+            {branches.length ? (
+              <InfoListBranch branches={branches} />
+            ) : (
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={handleCreate}
+              >
+                新規登録
+              </button>
+            )}
+          </div>
+        )}
 
         {/* tab3 */}
-        <div
-          className={`tab-pane fade ${
-            activeTab === "tab3" ? "show active" : ""
-          } my-3`}
-          id="tab3"
-          role="tabpanel"
-        >
-          {emps.length ? (
-            <InfoListEmployee emps={emps} />
-          ) : (
-            <div>登録されていません</div>
-          )}
-        </div>
+        {activeTab === "tab3" && (
+          <div
+            className="tab-pane fade show active my-3"
+            id="tab3"
+            role="tabpanel"
+          >
+            {emps.length ? (
+              <InfoListEmployee emps={emps} />
+            ) : (
+              <div>登録されていません</div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

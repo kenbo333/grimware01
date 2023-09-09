@@ -1,7 +1,7 @@
 const options = [
-  { value: "f_prime", label: "元請会社" },
-  { value: "f_sub", label: "下請会社" },
-  { value: "f_purchase", label: "仕入会社" },
+  { value: "isPrime", label: "元請会社" },
+  { value: "isSub", label: "下請会社" },
+  { value: "isPurchase", label: "仕入会社" },
 ];
 
 export const TransactionType = (props) => {

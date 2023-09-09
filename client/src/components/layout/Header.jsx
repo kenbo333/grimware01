@@ -1,52 +1,52 @@
 import React from "react";
-import { usePathChange } from "@/components/containers/handle";
+import { usePathChange } from "@/components/containers/handleItem";
 import apiClient from "../../../lib/apiClient";
 import { useRouter } from "next/router";
 
+const urlStrategies = {
+  company: () => "/companies",
+  branch: (query) => `/companies/${query.companyId}/branches`,
+  employee: (query) =>
+    `/companies/${query.companyId}/branches/${query.branchId}/employees`,
+};
+
 export const Header = (props) => {
-  const { items, type, querySel } = props;
+  const { items, type, sel } = props;
   const { pathChange } = usePathChange();
   const router = useRouter();
   const isStatus = router.query.isStatus === "false";
 
   //新規作成
   const createItem = async () => {
-    let data = {};
-    switch (type) {
-      case "company":
-        data = { f_prime: true };
-        break;
+    const createDataStrategies = {
+      company: { isPrime: true },
+      branch: { fk_companyId: router.query.companyId },
+      employee: {
+        fk_companyId: router.query.companyId,
+        fk_companyBranchId: router.query.branchId,
+      },
+    };
 
-      case "branch":
-        data = {
-          fk_companyId: items[0].fk_companyId,
-        };
-        break;
-
-      case "employee":
-        data = {
-          fk_companyId: items[0].fk_companyId,
-          fk_companyBranchId: items[0].fk_companyBranchId,
-        };
-        break;
-    }
+    const data = createDataStrategies[type];
+    const url = urlStrategies[type](router.query);
 
     try {
-      const response = await apiClient.post(router.asPath, data);
-      const { id } = response.data;
-      pathChange(id, false);
-      console.log(`create:${id}`);
+      const response = await apiClient.post(url, data);
+      const newBranchId = response.data.id;
+      pathChange(newBranchId, false);
+      console.log(`create:${newBranchId}`);
     } catch (error) {
-      alert("error");
-      console.log(error);
+      console.error(error);
     }
   };
 
   //削除
   const deleteItem = async () => {
+    const url = urlStrategies[type](router.query);
+
     try {
-      const index = items.findIndex((item) => item.id === querySel);
-      await apiClient.delete(router.asPath);
+      const index = items.findIndex((item) => item.id === sel);
+      await apiClient.delete(`${url}/${sel}`);
       //一番上以外は前の会社を選択
       if (index) {
         pathChange(items[index - 1].id, false);
@@ -55,7 +55,6 @@ export const Header = (props) => {
       }
       console.log("delete");
     } catch (error) {
-      alert("error");
       console.log(error);
     }
   };
@@ -75,9 +74,7 @@ export const Header = (props) => {
   return (
     <form className="bg-secondary">
       <div className="d-flex justify-content-end">
-        {isStatus ? (
-          <div></div>
-        ) : (
+        {!isStatus && (
           <button
             type="button"
             className="btn btn-success m-1"

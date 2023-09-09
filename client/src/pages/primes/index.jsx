@@ -5,28 +5,31 @@ import { getData } from "../../utils/SSR";
 import { ItemList } from "@/components/layout/ItemList";
 import { Header } from "@/components/layout/Header";
 
-export const getServerSideProps = (context) => getData(context);
+export const getServerSideProps = (context) => getData("/companies");
 
 const Company = (props) => {
   // console.log(props.data);
-  const companies = props.data;
   const router = useRouter();
-  const querySel = router.query.sel;
+  const companies =
+    router.query.isStatus === "false"
+      ? [...props.data.filter((item) => !item.isStatus)]
+      : [...props.data.filter((item) => item.isStatus)];
+  const { sel } = router.query;
 
   return (
     <>
       <Navbar />
-      <Header items={companies} type="company" querySel={querySel} />
+      <Header items={companies} type="company" sel={sel} />
 
       <div className="container-lg">
         <div className="row">
           <div className="col-4">
-            <ItemList items={companies} type="company" querySel={querySel} />
+            <ItemList items={companies} type="company" sel={sel} />
           </div>
 
-          {querySel ? (
+          {sel ? (
             <div className="col-8">
-              <TabPrimeCompany companies={companies} querySel={querySel} />
+              <TabPrimeCompany companies={companies} sel={sel} />
             </div>
           ) : (
             <div></div>

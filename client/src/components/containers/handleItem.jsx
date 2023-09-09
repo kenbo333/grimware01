@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 //パスの変更
 export const usePathChange = () => {
   const router = useRouter();
+
   const pathChange = (id, isShallow) => {
     //falseでSSRの再レンダリング
     router.replace(
@@ -23,14 +24,17 @@ export const usePathChange = () => {
 //データベースに保存
 export const useSaveData = (formData) => {
   const router = useRouter();
-  const saveData = useCallback(async () => {
-    try {
-      await apiClient.put(router.asPath, { formData });
-      console.log("saved");
-    } catch (error) {
-      console.error(error);
-    }
-  }, [router, formData]);
+  const saveData = useCallback(
+    async (url) => {
+      try {
+        await apiClient.put(url, { formData });
+        console.log("saved");
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [router, formData]
+  );
 
   return { saveData };
 };

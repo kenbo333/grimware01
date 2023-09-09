@@ -5,14 +5,14 @@ const Navbar = () => {
     <nav className="navbar navbar-light bg-light">
       <div className="d-flex flex-row bd-highlight">
         <div className="p-2 bd-highlight">
-          <Link href="/prime">元請会社</Link>
+          <Link href="/primes">元請会社</Link>
         </div>
 
         <div className="p-2 bd-highlight">
-          <Link href="/sub">下請会社</Link>
+          <Link href="/subs">下請会社</Link>
         </div>
         <div className="p-2 bd-highlight">
-          <Link href="/car">車両</Link>
+          <Link href="/cars">車両</Link>
         </div>
       </div>
     </nav>

@@ -1,8 +1,8 @@
-import { usePathChange } from "@/components/containers/handle";
+import { usePathChange } from "@/components/containers/handleItem";
 import { useState } from "react";
 
 export const ItemList = (props) => {
-  const { items, type, querySel } = props;
+  const { items, type, sel } = props;
   const { pathChange } = usePathChange();
   // 検索用
   const [searchText, setSearchText] = useState("");
@@ -10,38 +10,23 @@ export const ItemList = (props) => {
     setSearchText(event.target.value);
   };
 
-  let titles = [];
-  let filteredItems;
-  switch (type) {
-    case "company":
-      titles = ["companyName"];
-      filteredItems = items?.filter((item) =>
-        item.companyName?.includes(searchText)
-      );
-      break;
+  const filterStrategies = {
+    company: (item) => item.companyName?.includes(searchText),
+    branch: (item) => item.branchName?.includes(searchText),
+    employee: (item) =>
+      item.lastName.includes(searchText) || item.firstName.includes(searchText),
+    car: (item) => item.carName?.includes(searchText),
+  };
 
-    case "branch":
-      titles = ["branchName"];
-      filteredItems = items?.filter((item) =>
-        item.branchName?.includes(searchText)
-      );
-      break;
+  const titleStrategies = {
+    company: ["companyName"],
+    branch: ["branchName"],
+    employee: ["lastName", "firstName"],
+    car: ["carName"],
+  };
 
-    case "employee":
-      titles = ["lastName", "firstName"];
-      filteredItems = items?.filter(
-        (item) =>
-          item.lastName.includes(searchText) ||
-          item.firstName.includes(searchText)
-      );
-      break;
-
-    case "car":
-      titles = ["carName"];
-      filteredItems = items?.filter((item) =>
-        item.carName?.includes(searchText)
-      );
-  }
+  const filteredItems = items?.filter(filterStrategies[type]);
+  const titles = titleStrategies[type];
 
   return (
     <>
@@ -58,16 +43,14 @@ export const ItemList = (props) => {
         />
       </div>
 
-      {/* 会社リスト */}
+      {/* リスト */}
       <div className="overflow-auto" style={{ height: "750px" }}>
         <div className="list-group">
           {filteredItems?.map((item) => (
             <button
               key={item.id}
               type="button"
-              className={`list-group-item ${
-                querySel === item.id ? "active" : ""
-              }`}
+              className={`list-group-item ${sel === item.id ? "active" : ""}`}
               onClick={() => pathChange(item.id, true)}
             >
               {titles.map((title) => `${item[title]} `)}

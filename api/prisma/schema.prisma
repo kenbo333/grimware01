@@ -10,11 +10,11 @@ datasource db {
 //company
 model Company {
   id               String            @id @default(uuid())
-  f_ownCompany     Boolean           @default(false)
-  f_status         Boolean           @default(true)
-  f_prime          Boolean           @default(false)
-  f_sub            Boolean           @default(false)
-  f_purchase       Boolean           @default(false)
+  isOwnCompany     Boolean           @default(false)
+  isStatus         Boolean           @default(true)
+  isPrime          Boolean           @default(false)
+  isSub            Boolean           @default(false)
+  isPurchase       Boolean           @default(false)
   companyName      String            @default("")
   companyName_kana String            @default("")
   firstName        String            @default("")
@@ -28,7 +28,7 @@ model Company {
 model CompanyBranch {
   id              String            @id @default(uuid())
   fk_companyId    String
-  f_status        Boolean           @default(true)
+  isStatus        Boolean           @default(true)
   branchName      String            @default("")
   branchName_kana String            @default("")
   postcode        String            @default("")
@@ -45,7 +45,7 @@ model CompanyEmployee {
   id                 String        @id @default(uuid())
   fk_companyId       String
   fk_companyBranchId String
-  f_status           Boolean       @default(true)
+  isStatus           Boolean       @default(true)
   firstName          String        @default("")
   lastName           String        @default("")
   firstName_kana     String        @default("")
@@ -62,15 +62,16 @@ model CompanyEmployee {
   email              String        @default("")
   department         String        @default("")
   position           String        @default("")
-  companyBranch      CompanyBranch @relation(fields: [fk_companyBranchId], references: [id])
   company            Company       @relation(fields: [fk_companyId], references: [id])
+  companyBranch      CompanyBranch @relation(fields: [fk_companyBranchId], references: [id])
+  remark             Remark[]
 }
 
 //car
 model Car {
   id                    String           @id @default(uuid())
   fk_fuelType           String           @default("")
-  f_status              Boolean          @default(true)
+  isStatus              Boolean          @default(true)
   carName               String           @default("")
   frameNumber           String           @default("")
   model                 String           @default("")
@@ -96,6 +97,7 @@ model Car {
   volInsPassenger       String           @default("")
   volInsCar             String           @default("")
   carMaintenance        CarMaintenance[]
+  remark                Remark[]
 }
 
 model CarMaintenance {
@@ -112,4 +114,19 @@ model CarFuelType {
   id       String @id @default(uuid())
   fuelType String @default("")
   price    String @default("")
+}
+
+model Remark {
+  id                 String           @id @default(uuid())
+  date               String?
+  remark             String?
+  fileName           String?
+  fileData           Bytes?
+  isFileData         Boolean          @default(false)
+  mimeType           String?
+  isPublic           Boolean          @default(true)
+  fk_companyEmployee String?
+  companyEmployee    CompanyEmployee? @relation(fields: [fk_companyEmployee], references: [id])
+  fk_car             String?
+  car                Car?             @relation(fields: [fk_car], references: [id])
 }

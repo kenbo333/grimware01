@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import { SelectStatus } from "./forms/SelectStatus";
+import { SelectStatus } from "../forms/SelectStatus";
 import {
   useFormUpdate,
   usePathChange,
   useSaveData,
-} from "@/components/containers/handle";
-import { NameFrom, SelectForm, StartEndForm } from "./forms/InputForm";
-import InfoListCarMaintenance from "./layout/InfoListCarMaintenance";
+} from "@/components/containers/handleItem";
+import { NameFrom, SelectForm, StartEndForm } from "../forms/InputForm";
+import InfoListCarMaintenance from "./InfoListCarMaintenance";
+import TabRemark from "./TabRemark";
 
 const TabCar = (props) => {
   const { cars, querySel, fuels } = props;
   const car = cars.find((item) => item.id === querySel);
 
   //オブジェクトから配列を除去
-  const { carMaintenance, ...initialData } = car;
+  const { ...initialData } = car;
   //inputの表示とオブジェクトの更新
   const formUtils = useFormUpdate(initialData);
   const { formData } = formUtils;
@@ -223,10 +224,20 @@ const TabCar = (props) => {
           id="tab3"
           role="tabpanel"
         >
-          <InfoListCarMaintenance
-            carMaintenance={carMaintenance}
-            carId={car.id}
-          />
+          {activeTab === "tab3" && (
+            <InfoListCarMaintenance querySel={querySel} />
+          )}
+        </div>
+
+        {/* tab4 */}
+        <div
+          className={`tab-pane fade ${
+            activeTab === "tab4" ? "show active" : ""
+          } my-3`}
+          id="tab4"
+          role="tabpanel"
+        >
+          {activeTab === "tab4" && <TabRemark querySel={querySel} />}
         </div>
       </div>
     </div>

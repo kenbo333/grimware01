@@ -31,7 +31,7 @@ const InfoListBranch = (props) => {
           <div>
             {
               <Link
-                href={`${pathname}/branch/${branch.fk_companyId}?sel=${branch.id}`}
+                href={`${pathname}/${branch.fk_companyId}?sel=${branch.id}`}
               >
                 支店リンク
               </Link>

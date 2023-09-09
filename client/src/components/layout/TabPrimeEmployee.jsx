@@ -4,14 +4,16 @@ import {
   useFormUpdate,
   usePathChange,
   useSaveData,
-} from "@/components/containers/handle";
+} from "@/components/containers/handleItem";
 import { SelectForm, FullNameForm, NameFrom } from "../forms/InputForm";
 import { BirthdateForm } from "../forms/InputBirthdateForm";
 import { AddressForm } from "../forms/InputAddressForm";
+import { useRouter } from "next/router";
 
 const TabPrimeEmployee = (props) => {
-  const { branch, emps, querySel } = props;
-  const emp = emps.find((item) => item.id === querySel);
+  const { branch, emps, sel } = props;
+  const emp = emps.find((item) => item.id === sel);
+  const { companyId, branchId } = useRouter().query;
 
   //タブ設定
   const tabs = { tab1: "詳細", tab2: "備考" };
@@ -23,11 +25,13 @@ const TabPrimeEmployee = (props) => {
   const formUtils = useFormUpdate(initialData);
   const { formData } = formUtils;
 
+  // console.log(query);
+
   //formData保存して更新
   const { saveData } = useSaveData(formData);
   const { pathChange } = usePathChange();
   const handleSave = () => {
-    saveData();
+    saveData(`/companies/${companyId}/branches/${branchId}/employees/${sel}`);
     //所属とstatusが不変時
     if (
       emp.fk_companyBranchId === formData.fk_companyBranchId &&
@@ -37,7 +41,7 @@ const TabPrimeEmployee = (props) => {
       pathChange(formData.id, false);
     } else {
       //変更時、selを上に移動
-      const index = emps.findIndex((item) => item.id === querySel);
+      const index = emps.findIndex((item) => item.id === sel);
       if (index) {
         pathChange(emps[index - 1].id, false);
       } else {

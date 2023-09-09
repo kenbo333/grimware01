@@ -2,14 +2,14 @@ import Navbar from "@/components/layout/Navbar";
 import { useRouter } from "next/router";
 import { ItemList } from "@/components/layout/ItemList";
 import { Header } from "@/components/layout/Header";
-import TabCar from "@/components/TabCar";
+import TabCar from "@/components/layout/TabCar";
 import apiClient from "../../../lib/apiClient";
 
 export const getServerSideProps = async (context) => {
   try {
     const [carData, fuelData] = await Promise.all([
       apiClient.get(context.resolvedUrl),
-      apiClient.get("/car/fuel"),
+      apiClient.get("/cars/fuel"),
     ]);
     return {
       props: {
@@ -22,7 +22,7 @@ export const getServerSideProps = async (context) => {
   }
 };
 
-const Company = (props) => {
+const Car = (props) => {
   // console.log(props.cars);
   const { cars, fuels } = props;
   const router = useRouter();
@@ -52,4 +52,4 @@ const Company = (props) => {
   );
 };
 
-export default Company;
+export default Car;
