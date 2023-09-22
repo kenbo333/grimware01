@@ -8,10 +8,17 @@ import {
 import { NameFrom, SelectForm, StartEndForm } from "../forms/InputForm";
 import InfoListCarMaintenance from "./InfoListCarMaintenance";
 import TabRemark from "./TabRemark";
+import { useRouter } from "next/router";
 
 const TabCar = (props) => {
-  const { cars, querySel, fuels } = props;
-  const car = cars.find((item) => item.id === querySel);
+  const { cars, fuels } = props;
+  const router = useRouter();
+  const { sel } = router.query;
+  const car = cars.find((item) => item.id === sel);
+
+  //タブ設定
+  const tabs = { tab1: "詳細", tab2: "保険", tab3: "整備履歴", tab4: "備考" };
+  const [activeTab, setActiveTab] = useState("tab1");
 
   //オブジェクトから配列を除去
   const { ...initialData } = car;
@@ -23,14 +30,14 @@ const TabCar = (props) => {
   const { saveData } = useSaveData(formData);
   const { pathChange } = usePathChange();
   const handleSave = () => {
-    saveData();
+    saveData(`/cars/${sel}`);
     //statusが不変時
-    if (car.f_status === formData.f_status) {
+    if (car.isStatus === formData.isStatus) {
       //再レンダリング
       pathChange(formData.id, false);
     } else {
       //変更時、selを上に移動
-      const index = cars.findIndex((item) => item.id === querySel);
+      const index = cars.findIndex((item) => item.id === sel);
       if (index) {
         pathChange(cars[index - 1].id, false);
       } else {
@@ -38,10 +45,6 @@ const TabCar = (props) => {
       }
     }
   };
-
-  //タブ設定
-  const tabs = { tab1: "詳細", tab2: "保険", tab3: "整備履歴", tab4: "備考" };
-  const [activeTab, setActiveTab] = useState("tab1");
 
   return (
     <div>
@@ -68,177 +71,183 @@ const TabCar = (props) => {
       {/* tab */}
       <div className="tab-content">
         {/* tab1 */}
-        <div
-          className={`tab-pane fade ${
-            activeTab === "tab1" ? "show active" : ""
-          } my-3`}
-          id="tab1"
-          role="tabpanel"
-        >
-          <form>
-            <div className="mb-2">
-              <NameFrom
-                title="車両名"
-                nameKey="carName"
-                formUtils={formUtils}
-              />
-            </div>
-            <div className="mb-2">
-              <NameFrom
-                title="車両番号"
-                nameKey="carNumber"
-                formUtils={formUtils}
-              />
-              <NameFrom
-                title="車体番号"
-                nameKey="frameNumber"
-                formUtils={formUtils}
-              />
-              <NameFrom title="型式" nameKey="model" formUtils={formUtils} />
-            </div>
-            <div className="mb-2">
-              <NameFrom
-                title="初度登録年月"
-                nameKey="firstRegistration"
-                formUtils={formUtils}
-              />
-              <StartEndForm
-                title="車検"
-                startKey="inspectionStartDate"
-                endKey="inspectionEndDate"
-                formUtils={formUtils}
-              />
-              <NameFrom title="ETC" nameKey="etc" formUtils={formUtils} />
-            </div>
-            <div className="mb-2">
-              <SelectForm
-                title="車両燃料"
-                items={fuels}
-                nameKey="fk_fuelType"
-                viewKey="fuelType"
-                isAllowEmpty={true}
-                formUtils={formUtils}
-              />
-              <NameFrom
-                title="燃費"
-                nameKey="fuelConsumption"
-                formUtils={formUtils}
-              />
-            </div>
+        {activeTab === "tab1" && (
+          <div
+            className="tab-pane fade show active my-3"
+            id="tab1"
+            role="tabpanel"
+          >
+            <form>
+              <div className="mb-2">
+                <NameFrom
+                  title="車両名"
+                  nameKey="carName"
+                  formUtils={formUtils}
+                />
+              </div>
+              <div className="mb-2">
+                <NameFrom
+                  title="車両番号"
+                  nameKey="carNumber"
+                  formUtils={formUtils}
+                />
+                <NameFrom
+                  title="車体番号"
+                  nameKey="frameNumber"
+                  formUtils={formUtils}
+                />
+                <NameFrom title="型式" nameKey="model" formUtils={formUtils} />
+              </div>
+              <div className="mb-2">
+                <NameFrom
+                  title="初度登録年月"
+                  nameKey="firstRegistration"
+                  formUtils={formUtils}
+                />
+                <StartEndForm
+                  title="車検"
+                  startKey="inspectionStartDate"
+                  endKey="inspectionEndDate"
+                  formUtils={formUtils}
+                />
+                <NameFrom
+                  title="ETC"
+                  nameKey="etcNumber"
+                  formUtils={formUtils}
+                />
+              </div>
+              <div className="mb-2">
+                <SelectForm
+                  title="車両燃料"
+                  items={fuels}
+                  nameKey="fk_fuelType"
+                  viewKey="fuelType"
+                  isAllowEmpty={true}
+                  formUtils={formUtils}
+                />
+                <NameFrom
+                  title="燃費"
+                  nameKey="fuelConsumption"
+                  formUtils={formUtils}
+                />
+              </div>
 
-            <hr />
-            <button type="button" className="btn btn-info" onClick={handleSave}>
-              保存
-            </button>
-          </form>
-        </div>
+              <hr />
+              <button
+                type="button"
+                className="btn btn-info"
+                onClick={handleSave}
+              >
+                保存
+              </button>
+            </form>
+          </div>
+        )}
 
         {/* tab2 */}
-        <div
-          className={`tab-pane fade ${
-            activeTab === "tab2" ? "show active" : ""
-          } my-3`}
-          id="tab2"
-          role="tabpanel"
-        >
-          <form>
-            <div className="mb-2">
-              <NameFrom
-                title="自賠会社"
-                nameKey="compInsCompanyName"
-                formUtils={formUtils}
-              />
-              <NameFrom
-                title="自賠番号"
-                nameKey="compInsNumber"
-                formUtils={formUtils}
-              />
-              <StartEndForm
-                title="自賠期間"
-                startKey={"inspectionStartDate"}
-                endKey={"inspectionEndDate"}
-                formUtils={formUtils}
-              />
-              <NameFrom
-                title="自賠氏名"
-                nameKey="compInsContractorName"
-                formUtils={formUtils}
-              />
-            </div>
-            <div className="mb-2">
-              <NameFrom
-                title="任意会社"
-                nameKey="volInsCompanyName"
-                formUtils={formUtils}
-              />
-              <NameFrom
-                title="任意番号"
-                nameKey="volInsNumber"
-                formUtils={formUtils}
-              />
-              <StartEndForm
-                title="任意期間"
-                startKey="volInsStartDate"
-                endKey="volInsEndDate"
-                formUtils={formUtils}
-              />
-              <NameFrom
-                title="任意氏名"
-                nameKey="volInsContractorName"
-                formUtils={formUtils}
-              />
-              <NameFrom
-                title="年齢条件"
-                nameKey="volInsAgeRequirement"
-                formUtils={formUtils}
-              />
-              <NameFrom
-                title="対人金額"
-                nameKey="volInsPersonal"
-                formUtils={formUtils}
-              />
-              <NameFrom
-                title="対物金額"
-                nameKey="volInsProperty"
-                formUtils={formUtils}
-              />
-              <NameFrom
-                title="搭乗者"
-                nameKey="volInsPassenger"
-                formUtils={formUtils}
-              />
-              <NameFrom
-                title="車両保険"
-                nameKey="volInsCar"
-                formUtils={formUtils}
-              />
-            </div>
-          </form>
-        </div>
+        {activeTab === "tab2" && (
+          <div
+            className="tab-pane fade show active my-3"
+            id="tab2"
+            role="tabpanel"
+          >
+            <form>
+              <div className="mb-2">
+                <NameFrom
+                  title="自賠会社"
+                  nameKey="compInsCompanyName"
+                  formUtils={formUtils}
+                />
+                <NameFrom
+                  title="自賠番号"
+                  nameKey="compInsNumber"
+                  formUtils={formUtils}
+                />
+                <StartEndForm
+                  title="自賠期間"
+                  startKey="inspectionStartDate"
+                  endKey="inspectionEndDate"
+                  formUtils={formUtils}
+                />
+                <NameFrom
+                  title="自賠氏名"
+                  nameKey="compInsContractorName"
+                  formUtils={formUtils}
+                />
+              </div>
+              <div className="mb-2">
+                <NameFrom
+                  title="任意会社"
+                  nameKey="volInsCompanyName"
+                  formUtils={formUtils}
+                />
+                <NameFrom
+                  title="任意番号"
+                  nameKey="volInsNumber"
+                  formUtils={formUtils}
+                />
+                <StartEndForm
+                  title="任意期間"
+                  startKey="volInsStartDate"
+                  endKey="volInsEndDate"
+                  formUtils={formUtils}
+                />
+                <NameFrom
+                  title="任意氏名"
+                  nameKey="volInsContractorName"
+                  formUtils={formUtils}
+                />
+                <NameFrom
+                  title="年齢条件"
+                  nameKey="volInsAgeRequirement"
+                  formUtils={formUtils}
+                />
+                <NameFrom
+                  title="対人金額"
+                  nameKey="volInsPersonal"
+                  formUtils={formUtils}
+                />
+                <NameFrom
+                  title="対物金額"
+                  nameKey="volInsProperty"
+                  formUtils={formUtils}
+                />
+                <NameFrom
+                  title="搭乗者"
+                  nameKey="volInsPassenger"
+                  formUtils={formUtils}
+                />
+                <NameFrom
+                  title="車両保険"
+                  nameKey="volInsCar"
+                  formUtils={formUtils}
+                />
+              </div>
+            </form>
+          </div>
+        )}
 
         {/* tab3 */}
-        <div
-          className={`tab-pane fade ${
-            activeTab === "tab3" ? "show active" : ""
-          } my-3`}
-          id="tab3"
-          role="tabpanel"
-        >
-          {activeTab === "tab3" && (
-            <InfoListCarMaintenance querySel={querySel} />
-          )}
-        </div>
+        {activeTab === "tab3" && (
+          <div
+            className="tab-pane fade show active my-3"
+            id="tab3"
+            role="tabpanel"
+          >
+            <InfoListCarMaintenance sel={sel} />
+          </div>
+        )}
 
         {/* tab4 */}
-        <div
-          className={`tab-pane fade ${
-            activeTab === "tab4" ? "show active" : ""
-          } my-3`}
-          id="tab4"
-          role="tabpanel"
-        >
-          {activeTab === "tab4" && <TabRemark querySel={querySel} />}
-        </div>
+        {activeTab === "tab4" && (
+          <div
+            className="tab-pane fade show active my-3"
+            id="tab4"
+            role="tabpanel"
+          >
+            <TabRemark sel={sel} />
+          </div>
+        )}
       </div>
     </div>
   );

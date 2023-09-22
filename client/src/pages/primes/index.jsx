@@ -10,29 +10,29 @@ export const getServerSideProps = (context) => getData("/companies");
 const Company = (props) => {
   // console.log(props.data);
   const router = useRouter();
-  const companies =
-    router.query.isStatus === "false"
-      ? [...props.data.filter((item) => !item.isStatus)]
-      : [...props.data.filter((item) => item.isStatus)];
-  const { sel } = router.query;
+  const { sel, isStatus } = router.query;
+
+  const companies = props.data.filter((item) =>
+    isStatus === undefined ? item.isStatus : !item.isStatus
+  );
 
   return (
     <>
       <Navbar />
-      <Header items={companies} type="company" sel={sel} />
+      <Header items={companies} type="company" />
 
       <div className="container-lg">
         <div className="row">
-          <div className="col-4">
-            <ItemList items={companies} type="company" sel={sel} />
-          </div>
-
-          {sel ? (
-            <div className="col-8">
-              <TabPrimeCompany companies={companies} sel={sel} />
+          {companies && (
+            <div className="col-4">
+              <ItemList items={companies} type="company" sel={sel} />
             </div>
-          ) : (
-            <div></div>
+          )}
+
+          {sel && (
+            <div className="col-8">
+              <TabPrimeCompany companies={companies} />
+            </div>
           )}
         </div>
       </div>

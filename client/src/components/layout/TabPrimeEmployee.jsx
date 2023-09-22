@@ -11,9 +11,10 @@ import { AddressForm } from "../forms/InputAddressForm";
 import { useRouter } from "next/router";
 
 const TabPrimeEmployee = (props) => {
-  const { branch, emps, sel } = props;
+  const { branch, emps } = props;
+  const router = useRouter();
+  const { sel, companyId, branchId } = router.query;
   const emp = emps.find((item) => item.id === sel);
-  const { companyId, branchId } = useRouter().query;
 
   //タブ設定
   const tabs = { tab1: "詳細", tab2: "備考" };
@@ -25,8 +26,6 @@ const TabPrimeEmployee = (props) => {
   const formUtils = useFormUpdate(initialData);
   const { formData } = formUtils;
 
-  // console.log(query);
-
   //formData保存して更新
   const { saveData } = useSaveData(formData);
   const { pathChange } = usePathChange();
@@ -35,7 +34,7 @@ const TabPrimeEmployee = (props) => {
     //所属とstatusが不変時
     if (
       emp.fk_companyBranchId === formData.fk_companyBranchId &&
-      emp.f_status === formData.f_status
+      emp.isStatus === formData.isStatus
     ) {
       //再レンダリング
       pathChange(formData.id, false);
@@ -80,60 +79,62 @@ const TabPrimeEmployee = (props) => {
 
       <div className="tab-content">
         {/* tab1 */}
-        <div
-          className={`tab-pane fade ${
-            activeTab === "tab1" ? "show active" : ""
-          } my-3`}
-          id="tab1"
-          role="tabpanel"
-        >
-          <div className="mb-2">
-            <SelectForm
-              title="所属"
-              items={branch.company.companyBranch}
-              nameKey={"fk_companyBranchId"}
-              viewKey={"branchName"}
-              isArrowEmpty={false}
-              formUtils={formUtils}
-            />
+        {activeTab === "tab1" && (
+          <div
+            className="tab-pane fade show active my-3"
+            id="tab1"
+            role="tabpanel"
+          >
+            <div className="mb-2">
+              <SelectForm
+                title="所属"
+                items={branch.company.companyBranch}
+                nameKey="fk_companyBranchId"
+                viewKey="branchName"
+                isArrowEmpty={false}
+                formUtils={formUtils}
+              />
+            </div>
+            <div className="mb-2">
+              <BirthdateForm formUtils={formUtils} />
+            </div>
+            <div className="mb-2">
+              <FullNameForm title="氏名" formUtils={formUtils} />
+            </div>
+            <div className="mb-2">
+              <NameFrom
+                title="役職"
+                nameKey="employmentStatus"
+                formUtils={formUtils}
+              />
+              <NameFrom
+                title="部署"
+                nameKey="department"
+                formUtils={formUtils}
+              />
+              <NameFrom title="TEL" nameKey="tel" formUtils={formUtils} />
+              <NameFrom title="Email" nameKey="email" formUtils={formUtils} />
+            </div>
+            <div>
+              <AddressForm formUtils={formUtils} />
+            </div>
+            <hr />
+            <button type="button" className="btn btn-info" onClick={handleSave}>
+              保存
+            </button>
           </div>
-          <div className="mb-2">
-            <BirthdateForm formUtils={formUtils} />
-          </div>
-          <div className="mb-2">
-            <FullNameForm title="氏名" formUtils={formUtils} />
-          </div>
-          <div className="mb-2">
-            <NameFrom
-              title="役職"
-              nameKey="employmentStatus"
-              formUtils={formUtils}
-            />
-            <NameFrom title="部署" nameKey="department" formUtils={formUtils} />
-            <NameFrom title="TEL" nameKey="tel" formUtils={formUtils} />
-            <NameFrom title="Email" nameKey="email" formUtils={formUtils} />
-          </div>
-          <div>
-            <AddressForm formUtils={formUtils} />
-          </div>
-
-          <hr />
-
-          <button type="button" className="btn btn-info" onClick={handleSave}>
-            保存
-          </button>
-        </div>
+        )}
 
         {/* tab2 */}
-        <div
-          className={`tab-pane fade ${
-            activeTab === "tab2" ? "show active" : ""
-          } my-3`}
-          id="tab2"
-          role="tabpanel"
-        >
-          tab2
-        </div>
+        {activeTab === "tab2" && (
+          <div
+            className="tab-pane fade show active my-3"
+            id="tab2"
+            role="tabpanel"
+          >
+            tab2
+          </div>
+        )}
       </div>
     </div>
   );

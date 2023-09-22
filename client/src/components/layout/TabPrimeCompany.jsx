@@ -8,16 +8,21 @@ import {
   useSaveData,
 } from "@/components/containers/handleItem";
 import apiClient from "../../../lib/apiClient";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { SelectStatus } from "../forms/SelectStatus";
+import { useRouter } from "next/router";
 
 const TabPrimeCompany = (props) => {
-  const { companies, sel } = props;
+  const { companies } = props;
+  const router = useRouter();
+  const { sel } = router.query;
   const company = companies.find((item) => item.id === sel);
   const branches = company.companyBranch;
   const emps = company.companyEmployee;
-  const router = useRouter();
+
+  //タブ設定
+  const tabs = { tab1: "詳細", tab2: "店社", tab3: "社員" };
+  const [activeTab, setActiveTab] = useState("tab1");
 
   //オブジェクトから配列を除去
   const { companyBranch, companyEmployee, ...initialData } = company;
@@ -48,19 +53,21 @@ const TabPrimeCompany = (props) => {
     }
   };
 
-  //タブ設定
-  const tabs = { tab1: "詳細", tab2: "店社", tab3: "社員" };
-  const [activeTab, setActiveTab] = useState("tab1");
-
   //店社作成
   const handleCreate = async () => {
     try {
-      const response = await apiClient.post(`/companies/1/branches`, {
-        fk_companyId: sel,
+      const response = await apiClient.post(
+        `/companies/${company.id}/branches`,
+        {
+          fk_companyId: sel,
+        }
+      );
+      const { id: newBranchId } = response.data;
+      router.push({
+        pathname: `/primes/${company.id}`,
+        query: { sel: newBranchId },
       });
-      const { id } = response.data;
-      // router.push(`${router.asPath}/branches/${branchId}`);
-      console.log(`create${id}`);
+      console.log(`create:${newBranchId}`);
     } catch (error) {
       console.error(error);
     }
@@ -113,9 +120,7 @@ const TabPrimeCompany = (props) => {
               <div>
                 <TransactionType formUtils={formUtils} />
               </div>
-
               <hr />
-
               <button
                 type="button"
                 className="btn btn-info"
@@ -134,17 +139,15 @@ const TabPrimeCompany = (props) => {
             id="tab2"
             role="tabpanel"
           >
-            {branches.length ? (
-              <InfoListBranch branches={branches} />
-            ) : (
-              <button
-                type="button"
-                className="btn btn-success"
-                onClick={handleCreate}
-              >
-                新規登録
-              </button>
-            )}
+            <InfoListBranch branches={branches} />
+
+            <button
+              type="button"
+              className="btn btn-success"
+              onClick={handleCreate}
+            >
+              新規登録
+            </button>
           </div>
         )}
 

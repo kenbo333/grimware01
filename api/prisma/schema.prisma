@@ -118,12 +118,12 @@ model CarFuelType {
 
 model Remark {
   id                 String           @id @default(uuid())
-  date               String?
-  remark             String?
+  date               String           @default("")
+  remark             String           @default("")
   fileName           String?
-  fileData           Bytes?
-  isFileData         Boolean          @default(false)
-  mimeType           String?
+  fileType           String?
+  filePath           String?
+  isFile             Boolean          @default(false)
   isPublic           Boolean          @default(true)
   fk_companyEmployee String?
   companyEmployee    CompanyEmployee? @relation(fields: [fk_companyEmployee], references: [id])

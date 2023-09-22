@@ -24,27 +24,31 @@ export const getServerSideProps = async (context) => {
 
 const Car = (props) => {
   // console.log(props.cars);
-  const { cars, fuels } = props;
+  const { fuels } = props;
   const router = useRouter();
-  const querySel = router.query.sel;
+  const { sel, isStatus } = router.query;
+
+  const cars = props.cars.filter((item) =>
+    isStatus === undefined ? item.isStatus : !item.isStatus
+  );
 
   return (
     <>
       <Navbar />
-      <Header items={cars} type="car" querySel={querySel} />
+      <Header items={cars} type="car" />
 
       <div className="container-lg">
         <div className="row">
-          <div className="col-4">
-            <ItemList items={cars} type="car" querySel={querySel} />
-          </div>
-
-          {querySel ? (
-            <div className="col-8">
-              <TabCar cars={cars} querySel={querySel} fuels={fuels} />
+          {cars && (
+            <div className="col-4">
+              <ItemList items={cars} type="car" sel={sel} />
             </div>
-          ) : (
-            <div></div>
+          )}
+
+          {sel && (
+            <div className="col-8">
+              <TabCar cars={cars} fuels={fuels} />
+            </div>
           )}
         </div>
       </div>

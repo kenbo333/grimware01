@@ -12,10 +12,15 @@ import { SelectStatus } from "../forms/SelectStatus";
 import { AddressForm } from "../forms/InputAddressForm";
 
 const TabPrimeBranch = (props) => {
-  const { branches, sel, company } = props;
+  const { branches, company } = props;
+  const router = useRouter();
+  const { sel, companyId } = router.query;
   const branch = branches.find((item) => item.id === sel);
   const emps = branch.companyEmployee;
-  const router = useRouter();
+
+  //タブ設定
+  const tabs = { tab1: "詳細", tab2: "社員" };
+  const [activeTab, setActiveTab] = useState("tab1");
 
   //オブジェクトから配列を除去
   const { companyEmployee, ...initialData } = branch;
@@ -23,17 +28,13 @@ const TabPrimeBranch = (props) => {
   const formUtils = useFormUpdate(initialData);
   const { formData } = formUtils;
 
-  //タブ設定
-  const tabs = { tab1: "詳細", tab2: "社員" };
-  const [activeTab, setActiveTab] = useState("tab1");
-
   //formData保存して更新
   const { saveData } = useSaveData(formData);
   const { pathChange } = usePathChange();
   const handleSave = () => {
-    saveData(`/companies/${company.id}/branches/${sel}`);
+    saveData(`/companies/${companyId}/branches/${sel}`);
     //statusが不変時
-    if (branch.f_status === formData.f_status) {
+    if (branch.isStatus === formData.isStatus) {
       //再レンダリング
       pathChange(formData.id, false);
     } else {
@@ -49,22 +50,20 @@ const TabPrimeBranch = (props) => {
 
   //社員作成
   const handleCreate = async () => {
-    // console.log(company);
-    // return;
     try {
       const response = await apiClient.post(
-        `/companies/${company.id}/branches/${sel}/employees`,
+        `/companies/${companyId}/branches/${sel}/employees`,
         {
           fk_companyId: branch.fk_companyId,
           fk_companyBranchId: branch.id,
         }
       );
-      const newBranchId = response.data.id;
-      // router.push({
-      // pathname: `/prime/branch/employee/${branch.id}`,
-      // query: { sel: id },
-      // });
-      console.log(newBranchId);
+      const { id: newEmployeeId } = response.data;
+      router.push({
+        pathname: `/primes/${companyId}/branches/${branch.id}`,
+        query: { sel: newEmployeeId },
+      });
+      console.log(`create:${newEmployeeId}`);
     } catch (error) {
       console.error(error);
     }
@@ -106,8 +105,8 @@ const TabPrimeBranch = (props) => {
           >
             <div className="mb-2">
               <NameFrom_kana
-                title={"店社名"}
-                nameKey={"branchName"}
+                title="店社名"
+                nameKey="branchName"
                 formUtils={formUtils}
               />
             </div>
@@ -121,9 +120,7 @@ const TabPrimeBranch = (props) => {
               <NameFrom title="FAX" nameKey="fax" formUtils={formUtils} />
               <NameFrom title="Email" nameKey="email" formUtils={formUtils} />
             </div>
-
             <hr />
-
             <button type="button" className="btn btn-info" onClick={handleSave}>
               保存
             </button>
@@ -142,9 +139,7 @@ const TabPrimeBranch = (props) => {
                 <div className="col-4">氏名/Email</div>
                 <div className="col-8">TEL</div>
               </div>
-
               <hr />
-
               {emps.map((emp) => (
                 <div key={emp.id}>
                   <div className="row">
@@ -157,9 +152,7 @@ const TabPrimeBranch = (props) => {
                     </div>
                   </div>
                   <Link
-                    href={`${router.asPath.split("?")[0]}/branches/${
-                      branch.id
-                    }?sel=${emp.id}`}
+                    href={`/primes/${companyId}/branches/${branch.id}?sel=${emp.id}`}
                   >
                     社員リンク
                   </Link>

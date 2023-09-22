@@ -4,6 +4,7 @@ import { useState } from "react";
 export const ItemList = (props) => {
   const { items, type, sel } = props;
   const { pathChange } = usePathChange();
+
   // 検索用
   const [searchText, setSearchText] = useState("");
   const handleChange = (event) => {
@@ -11,11 +12,11 @@ export const ItemList = (props) => {
   };
 
   const filterStrategies = {
-    company: (item) => item.companyName?.includes(searchText),
-    branch: (item) => item.branchName?.includes(searchText),
+    company: (item) => item.companyName.includes(searchText),
+    branch: (item) => item.branchName.includes(searchText),
     employee: (item) =>
       item.lastName.includes(searchText) || item.firstName.includes(searchText),
-    car: (item) => item.carName?.includes(searchText),
+    car: (item) => item.carName.includes(searchText),
   };
 
   const titleStrategies = {
@@ -25,7 +26,7 @@ export const ItemList = (props) => {
     car: ["carName"],
   };
 
-  const filteredItems = items?.filter(filterStrategies[type]);
+  const filteredItems = items.filter(filterStrategies[type]);
   const titles = titleStrategies[type];
 
   return (
@@ -46,7 +47,7 @@ export const ItemList = (props) => {
       {/* リスト */}
       <div className="overflow-auto" style={{ height: "750px" }}>
         <div className="list-group">
-          {filteredItems?.map((item) => (
+          {filteredItems.map((item) => (
             <button
               key={item.id}
               type="button"

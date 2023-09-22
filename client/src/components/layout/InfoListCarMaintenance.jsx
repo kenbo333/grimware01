@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import apiClient from "../../../lib/apiClient";
 
 const InfoListCarMaintenance = (props) => {
-  const { querySel } = props;
+  const { sel } = props;
   const [items, setItems] = useState([]);
 
   const handleEdit = (index) => {
@@ -14,8 +14,7 @@ const InfoListCarMaintenance = (props) => {
 
   const handleCancel = (index) => {
     const newItems = [...items];
-    const originalItem = newItems[index].originalItem;
-    newItems[index] = originalItem;
+    newItems[index] = newItems[index].originalItem;
     delete newItems[index].isEditing;
     delete newItems[index].originalItem;
     setItems(newItems);
@@ -31,7 +30,7 @@ const InfoListCarMaintenance = (props) => {
 
   const handleCreate = async () => {
     try {
-      const response = await apiClient.post(`/cars/${querySel}/maintenance`);
+      const response = await apiClient.post(`/cars/${sel}/maintenance`);
       const newItem = response.data;
       setItems((prevItems) => [newItem, ...prevItems]);
     } catch (error) {
@@ -45,7 +44,7 @@ const InfoListCarMaintenance = (props) => {
       delete newItems[index].isEditing;
       delete newItems[index].originalItem;
       const updateData = newItems[index];
-      await apiClient.put(`/cars/${querySel}/maintenance/${items[index].id}`, {
+      await apiClient.put(`/cars/${sel}/maintenance/${items[index].id}`, {
         updateData,
       });
       setItems(newItems);
@@ -57,9 +56,7 @@ const InfoListCarMaintenance = (props) => {
 
   const handleDelete = async (index) => {
     try {
-      await apiClient.delete(
-        `/cars/${querySel}/maintenance/${items[index].id}`
-      );
+      await apiClient.delete(`/cars/${sel}/maintenance/${items[index].id}`);
       const newItems = [...items];
       newItems.splice(index, 1);
       setItems(newItems);
@@ -72,14 +69,14 @@ const InfoListCarMaintenance = (props) => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await apiClient.get(`/cars/${querySel}/maintenance`);
+        const response = await apiClient.get(`/cars/${sel}/maintenance`);
         setItems(response.data);
       } catch (error) {
         console.error(error);
       }
     };
     fetchItems();
-  }, [querySel]);
+  }, [sel]);
 
   return (
     <div>

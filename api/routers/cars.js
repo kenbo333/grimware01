@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-//-----------post-----------------------
+//------create-----------------------
 router.post("/", async (req, res) => {
   try {
     const newItem = await prisma.car.create({ data: req.body });
@@ -28,14 +28,15 @@ router.post("/:carId/maintenance", async (req, res) => {
 });
 
 //-----------get---------------------------
-const getIsStatus = (query) => query.isStatus !== "false";
+//クエリ ?isStatus=true 取引中のみ
+const isStatusCondition = (query) =>
+  query.isStatus === undefined ? {} : { isStatus: query.isStatus === "true" };
 
 router.get("/", async (req, res) => {
   try {
-    const isStatus = getIsStatus(req.query);
     const items = await prisma.car.findMany({
       where: {
-        f_status: isStatus,
+        ...isStatusCondition(req.query),
       },
     });
     return res.status(200).json(items);
@@ -69,15 +70,11 @@ router.get("/fuel", async (req, res) => {
   }
 });
 
-//-----------put-----------------------
-router.put("/", async (req, res) => {
+//-----update--------------------------------------
+router.put("/:carId", async (req, res) => {
   try {
-    if (!req.query.sel) {
-      return res.status(400).json({ error: "ID is required to update." });
-    }
-
     const updateItem = await prisma.car.update({
-      where: { id: req.query.sel },
+      where: { id: req.params.carId },
       data: req.body.formData,
     });
     return res.status(200).json(updateItem);
@@ -88,7 +85,7 @@ router.put("/", async (req, res) => {
 });
 
 //
-router.put("/:carId/maintenance/:id", async (req, res) => {
+router.put("/:carId/maintenance/:maintenanceId", async (req, res) => {
   const { updateData } = req.body;
 
   if (!updateData || !updateData.id || typeof updateData !== "object") {
@@ -97,7 +94,7 @@ router.put("/:carId/maintenance/:id", async (req, res) => {
 
   try {
     const updateItem = await prisma.carMaintenance.update({
-      where: { id: updateData.id },
+      where: { id: req.params.maintenanceId },
       data: updateData,
     });
     return res.status(200).json(updateItem);
@@ -109,14 +106,10 @@ router.put("/:carId/maintenance/:id", async (req, res) => {
   }
 });
 
-//-----------delete-----------------------
-router.delete("/", async (req, res) => {
+//------delete-----------------------
+router.delete("/:carId", async (req, res) => {
   try {
-    if (!req.query.sel) {
-      return res.status(400).json({ error: "ID is required to delete." });
-    }
-
-    await prisma.car.delete({ where: { id: req.query.sel } });
+    await prisma.car.delete({ where: { id: req.params.carId } });
     return res.status(204).send();
   } catch (error) {
     console.error(error);
@@ -124,11 +117,11 @@ router.delete("/", async (req, res) => {
   }
 });
 
-router.delete("/:carId/maintenance/:id", async (req, res) => {
+router.delete("/:carId/maintenance/:maintenanceId", async (req, res) => {
   try {
     await prisma.carMaintenance.delete({
       where: {
-        id: req.params.id,
+        id: req.params.maintenanceId,
       },
     });
     return res.status(204).send();

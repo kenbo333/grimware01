@@ -8,33 +8,35 @@ const urlStrategies = {
   branch: (query) => `/companies/${query.companyId}/branches`,
   employee: (query) =>
     `/companies/${query.companyId}/branches/${query.branchId}/employees`,
+  car: () => "/cars",
 };
 
 export const Header = (props) => {
-  const { items, type, sel } = props;
+  const { items, type } = props;
   const { pathChange } = usePathChange();
   const router = useRouter();
-  const isStatus = router.query.isStatus === "false";
+  const query = router.query;
+  const isStatus = query.isStatus === "false";
 
   //新規作成
   const createItem = async () => {
     const createDataStrategies = {
       company: { isPrime: true },
-      branch: { fk_companyId: router.query.companyId },
+      branch: { fk_companyId: query.companyId },
       employee: {
-        fk_companyId: router.query.companyId,
-        fk_companyBranchId: router.query.branchId,
+        fk_companyId: query.companyId,
+        fk_companyBranchId: query.branchId,
       },
     };
 
     const data = createDataStrategies[type];
-    const url = urlStrategies[type](router.query);
+    const url = urlStrategies[type](query);
 
     try {
       const response = await apiClient.post(url, data);
-      const newBranchId = response.data.id;
-      pathChange(newBranchId, false);
-      console.log(`create:${newBranchId}`);
+      const newId = response.data.id;
+      pathChange(newId, false);
+      console.log(`create:${newId}`);
     } catch (error) {
       console.error(error);
     }
@@ -45,8 +47,8 @@ export const Header = (props) => {
     const url = urlStrategies[type](router.query);
 
     try {
-      const index = items.findIndex((item) => item.id === sel);
-      await apiClient.delete(`${url}/${sel}`);
+      const index = items.findIndex((item) => item.id === query.sel);
+      await apiClient.delete(`${url}/${query.sel}`);
       //一番上以外は前の会社を選択
       if (index) {
         pathChange(items[index - 1].id, false);

@@ -209,7 +209,7 @@ export const StartEndForm = (props) => {
           <input
             type="text"
             className="form-control"
-            id={endValue}
+            id={endKey}
             value={endValue || ""}
             onChange={handleChange}
           />

@@ -1,65 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import apiClient from "../../../lib/apiClient";
 
 const TabRemark = (props) => {
-  const { querySel } = props;
+  const { sel } = props;
   const [items, setItems] = useState([]);
-  const [isZoomed, setIsZoomed] = useState(false);
-  const [isDragOver, setIsDragOver] = useState(false);
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setIsDragOver(true);
-  };
-
-  const handleDragLeave = () => {
-    setIsDragOver(false);
-  };
-
-  const handleDrop = async (e) => {
-    e.preventDefault();
-    setIsDragOver(false);
-
-    const formData = new FormData();
-    formData.append("file", e.dataTransfer.files[0]);
-    formData.append("fk_car", querySel);
-
-    try {
-      const response = await apiClient.post("/remark", formData);
-      console.log("File uploaded:", response.data);
-    } catch (error) {
-      console.error("Error uploading file:", error);
-    }
-  };
-
-  const handleImageClick = () => {
-    setIsZoomed(!isZoomed);
-  };
-  const imageStyle = isZoomed
-    ? { width: "100%", height: "auto" }
-    : { width: "100px", height: "auto", cursor: "pointer" };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await apiClient.get("/remarks", {
-          params: {
-            fk_car: querySel,
-          },
-        });
-        setItems(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, [querySel]);
-
-  const handleChange = (e) => {
-    const index = parseInt(e.target.dataset.index, 10);
-    const { name, value } = e.target;
+  const handleEdit = (index) => {
     const newItems = [...items];
-    newItems[index][name] = value;
+    newItems[index].isEditing = true;
+    newItems[index].originalItem = { ...newItems[index] };
+    setItems(newItems);
+  };
+
+  const handleCancel = (index) => {
+    const newItems = [...items];
+    newItems[index] = newItems[index].originalItem;
+    delete newItems[index].isEditing;
+    delete newItems[index].originalItem;
     setItems(newItems);
   };
 
@@ -67,7 +24,7 @@ const TabRemark = (props) => {
     try {
       const response = await apiClient.post("/remarks", {
         postData: {
-          fk_car: querySel,
+          fk_car: sel,
         },
       });
       const newItem = response.data;
@@ -79,11 +36,21 @@ const TabRemark = (props) => {
 
   const handleSave = async (index) => {
     try {
+      const stagedFile = items[index].file;
       const newItems = [...items];
-      // delete newItems[index].isEditing;
-      // delete newItems[index].originalItem;
-      const updatedData = newItems[index];
-      await apiClient.put("/remarks", { updatedData });
+      newItems[index] = {
+        ...newItems[index],
+        isFile: true,
+      };
+      delete newItems[index].isEditing;
+      delete newItems[index].originalItem;
+
+      const formData = new FormData();
+      stagedFile &&
+        (formData.append("file", stagedFile), delete newItems[index].file);
+      formData.append("updateData", JSON.stringify(newItems[index]));
+
+      await apiClient.put(`/remarks/${items[index].id}`, formData);
       setItems(newItems);
       console.log("save");
     } catch (error) {
@@ -102,6 +69,63 @@ const TabRemark = (props) => {
       console.error("Error deleting the item:", error);
     }
   };
+
+  const handleFileDrop = (e, index) => {
+    e.preventDefault();
+    const newItems = [...items];
+    const droppedFile = e.dataTransfer.files[0];
+    const today = new Date();
+    const formattedDate = `${today.getFullYear()}-${String(
+      today.getMonth() + 1
+    ).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+
+    newItems[index].file = droppedFile;
+    newItems[index].fileName = droppedFile.name;
+    newItems[index].date = formattedDate;
+    setItems(newItems);
+  };
+
+  const handleChange = (e) => {
+    const index = parseInt(e.target.dataset.index, 10);
+    const { name, value } = e.target;
+    const newItems = [...items];
+    newItems[index][name] = value;
+    setItems(newItems);
+  };
+
+  const handleCheck = (e) => {
+    const index = parseInt(e.target.dataset.index, 10);
+    const { name } = e.target;
+    const newItems = [...items];
+    newItems[index][name] = !newItems[index][name];
+    setItems(newItems);
+  };
+
+  const handleDownload = (index) => {
+    window.location.href = `http://localhost:5000/api/remarks/download/${items[index].id}`;
+  };
+
+  const getFileStatus = (item) => {
+    if (item.isFile) return "ファイル有";
+    if (item.file) return "ファイルセット";
+    return "ファイル無し";
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await apiClient.get("/remarks", {
+          params: {
+            fk_car: sel,
+          },
+        });
+        setItems(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [sel]);
 
   return (
     <div>
@@ -126,22 +150,6 @@ const TabRemark = (props) => {
         {items.map((item, index) => (
           <div key={item.id}>
             <div className="row mb-3">
-              <div
-                className="col-2"
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                style={{
-                  border: "2px dashed gray",
-                  height: "80px",
-                  display: "flex",
-                  alignItems: "center",
-                  background: isDragOver ? "#f3f4f6" : "white",
-                }}
-              >
-                {isDragOver ? "Release to drop" : "Drag & Drop ここへ"}
-              </div>
-
               <div className="col-10">
                 <div className="row">
                   <div className="col-8 px-1">
@@ -151,6 +159,7 @@ const TabRemark = (props) => {
                       name="fileName"
                       data-index={index.toString()}
                       value={item.fileName || ""}
+                      disabled={!item.isEditing}
                       onChange={handleChange}
                     />
                   </div>
@@ -161,6 +170,7 @@ const TabRemark = (props) => {
                       name="date"
                       data-index={index.toString()}
                       value={item.date || ""}
+                      disabled={!item.isEditing}
                       onChange={handleChange}
                     />
                   </div>
@@ -173,79 +183,111 @@ const TabRemark = (props) => {
                       name="remark"
                       data-index={index.toString()}
                       value={item.remark || ""}
+                      disabled={!item.isEditing}
                       onChange={handleChange}
                     />
                   </div>
-                  <div className="col-4 px-1">
-                    <button type="button" className="btn btn-light">
-                      🔎
-                    </button>
-                    <button type="button" className="btn btn-light">
-                      DL
-                    </button>
+                  <div className="col-4 d-flex align-items-center">
+                    <div className="form-check">
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        id={`isPublic-${index}`}
+                        name="isPublic"
+                        data-index={index.toString()}
+                        checked={item.isPublic || false}
+                        onChange={handleCheck}
+                        disabled={!item.isEditing}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor={`isPublic-${index}`}
+                      >
+                        公開
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div>
-              <button
-                type="button"
-                className="btn btn-success me-3"
-                onClick={() => handleSave(index)}
+            <div className="row">
+              <div
+                className="col-6"
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => handleFileDrop(e, index)}
+                style={{
+                  border: "2px dashed #ccc",
+                  padding: "20px",
+                  textAlign: "center",
+                }}
               >
-                保存
-              </button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => handleDelete(index)}
-              >
-                削除
-              </button>
+                {getFileStatus(item)}
+                <input
+                  className="form-control"
+                  type="file"
+                  style={{ display: "none" }}
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </div>
+              <div className="col">
+                {item.isFile && (
+                  <div>
+                    <button
+                      type="button"
+                      className="btn btn-light"
+                      onClick={() => handleDownload(index)}
+                    >
+                      Download
+                    </button>
+                    <button type="button" className="btn btn-light">
+                      🔎
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
+
+            {!item.isEditing ? (
+              <div>
+                <button
+                  type="button"
+                  className="btn btn-info me-4"
+                  onClick={() => handleEdit(index)}
+                >
+                  編集
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={() => handleDelete(index)}
+                >
+                  削除
+                </button>
+              </div>
+            ) : (
+              <div>
+                <button
+                  type="button"
+                  className="btn btn-success me-4"
+                  onClick={() => handleSave(index)}
+                >
+                  保存
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => handleCancel(index)}
+                >
+                  キャンセル
+                </button>
+              </div>
+            )}
             <hr />
           </div>
         ))}
       </div>
     </div>
-
-    // <div>
-
-    //   <div>
-    //     {items.map((item) => (
-    //       <div key={item.id} className="my-2">
-    //         <input
-    //           type="text"
-    //           className="form-control"
-    //           name="fileName"
-    //           value={item.fileName || ""}
-    //           onChange={handleChange}
-    //         />
-    //         <input
-    //           type="text"
-    //           className="form-control"
-    //           name="remark"
-    //           value={item.remark || ""}
-    //           onChange={handleChange}
-    //         />
-    //         {item.mimeType.startsWith("image/") ? (
-    //           <img
-    //             src={item.data}
-    //             alt={item.name}
-    //             style={imageStyle}
-    //             onClick={handleImageClick}
-    //           />
-    //         ) : (
-    //           <a href={item.data} download={item.name}>
-    //             Download {item.name}
-    //           </a>
-    //         )}
-    //         <hr />
-    //       </div>
-    //     ))}
-    //   </div>
-    // </div>
   );
 };
 

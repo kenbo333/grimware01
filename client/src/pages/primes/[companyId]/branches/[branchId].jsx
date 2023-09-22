@@ -13,27 +13,30 @@ export const getServerSideProps = (context) => {
 const Employee = (props) => {
   // console.log(props.data);
   const router = useRouter();
-  const sel = router.query.sel;
+  const { sel, isStatus } = router.query;
   const branch = props.data;
-  const emps = branch.companyEmployee;
+
+  const emps = branch.companyEmployee.filter((item) =>
+    isStatus === undefined ? item.isStatus : !item.isStatus
+  );
 
   return (
     <div>
       <Navbar />
-      <Header items={emps} type="employee" sel={sel} />
+      <Header items={emps} type="employee" />
 
       <div className="container-lg">
         <div className="row">
-          <div className="col-4">
-            <ItemList items={emps} type="employee" sel={sel} />
-          </div>
-
-          {sel ? (
-            <div className="col-8">
-              <TabPrimeEmployee emps={emps} sel={sel} branch={branch} />
+          {emps && (
+            <div className="col-4">
+              <ItemList items={emps} type="employee" sel={sel} />
             </div>
-          ) : (
-            <div></div>
+          )}
+
+          {sel && (
+            <div className="col-8">
+              <TabPrimeEmployee emps={emps} branch={branch} />
+            </div>
           )}
         </div>
       </div>
