@@ -27,7 +27,7 @@ router.post("/:carId/maintenance", async (req, res) => {
   }
 });
 
-//-----------get---------------------------
+//-----------read---------------------------
 //クエリ ?isStatus=true 取引中のみ
 const isStatusCondition = (query) =>
   query.isStatus === undefined ? {} : { isStatus: query.isStatus === "true" };

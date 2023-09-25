@@ -1,8 +1,6 @@
 export const NameFrom = (props) => {
-  //title,nameKey,formUtils
-  const { formData, updateObject } = props.formUtils;
-  const nameKey = props.nameKey;
-  const value = formData[nameKey];
+  const { title, nameKey, formUtils } = props;
+  const { formData, updateObject } = formUtils;
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -13,15 +11,16 @@ export const NameFrom = (props) => {
     <div>
       <div className="row">
         <label className="col-form-label col-sm-2" htmlFor={nameKey}>
-          {props.title}
+          {title}
         </label>
         <div className="col-sm-10">
           <input
             type="text"
             className="form-control"
             id={nameKey}
-            value={value}
+            value={formData[nameKey]}
             onChange={handleChange}
+            disabled={!formData.isEditing}
           />
         </div>
       </div>
@@ -31,11 +30,9 @@ export const NameFrom = (props) => {
 
 //-------------------------------------------------------------------
 export const NameFrom_kana = (props) => {
-  //title,nameKey,formUtils
-  const { formData, updateObject } = props.formUtils;
-  const nameKey = props.nameKey;
-  const nameKey_kana = `${props.nameKey}_kana`;
-  const value = formData[nameKey];
+  const { title, nameKey, formUtils } = props;
+  const { formData, updateObject } = formUtils;
+  const nameKey_kana = `${nameKey}_kana`;
   const value_kana = formData[nameKey_kana];
 
   const handleChange = (event) => {
@@ -56,21 +53,23 @@ export const NameFrom_kana = (props) => {
             id={nameKey_kana}
             value={value_kana}
             onChange={handleChange}
+            disabled={!formData.isEditing}
           />
         </div>
       </div>
 
       <div className="row">
         <label className="col-form-label col-sm-2" htmlFor={nameKey}>
-          {props.title}
+          {title}
         </label>
         <div className="col-sm-10">
           <input
             type="text"
             className="form-control"
             id={nameKey}
-            value={value}
+            value={formData[nameKey]}
             onChange={handleChange}
+            disabled={!formData.isEditing}
           />
         </div>
       </div>
@@ -80,9 +79,8 @@ export const NameFrom_kana = (props) => {
 
 //-------------------------------------------------------------------------------
 export const FullNameForm = (props) => {
-  //title,formUtils
-  const { title } = props;
-  const { formData, updateObject } = props.formUtils;
+  const { title, formUtils } = props;
+  const { formData, updateObject } = formUtils;
   const { lastName, firstName, lastName_kana, firstName_kana } = formData;
 
   const handleChange = (event) => {
@@ -103,6 +101,7 @@ export const FullNameForm = (props) => {
             id="lastName_kana"
             value={lastName_kana}
             onChange={handleChange}
+            disabled={!formData.isEditing}
           />
         </div>
         <div className="col-sm-5">
@@ -112,6 +111,7 @@ export const FullNameForm = (props) => {
             id="firstName_kana"
             value={firstName_kana}
             onChange={handleChange}
+            disabled={!formData.isEditing}
           />
         </div>
       </div>
@@ -127,6 +127,7 @@ export const FullNameForm = (props) => {
             id="lastName"
             value={lastName}
             onChange={handleChange}
+            disabled={!formData.isEditing}
           />
         </div>
         <div className="col-sm-5">
@@ -136,6 +137,7 @@ export const FullNameForm = (props) => {
             id="firstName"
             value={firstName}
             onChange={handleChange}
+            disabled={!formData.isEditing}
           />
         </div>
       </div>
@@ -145,10 +147,8 @@ export const FullNameForm = (props) => {
 
 //---------------------------------------------------------------------------
 export const SelectForm = (props) => {
-  //title,items,nameKey,viewKey,isAllowEmpty,formUtils
-  const { title, items, nameKey, viewKey, isAllowEmpty } = props;
-  const { formData, updateObject } = props.formUtils;
-  const value = formData[nameKey];
+  const { title, items, nameKey, viewKey, isAllowEmpty, formUtils } = props;
+  const { formData, updateObject } = formUtils;
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -165,7 +165,8 @@ export const SelectForm = (props) => {
           className="form-select"
           id={nameKey}
           onChange={handleChange}
-          value={value}
+          value={formData[nameKey]}
+          disabled={!formData.isEditing}
         >
           {isAllowEmpty && <option value=""></option>}
           {items.map((item) => (
@@ -181,10 +182,8 @@ export const SelectForm = (props) => {
 
 //---------------------------------------------------------------------
 export const StartEndForm = (props) => {
-  const { title, startKey, endKey } = props;
-  const { formData, updateObject } = props.formUtils;
-  const startValue = formData[startKey];
-  const endValue = formData[endKey];
+  const { title, startKey, endKey, formUtils } = props;
+  const { formData, updateObject } = formUtils;
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -201,8 +200,9 @@ export const StartEndForm = (props) => {
             type="text"
             className="form-control"
             id={startKey}
-            value={startValue || ""}
+            value={formData[startKey] || ""}
             onChange={handleChange}
+            disabled={!formData.isEditing}
           />
         </div>
         <div className="col-sm-4 ps-0">
@@ -210,8 +210,9 @@ export const StartEndForm = (props) => {
             type="text"
             className="form-control"
             id={endKey}
-            value={endValue || ""}
+            value={formData[endKey] || ""}
             onChange={handleChange}
+            disabled={!formData.isEditing}
           />
         </div>
       </div>

@@ -11,6 +11,7 @@ import apiClient from "../../../lib/apiClient";
 import { useState } from "react";
 import { SelectStatus } from "../forms/SelectStatus";
 import { useRouter } from "next/router";
+import { ButtonEdit } from "../ui/ButtonEdit";
 
 const TabPrimeCompany = (props) => {
   const { companies } = props;
@@ -28,29 +29,19 @@ const TabPrimeCompany = (props) => {
   const { companyBranch, companyEmployee, ...initialData } = company;
   //inputの表示とオブジェクトの更新
   const formUtils = useFormUpdate(initialData);
-  const { formData } = formUtils;
+  const { formData, endEdit } = formUtils;
 
   //formData保存して更新
-  const { saveData } = useSaveData(formData);
-  const { pathChange } = usePathChange();
+  const { saveData } = useSaveData();
+  const { pathMove } = usePathChange();
   const handleSave = () => {
-    saveData(`/companies/${sel}`);
-    //元請会社のチェック||statusが不変時
-    if (
+    const newFormData = endEdit();
+    saveData(`/companies/${sel}`, newFormData);
+    //元請会社のチェック||statusが不変
+    const isStatic =
       company.isPrime === formData.isPrime &&
-      company.isStatus === formData.isStatus
-    ) {
-      //再レンダリング
-      pathChange(formData.id, false);
-    } else {
-      //変更時、selを上に移動
-      const index = companies.findIndex((item) => item.id === sel);
-      if (index) {
-        pathChange(companies[index - 1].id, false);
-      } else {
-        pathChange("", false);
-      }
-    }
+      company.isStatus === formData.isStatus;
+    pathMove(isStatic, companies, sel);
   };
 
   //店社作成
@@ -121,13 +112,7 @@ const TabPrimeCompany = (props) => {
                 <TransactionType formUtils={formUtils} />
               </div>
               <hr />
-              <button
-                type="button"
-                className="btn btn-info"
-                onClick={handleSave}
-              >
-                保存
-              </button>
+              <ButtonEdit formUtils={formUtils} handleSave={handleSave} />
             </form>
           </div>
         )}

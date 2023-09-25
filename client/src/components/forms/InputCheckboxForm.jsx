@@ -5,8 +5,8 @@ const options = [
 ];
 
 export const TransactionType = (props) => {
-  //formUtils
   const { formData, updateCheckbox } = props.formUtils;
+
   const handleChange = (event) => {
     const { id } = event.target;
     updateCheckbox(id);
@@ -24,6 +24,7 @@ export const TransactionType = (props) => {
               id={option.value}
               checked={formData[option.value] || false}
               onChange={handleChange}
+              disabled={!formData.isEditing}
             />
             <label className="form-check-label" htmlFor={option.value}>
               {option.label}

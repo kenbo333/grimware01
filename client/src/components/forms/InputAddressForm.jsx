@@ -1,5 +1,4 @@
 export const AddressForm = (props) => {
-  //formUtils
   const { formData, updateObject } = props.formUtils;
   const { postcode, address1, address2 } = formData;
 
@@ -21,6 +20,7 @@ export const AddressForm = (props) => {
             id="postcode"
             value={postcode}
             onChange={handleChange}
+            disabled={!formData.isEditing}
           />
         </div>
       </div>
@@ -35,6 +35,7 @@ export const AddressForm = (props) => {
             id="address1"
             value={address1}
             onChange={handleChange}
+            disabled={!formData.isEditing}
           />
         </div>
       </div>
@@ -47,6 +48,7 @@ export const AddressForm = (props) => {
             id="address2"
             value={address2}
             onChange={handleChange}
+            disabled={!formData.isEditing}
           />
         </div>
       </div>

@@ -32,7 +32,7 @@ export const ItemList = (props) => {
   return (
     <>
       {/* 検索窓 */}
-      <div className="my-2">
+      <div className="my-2 position-relative">
         <input
           type="text"
           name="searchText"
@@ -42,6 +42,23 @@ export const ItemList = (props) => {
           onChange={handleChange}
           className="form-control"
         />
+        {searchText && (
+          <div className="input-group-append">
+            <span
+              className="position-absolute text-secondary"
+              style={{
+                top: "50%",
+                right: "10px",
+                transform: "translateY(-55%)",
+                cursor: "pointer",
+                fontSize: "1.5rem",
+              }}
+              onClick={() => setSearchText("")}
+            >
+              ×
+            </span>
+          </div>
+        )}
       </div>
 
       {/* リスト */}

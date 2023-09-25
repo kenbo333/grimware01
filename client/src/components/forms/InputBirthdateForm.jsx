@@ -41,6 +41,7 @@ export const BirthdateForm = (props) => {
             id="birthYear"
             onChange={handleChange}
             value={birthYear || ""}
+            disabled={!formData.isEditing}
           >
             <option value=""></option>
             {inputYears.map((inputYear) => (
@@ -56,6 +57,7 @@ export const BirthdateForm = (props) => {
             id="birthMonth"
             onChange={handleChange}
             value={birthMonth || ""}
+            disabled={!formData.isEditing}
           >
             <option value=""></option>
             {inputMonths.map((inputMonth) => (
@@ -71,6 +73,7 @@ export const BirthdateForm = (props) => {
             id="birthDay"
             onChange={handleChange}
             value={birthDay || ""}
+            disabled={!formData.isEditing}
           >
             <option value=""></option>
             {inputDays.map((inputDay) => (
@@ -82,15 +85,13 @@ export const BirthdateForm = (props) => {
         </div>
 
         <div className="col-sm-2">
-          {birthYear && birthMonth && birthDay ? (
+          {birthYear && birthMonth && birthDay && (
             <input
               type="text"
               className="form-control"
               value={`${calculateAge(birthYear, birthMonth, birthDay)}歳`}
               disabled
             />
-          ) : (
-            <div></div>
           )}
         </div>
       </div>

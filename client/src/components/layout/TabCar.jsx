@@ -9,6 +9,7 @@ import { NameFrom, SelectForm, StartEndForm } from "../forms/InputForm";
 import InfoListCarMaintenance from "./InfoListCarMaintenance";
 import TabRemark from "./TabRemark";
 import { useRouter } from "next/router";
+import { ButtonEdit } from "../ui/ButtonEdit";
 
 const TabCar = (props) => {
   const { cars, fuels } = props;
@@ -24,26 +25,17 @@ const TabCar = (props) => {
   const { ...initialData } = car;
   //inputの表示とオブジェクトの更新
   const formUtils = useFormUpdate(initialData);
-  const { formData } = formUtils;
+  const { formData, endEdit } = formUtils;
 
   //formData保存して更新
-  const { saveData } = useSaveData(formData);
-  const { pathChange } = usePathChange();
+  const { saveData } = useSaveData();
+  const { pathMove } = usePathChange();
   const handleSave = () => {
-    saveData(`/cars/${sel}`);
-    //statusが不変時
-    if (car.isStatus === formData.isStatus) {
-      //再レンダリング
-      pathChange(formData.id, false);
-    } else {
-      //変更時、selを上に移動
-      const index = cars.findIndex((item) => item.id === sel);
-      if (index) {
-        pathChange(cars[index - 1].id, false);
-      } else {
-        pathChange("", false);
-      }
-    }
+    const newFormData = endEdit();
+    saveData(`/cars/${sel}`, newFormData);
+    //statusが不変
+    const isStatic = car.isStatus === formData.isStatus;
+    pathMove(isStatic, cars, sel);
   };
 
   return (
@@ -133,13 +125,7 @@ const TabCar = (props) => {
               </div>
 
               <hr />
-              <button
-                type="button"
-                className="btn btn-info"
-                onClick={handleSave}
-              >
-                保存
-              </button>
+              <ButtonEdit formUtils={formUtils} handleSave={handleSave} />
             </form>
           </div>
         )}
@@ -223,6 +209,8 @@ const TabCar = (props) => {
                   formUtils={formUtils}
                 />
               </div>
+              <hr />
+              <ButtonEdit formUtils={formUtils} handleSave={handleSave} />
             </form>
           </div>
         )}

@@ -10,6 +10,7 @@ import {
 import apiClient from "../../../lib/apiClient";
 import { SelectStatus } from "../forms/SelectStatus";
 import { AddressForm } from "../forms/InputAddressForm";
+import { ButtonEdit } from "../ui/ButtonEdit";
 
 const TabPrimeBranch = (props) => {
   const { branches, company } = props;
@@ -26,26 +27,17 @@ const TabPrimeBranch = (props) => {
   const { companyEmployee, ...initialData } = branch;
   //inputの表示とオブジェクトの更新
   const formUtils = useFormUpdate(initialData);
-  const { formData } = formUtils;
+  const { formData, endEdit } = formUtils;
 
   //formData保存して更新
-  const { saveData } = useSaveData(formData);
-  const { pathChange } = usePathChange();
+  const { saveData } = useSaveData();
+  const { pathMove } = usePathChange();
   const handleSave = () => {
-    saveData(`/companies/${companyId}/branches/${sel}`);
-    //statusが不変時
-    if (branch.isStatus === formData.isStatus) {
-      //再レンダリング
-      pathChange(formData.id, false);
-    } else {
-      //変更時、selを上に移動
-      const index = branches.findIndex((item) => item.id === sel);
-      if (index) {
-        pathChange(branches[index - 1].id, false);
-      } else {
-        pathChange("", false);
-      }
-    }
+    const newFormData = endEdit();
+    saveData(`/companies/${companyId}/branches/${sel}`, newFormData);
+    //statusが不変
+    const isStatic = branch.isStatus === formData.isStatus;
+    pathMove(isStatic, branches, sel);
   };
 
   //社員作成
@@ -121,9 +113,7 @@ const TabPrimeBranch = (props) => {
               <NameFrom title="Email" nameKey="email" formUtils={formUtils} />
             </div>
             <hr />
-            <button type="button" className="btn btn-info" onClick={handleSave}>
-              保存
-            </button>
+            <ButtonEdit formUtils={formUtils} handleSave={handleSave} />
           </div>
         )}
 

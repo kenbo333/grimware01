@@ -9,6 +9,7 @@ import { SelectForm, FullNameForm, NameFrom } from "../forms/InputForm";
 import { BirthdateForm } from "../forms/InputBirthdateForm";
 import { AddressForm } from "../forms/InputAddressForm";
 import { useRouter } from "next/router";
+import { ButtonEdit } from "../ui/ButtonEdit";
 
 const TabPrimeEmployee = (props) => {
   const { branch, emps } = props;
@@ -24,29 +25,22 @@ const TabPrimeEmployee = (props) => {
   const { ...initialData } = emp;
   //inputの表示とオブジェクトの更新
   const formUtils = useFormUpdate(initialData);
-  const { formData } = formUtils;
+  const { formData, endEdit } = formUtils;
 
   //formData保存して更新
-  const { saveData } = useSaveData(formData);
-  const { pathChange } = usePathChange();
+  const { saveData } = useSaveData();
+  const { pathMove } = usePathChange();
   const handleSave = () => {
-    saveData(`/companies/${companyId}/branches/${branchId}/employees/${sel}`);
+    const newFormData = endEdit();
+    saveData(
+      `/companies/${companyId}/branches/${branchId}/employees/${sel}`,
+      newFormData
+    );
     //所属とstatusが不変時
-    if (
+    const isStatic =
       emp.fk_companyBranchId === formData.fk_companyBranchId &&
-      emp.isStatus === formData.isStatus
-    ) {
-      //再レンダリング
-      pathChange(formData.id, false);
-    } else {
-      //変更時、selを上に移動
-      const index = emps.findIndex((item) => item.id === sel);
-      if (index) {
-        pathChange(emps[index - 1].id, false);
-      } else {
-        pathChange("", false);
-      }
-    }
+      emp.isStatus === formData.isStatus;
+    pathMove(isStatic, emps, sel);
   };
 
   return (
@@ -119,9 +113,7 @@ const TabPrimeEmployee = (props) => {
               <AddressForm formUtils={formUtils} />
             </div>
             <hr />
-            <button type="button" className="btn btn-info" onClick={handleSave}>
-              保存
-            </button>
+            <ButtonEdit formUtils={formUtils} handleSave={handleSave} />
           </div>
         )}
 

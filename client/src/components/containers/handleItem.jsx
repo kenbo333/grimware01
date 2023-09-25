@@ -5,7 +5,6 @@ import { useCallback, useEffect, useState } from "react";
 //パスの変更
 export const usePathChange = () => {
   const router = useRouter();
-
   const pathChange = (id, isShallow) => {
     //falseでSSRの再レンダリング
     router.replace(
@@ -18,23 +17,28 @@ export const usePathChange = () => {
     );
   };
 
-  return { pathChange };
+  const pathMove = (isStatic, items, sel) => {
+    if (isStatic) {
+      pathChange(sel, false);
+    } else {
+      const index = items.findIndex((item) => item.id === sel);
+      pathChange(index ? items[index - 1].id : "", false);
+    }
+  };
+
+  return { pathChange, pathMove };
 };
 
 //データベースに保存
-export const useSaveData = (formData) => {
-  const router = useRouter();
-  const saveData = useCallback(
-    async (url) => {
-      try {
-        await apiClient.put(url, { formData });
-        console.log("saved");
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [router, formData]
-  );
+export const useSaveData = () => {
+  const saveData = useCallback(async (url, formData) => {
+    try {
+      await apiClient.put(url, { formData });
+      console.log("saved");
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   return { saveData };
 };
@@ -54,9 +58,38 @@ export const useFormUpdate = (initialData) => {
     setFormData((prevData) => ({ ...prevData, [id]: !prevData[id] }));
   }, []);
 
+  const startEdit = () => {
+    const newFormData = { ...formData };
+    newFormData.isEditing = true;
+    newFormData.originalData = { ...newFormData };
+    setFormData(newFormData);
+  };
+
+  const cancelEdit = () => {
+    const newFormData = { ...formData.originalData };
+    delete newFormData.isEditing;
+    delete newFormData.originalData;
+    setFormData(newFormData);
+  };
+
+  const endEdit = () => {
+    const newFormData = { ...formData };
+    delete newFormData.isEditing;
+    delete newFormData.originalData;
+    setFormData(newFormData);
+    return newFormData;
+  };
+
   useEffect(() => {
     setFormData({ ...initialData });
   }, [JSON.stringify(initialData)]);
 
-  return { formData, updateObject, updateCheckbox };
+  return {
+    formData,
+    updateObject,
+    updateCheckbox,
+    startEdit,
+    cancelEdit,
+    endEdit,
+  };
 };

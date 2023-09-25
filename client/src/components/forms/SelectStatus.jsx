@@ -1,5 +1,4 @@
 export const SelectStatus = (props) => {
-  //formUtils
   const { formData, updateObject } = props.formUtils;
   const { isStatus } = formData;
 
@@ -13,6 +12,7 @@ export const SelectStatus = (props) => {
       id="isStatus"
       onChange={handleChange}
       value={isStatus}
+      disabled={!formData.isEditing}
     >
       <option value="true">取引中</option>
       <option value="false">停止中</option>

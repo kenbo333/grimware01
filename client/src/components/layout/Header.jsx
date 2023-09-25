@@ -13,7 +13,7 @@ const urlStrategies = {
 
 export const Header = (props) => {
   const { items, type } = props;
-  const { pathChange } = usePathChange();
+  const { pathChange, pathMove } = usePathChange();
   const router = useRouter();
   const query = router.query;
   const isStatus = query.isStatus === "false";
@@ -47,14 +47,8 @@ export const Header = (props) => {
     const url = urlStrategies[type](router.query);
 
     try {
-      const index = items.findIndex((item) => item.id === query.sel);
       await apiClient.delete(`${url}/${query.sel}`);
-      //一番上以外は前の会社を選択
-      if (index) {
-        pathChange(items[index - 1].id, false);
-      } else {
-        pathChange("", false);
-      }
+      pathMove(false, items, query.sel);
       console.log("delete");
     } catch (error) {
       console.log(error);
@@ -63,14 +57,10 @@ export const Header = (props) => {
 
   //status一覧の変更
   const changeList = () => {
-    if (isStatus) {
-      router.push(router.asPath.split("?")[0]);
-    } else {
-      router.push({
-        pathname: router.asPath.split("?")[0],
-        query: { isStatus: false },
-      });
-    }
+    const basePath = router.asPath.split("?")[0];
+    router.push(
+      isStatus ? basePath : { pathname: basePath, query: { isStatus: false } }
+    );
   };
 
   return (
