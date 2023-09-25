@@ -21,7 +21,7 @@ const Branch = (props) => {
   );
 
   return (
-    <>
+    <div>
       <Navbar />
       <Header items={branches} type="branch" />
 
@@ -40,7 +40,7 @@ const Branch = (props) => {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

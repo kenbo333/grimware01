@@ -1,5 +1,5 @@
 import React from "react";
-import { usePathChange } from "@/components/containers/handleItem";
+import { usePathManager } from "@/components/containers/handleItem";
 import apiClient from "../../../lib/apiClient";
 import { useRouter } from "next/router";
 
@@ -13,7 +13,7 @@ const urlStrategies = {
 
 export const Header = (props) => {
   const { items, type } = props;
-  const { pathChange, pathMove } = usePathChange();
+  const { pathChange, pathMove } = usePathManager();
   const router = useRouter();
   const query = router.query;
   const isStatus = query.isStatus === "false";
@@ -34,7 +34,7 @@ export const Header = (props) => {
 
     try {
       const response = await apiClient.post(url, data);
-      const newId = response.data.id;
+      const { id: newId } = response.data;
       pathChange(newId, false);
       console.log(`create:${newId}`);
     } catch (error) {

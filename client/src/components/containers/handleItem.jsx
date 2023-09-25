@@ -2,8 +2,8 @@ import { useRouter } from "next/router";
 import apiClient from "../../../lib/apiClient";
 import { useCallback, useEffect, useState } from "react";
 
-//パスの変更
-export const usePathChange = () => {
+//パスの管理
+export const usePathManager = () => {
   const router = useRouter();
   const pathChange = (id, isShallow) => {
     //falseでSSRの再レンダリング
@@ -43,8 +43,8 @@ export const useSaveData = () => {
   return { saveData };
 };
 
-//inputの表示とオブジェクトの更新
-export const useFormUpdate = (initialData) => {
+//フォームデータの管理
+export const useFormEditor = (initialData) => {
   const [formData, setFormData] = useState(initialData);
 
   const updateObject = useCallback((key, newValue) => {

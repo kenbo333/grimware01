@@ -1,8 +1,8 @@
 import React from "react";
 
 export const ButtonEdit = (props) => {
-  const { handleSave } = props;
-  const { formData, startEdit, cancelEdit } = props.formUtils;
+  const { formUtils, handleSave } = props;
+  const { formData, startEdit, cancelEdit } = formUtils;
 
   return (
     <div>

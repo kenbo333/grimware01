@@ -17,7 +17,7 @@ const Company = (props) => {
   );
 
   return (
-    <>
+    <div>
       <Navbar />
       <Header items={companies} type="company" />
 
@@ -36,7 +36,7 @@ const Company = (props) => {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

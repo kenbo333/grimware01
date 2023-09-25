@@ -1,9 +1,9 @@
-import { usePathChange } from "@/components/containers/handleItem";
+import { usePathManager } from "@/components/containers/handleItem";
 import { useState } from "react";
 
 export const ItemList = (props) => {
   const { items, type, sel } = props;
-  const { pathChange } = usePathChange();
+  const { pathChange } = usePathManager();
 
   // 検索用
   const [searchText, setSearchText] = useState("");

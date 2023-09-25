@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { SelectStatus } from "../forms/SelectStatus";
 import {
-  useFormUpdate,
-  usePathChange,
+  useFormEditor,
+  usePathManager,
   useSaveData,
 } from "@/components/containers/handleItem";
 import { SelectForm, FullNameForm, NameFrom } from "../forms/InputForm";
@@ -24,12 +24,12 @@ const TabPrimeEmployee = (props) => {
   //オブジェクトから配列を除去
   const { ...initialData } = emp;
   //inputの表示とオブジェクトの更新
-  const formUtils = useFormUpdate(initialData);
+  const formUtils = useFormEditor(initialData);
   const { formData, endEdit } = formUtils;
 
   //formData保存して更新
   const { saveData } = useSaveData();
-  const { pathMove } = usePathChange();
+  const { pathMove } = usePathManager();
   const handleSave = () => {
     const newFormData = endEdit();
     saveData(

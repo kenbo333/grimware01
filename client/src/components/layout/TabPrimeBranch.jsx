@@ -3,8 +3,8 @@ import { NameFrom, NameFrom_kana } from "../forms/InputForm";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import {
-  useFormUpdate,
-  usePathChange,
+  useFormEditor,
+  usePathManager,
   useSaveData,
 } from "@/components/containers/handleItem";
 import apiClient from "../../../lib/apiClient";
@@ -26,12 +26,12 @@ const TabPrimeBranch = (props) => {
   //オブジェクトから配列を除去
   const { companyEmployee, ...initialData } = branch;
   //inputの表示とオブジェクトの更新
-  const formUtils = useFormUpdate(initialData);
+  const formUtils = useFormEditor(initialData);
   const { formData, endEdit } = formUtils;
 
   //formData保存して更新
   const { saveData } = useSaveData();
-  const { pathMove } = usePathChange();
+  const { pathMove } = usePathManager();
   const handleSave = () => {
     const newFormData = endEdit();
     saveData(`/companies/${companyId}/branches/${sel}`, newFormData);

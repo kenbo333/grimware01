@@ -3,8 +3,8 @@ import { TransactionType } from "../forms/InputCheckboxForm";
 import InfoListBranch from "./InfoListBranch";
 import InfoListEmployee from "./InfoListEmployee";
 import {
-  useFormUpdate,
-  usePathChange,
+  useFormEditor,
+  usePathManager,
   useSaveData,
 } from "@/components/containers/handleItem";
 import apiClient from "../../../lib/apiClient";
@@ -28,12 +28,12 @@ const TabPrimeCompany = (props) => {
   //オブジェクトから配列を除去
   const { companyBranch, companyEmployee, ...initialData } = company;
   //inputの表示とオブジェクトの更新
-  const formUtils = useFormUpdate(initialData);
+  const formUtils = useFormEditor(initialData);
   const { formData, endEdit } = formUtils;
 
   //formData保存して更新
   const { saveData } = useSaveData();
-  const { pathMove } = usePathChange();
+  const { pathMove } = usePathManager();
   const handleSave = () => {
     const newFormData = endEdit();
     saveData(`/companies/${sel}`, newFormData);

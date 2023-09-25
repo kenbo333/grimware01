@@ -33,6 +33,7 @@ const InfoListCarMaintenance = (props) => {
       const response = await apiClient.post(`/cars/${sel}/maintenance`);
       const newItem = response.data;
       setItems((prevItems) => [newItem, ...prevItems]);
+      console.log(`create:${newItem.id}`);
     } catch (error) {
       console.error("Error creating a new maintenance record:", error);
     }
