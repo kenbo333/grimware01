@@ -55,7 +55,11 @@ router.get("/download/:remarkId", async (req, res) => {
     const filePath = record.filePath;
     const downloadFileName = record.fileName;
 
-    res.download(filePath, encodeURIComponent(downloadFileName));
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename*=UTF-8''${encodeURIComponent(downloadFileName)}`
+    );
+    res.sendFile(filePath);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to download the file." });

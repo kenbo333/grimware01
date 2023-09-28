@@ -49,7 +49,7 @@ const InfoListCarMaintenance = (props) => {
         updateData,
       });
       setItems(newItems);
-      console.log("save");
+      console.log("saved");
     } catch (error) {
       console.error("Error saving the item:", error);
     }
