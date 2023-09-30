@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import apiClient from "../../../lib/apiClient";
+import { toast } from "react-toastify";
 
 const InfoListCarMaintenance = (props) => {
   const { sel } = props;
@@ -32,9 +33,12 @@ const InfoListCarMaintenance = (props) => {
     try {
       const response = await apiClient.post(`/cars/${sel}/maintenance`);
       const newItem = response.data;
+      newItem.isEditing = true;
+      newItem.originalItem = { ...newItem };
       setItems((prevItems) => [newItem, ...prevItems]);
       console.log(`create:${newItem.id}`);
     } catch (error) {
+      toast.error("createError");
       console.error("Error creating a new maintenance record:", error);
     }
   };
@@ -49,20 +53,24 @@ const InfoListCarMaintenance = (props) => {
         updateData,
       });
       setItems(newItems);
-      console.log("saved");
+      toast.success("保存しました");
     } catch (error) {
+      toast.error("saveError");
       console.error("Error saving the item:", error);
     }
   };
 
   const handleDelete = async (index) => {
+    if (!window.confirm("削除してもよろしいですか？")) return;
+
     try {
       await apiClient.delete(`/cars/${sel}/maintenance/${items[index].id}`);
       const newItems = [...items];
       newItems.splice(index, 1);
       setItems(newItems);
-      console.log("delete");
+      toast.warn("削除しました");
     } catch (error) {
+      toast.error("deleteError");
       console.error("Error deleting the item:", error);
     }
   };

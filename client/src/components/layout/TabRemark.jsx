@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import apiClient from "../../../lib/apiClient";
+import { toast } from "react-toastify";
 
 const TabRemark = (props) => {
   const { sel } = props;
@@ -21,13 +22,16 @@ const TabRemark = (props) => {
   };
 
   const handleDelete = async (index) => {
+    if (!window.confirm("削除してもよろしいですか？")) return;
+
     try {
       await apiClient.delete(`/remarks/${items[index].id}`);
       const newItems = [...items];
       newItems.splice(index, 1);
       setItems(newItems);
-      console.log("delete");
+      toast.warn("削除しました");
     } catch (error) {
+      toast.error("deleteError");
       console.error("Error deleting the item:", error);
     }
   };
@@ -51,8 +55,9 @@ const TabRemark = (props) => {
 
       await apiClient.put(`/remarks/${items[index].id}`, formData);
       setItems(newItems);
-      console.log("save");
+      toast.success("保存しました");
     } catch (error) {
+      toast.error("saveError");
       console.error(error);
     }
   };
@@ -66,8 +71,9 @@ const TabRemark = (props) => {
 
       await apiClient.put(`/remarks/${items[index].id}`, formData);
       setItems(newItems);
-      console.log("save");
+      toast.success("保存しました");
     } catch (error) {
+      toast.error("saveError");
       console.error("Failed to update:", error);
     }
   };
@@ -127,7 +133,13 @@ const TabRemark = (props) => {
                 ) : (
                   <a
                     href={`http://localhost:5000/api/remarks/download/${item.id}`}
-                    download={item.fileName}
+                    target={
+                      ["image/jpeg", "image/png", "application/pdf"].includes(
+                        item.fileType
+                      )
+                        ? "_blank"
+                        : ""
+                    }
                   >
                     {item.fileName}
                   </a>

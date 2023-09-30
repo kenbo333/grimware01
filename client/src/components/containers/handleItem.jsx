@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import apiClient from "../../../lib/apiClient";
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 //パスの管理
 export const usePathManager = () => {
@@ -34,8 +35,9 @@ export const useSaveData = () => {
   const saveData = useCallback(async (url, formData) => {
     try {
       await apiClient.put(url, { formData });
-      console.log("saved");
+      toast.success("保存しました");
     } catch (error) {
+      toast.error("saveError");
       console.error(error);
     }
   }, []);

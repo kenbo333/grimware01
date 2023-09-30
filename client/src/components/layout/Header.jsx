@@ -2,6 +2,7 @@ import React from "react";
 import { usePathManager } from "@/components/containers/handleItem";
 import apiClient from "../../../lib/apiClient";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 const urlStrategies = {
   company: () => "/companies",
@@ -44,12 +45,14 @@ export const Header = (props) => {
 
   //削除
   const deleteItem = async () => {
+    if (!window.confirm("削除してもよろしいですか？")) return;
+
     const url = urlStrategies[type](router.query);
 
     try {
       await apiClient.delete(`${url}/${query.sel}`);
       pathMove(false, items, query.sel);
-      console.log("delete");
+      toast.warn("削除しました");
     } catch (error) {
       console.log(error);
     }

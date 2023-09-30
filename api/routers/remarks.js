@@ -54,11 +54,22 @@ router.get("/download/:remarkId", async (req, res) => {
     }
     const filePath = record.filePath;
     const downloadFileName = record.fileName;
+    const fileType = record.fileType;
 
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename*=UTF-8''${encodeURIComponent(downloadFileName)}`
-    );
+    // 特定のファイルタイプの場合、inlineでContent-Dispositionヘッダーを設定
+    if (["image/jpeg", "image/png", "application/pdf"].includes(fileType)) {
+      res.setHeader(
+        "Content-Disposition",
+        `inline; filename*=UTF-8''${encodeURIComponent(downloadFileName)}`
+      );
+    } else {
+      // それ以外のファイルタイプの場合、attachmentでContent-Dispositionヘッダーを設定
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename*=UTF-8''${encodeURIComponent(downloadFileName)}`
+      );
+    }
+
     res.sendFile(filePath);
   } catch (error) {
     console.error(error);

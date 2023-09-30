@@ -4,6 +4,7 @@ import { ItemList } from "@/components/layout/ItemList";
 import { Header } from "@/components/layout/Header";
 import TabCar from "@/components/layout/TabCar";
 import apiClient from "../../../lib/apiClient";
+import { useEffect } from "react";
 
 export const getServerSideProps = async (context) => {
   try {
