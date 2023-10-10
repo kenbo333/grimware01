@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import apiClient from "../../../lib/apiClient";
 import { toast } from "react-toastify";
 
-const TabRemark = (props) => {
-  const { sel } = props;
+const InfoListRemark = (props) => {
+  const { fkName, sel } = props;
   const [items, setItems] = useState([]);
 
   const handleCreate = async () => {
     try {
       const response = await apiClient.post("/remarks", {
         postData: {
-          fk_car: sel,
+          [fkName]: sel,
         },
       });
       const newItem = response.data;
@@ -83,7 +83,7 @@ const TabRemark = (props) => {
       try {
         const response = await apiClient.get("/remarks", {
           params: {
-            fk_car: sel,
+            [fkName]: sel,
           },
         });
         setItems(response.data);
@@ -185,4 +185,4 @@ const TabRemark = (props) => {
   );
 };
 
-export default TabRemark;
+export default InfoListRemark;

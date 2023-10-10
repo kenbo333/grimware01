@@ -11,8 +11,10 @@ import apiClient from "../../../lib/apiClient";
 import { SelectStatus } from "../forms/SelectStatus";
 import { AddressForm } from "../forms/InputAddressForm";
 import { ButtonEdit } from "../ui/ButtonEdit";
+import InfoListBankAccount from "./InfoListBankAccount";
+import InfoListPermitNotice from "./InfoListPermitNotice";
 
-const TabPrimeBranch = (props) => {
+const TabOwnBranch = (props) => {
   const { branches, company } = props;
   const router = useRouter();
   const { sel, companyId } = router.query;
@@ -20,7 +22,12 @@ const TabPrimeBranch = (props) => {
   const emps = branch.companyEmployee;
 
   //タブ設定
-  const tabs = { tab1: "詳細", tab2: "社員" };
+  const tabs = {
+    tab1: "詳細",
+    tab2: "社員",
+    tab3: "口座情報",
+    tab4: "許可/届出",
+  };
   const [activeTab, setActiveTab] = useState("tab1");
 
   //オブジェクトから配列を除去
@@ -65,7 +72,7 @@ const TabPrimeBranch = (props) => {
     <div>
       <div className="d-flex justify-content-between my-3">
         <div>
-          <div className="h1">{companyEmployee.companyName}</div>
+          <div className="h1">{company.companyName}</div>
           <div className="h4">{branch.branchName}</div>
         </div>
         <div>
@@ -129,12 +136,13 @@ const TabPrimeBranch = (props) => {
                       {emp.lastName} {emp.firstName}
                     </div>
                     <div className="col-8">{emp.compMobile}</div>
+
                     <div className="row">
                       <div className="col">{emp.compEmail}</div>
                     </div>
                   </div>
                   <Link
-                    href={`/primes/${companyId}/branches/${branch.id}?sel=${emp.id}`}
+                    href={`/ownCompany/${companyId}/branches/${branch.id}?sel=${emp.id}`}
                   >
                     社員リンク
                   </Link>
@@ -153,8 +161,22 @@ const TabPrimeBranch = (props) => {
           </div>
         )}
       </div>
+
+      {/* tab3 */}
+      {activeTab === "tab3" && (
+        <div className="tab-pane fade show active my-3" id="tab3">
+          <InfoListBankAccount sel={sel} />
+        </div>
+      )}
+
+      {/* tab4 */}
+      {activeTab === "tab4" && (
+        <div className="tab-pane fade show active my-3" id="tab4">
+          <InfoListPermitNotice sel={sel} />
+        </div>
+      )}
     </div>
   );
 };
 
-export default TabPrimeBranch;
+export default TabOwnBranch;

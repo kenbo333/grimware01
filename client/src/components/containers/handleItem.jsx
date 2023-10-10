@@ -56,8 +56,8 @@ export const useFormEditor = (initialData) => {
     }));
   }, []);
 
-  const updateCheckbox = useCallback((id) => {
-    setFormData((prevData) => ({ ...prevData, [id]: !prevData[id] }));
+  const updateCheckbox = useCallback((key) => {
+    setFormData((prevData) => ({ ...prevData, [key]: !prevData[key] }));
   }, []);
 
   const startEdit = () => {

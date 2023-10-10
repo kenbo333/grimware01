@@ -10,6 +10,7 @@ import { BirthdateForm } from "../forms/InputBirthdateForm";
 import { AddressForm } from "../forms/InputAddressForm";
 import { useRouter } from "next/router";
 import { ButtonEdit } from "../ui/ButtonEdit";
+import InfoListRemark from "./InfoListRemark";
 
 const TabPrimeEmployee = (props) => {
   const { branch, emps } = props;
@@ -74,11 +75,7 @@ const TabPrimeEmployee = (props) => {
       <div className="tab-content">
         {/* tab1 */}
         {activeTab === "tab1" && (
-          <div
-            className="tab-pane fade show active my-3"
-            id="tab1"
-            role="tabpanel"
-          >
+          <div className="tab-pane fade show active my-3" id="tab1">
             <div className="mb-2">
               <SelectForm
                 title="所属"
@@ -119,12 +116,8 @@ const TabPrimeEmployee = (props) => {
 
         {/* tab2 */}
         {activeTab === "tab2" && (
-          <div
-            className="tab-pane fade show active my-3"
-            id="tab2"
-            role="tabpanel"
-          >
-            tab2
+          <div className="tab-pane fade show active my-3" id="tab2">
+            <InfoListRemark fkName="fk_companyEmployee" sel={sel} />
           </div>
         )}
       </div>

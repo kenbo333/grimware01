@@ -13,7 +13,7 @@ const urlStrategies = {
 };
 
 export const Header = (props) => {
-  const { items, type } = props;
+  const { items, type, companyType } = props;
   const { pathChange, pathMove } = usePathManager();
   const router = useRouter();
   const query = router.query;
@@ -22,7 +22,7 @@ export const Header = (props) => {
   //新規作成
   const createItem = async () => {
     const createDataStrategies = {
-      company: { isPrime: true },
+      company: { [companyType]: true },
       branch: { fk_companyId: query.companyId },
       employee: {
         fk_companyId: query.companyId,
@@ -45,7 +45,7 @@ export const Header = (props) => {
 
   //削除
   const deleteItem = async () => {
-    if (!window.confirm("削除してもよろしいですか？")) return;
+    // if (!window.confirm("削除してもよろしいですか？")) return;
 
     const url = urlStrategies[type](router.query);
 

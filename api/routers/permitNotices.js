@@ -77,11 +77,18 @@ router.put("/:carId", async (req, res) => {
   }
 });
 
+//
 router.put("/:carId/maintenance/:maintenanceId", async (req, res) => {
+  const { updateData } = req.body;
+
+  if (!updateData || !updateData.id || typeof updateData !== "object") {
+    return res.status(400).json({ error: "Invalid or missing data." });
+  }
+
   try {
     const updateItem = await prisma.carMaintenance.update({
       where: { id: req.params.maintenanceId },
-      data: req.body.updateData,
+      data: updateData,
     });
     return res.status(200).json(updateItem);
   } catch (error) {

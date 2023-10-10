@@ -20,8 +20,8 @@ const InfoListEmployee = (props) => {
             <div className="col-8">{emp.companyBranch.branchName}</div>
           </div>
           <div className="row">
-            <div className="col-4">{emp.tel}</div>
-            <div className="col-8">{emp.email}</div>
+            <div className="col-4">{emp.compMobile}</div>
+            <div className="col-8">{emp.compEmail}</div>
           </div>
           <hr />
         </div>

@@ -10,7 +10,7 @@ datasource db {
 //company
 model Company {
   id               String            @id @default(uuid())
-  isOwnCompany     Boolean           @default(false)
+  isOwn            Boolean           @default(false)
   isStatus         Boolean           @default(true)
   isPrime          Boolean           @default(false)
   isSub            Boolean           @default(false)
@@ -26,48 +26,76 @@ model Company {
 }
 
 model CompanyBranch {
-  id              String            @id @default(uuid())
-  fk_companyId    String
-  isStatus        Boolean           @default(true)
-  branchName      String            @default("")
-  branchName_kana String            @default("")
-  postcode        String            @default("")
-  address1        String            @default("")
-  address2        String            @default("")
-  tel             String            @default("")
-  fax             String            @default("")
-  email           String            @default("")
-  company         Company           @relation(fields: [fk_companyId], references: [id])
-  companyEmployee CompanyEmployee[]
+  id                 String            @id @default(uuid())
+  fk_companyId       String
+  isStatus           Boolean           @default(true)
+  branchName         String            @default("")
+  branchName_kana    String            @default("")
+  postcode           String            @default("")
+  address1           String            @default("")
+  address2           String            @default("")
+  tel                String            @default("")
+  fax                String            @default("")
+  email              String            @default("")
+  company            Company           @relation(fields: [fk_companyId], references: [id])
+  companyEmployee    CompanyEmployee[]
+  bankAccount        BankAccount[]
+  permitNotification PermitNotice[]
 }
 
 model CompanyEmployee {
-  id                 String        @id @default(uuid())
-  fk_companyId       String
-  fk_companyBranchId String
-  isStatus           Boolean       @default(true)
-  firstName          String        @default("")
-  lastName           String        @default("")
-  firstName_kana     String        @default("")
-  lastName_kana      String        @default("")
-  birthYear          String        @default("")
-  birthMonth         String        @default("")
-  birthDay           String        @default("")
-  employmentStatus   String        @default("")
-  postcode           String        @default("")
-  address1           String        @default("")
-  address2           String        @default("")
-  tel                String        @default("")
-  fax                String        @default("")
-  email              String        @default("")
-  department         String        @default("")
-  position           String        @default("")
-  company            Company       @relation(fields: [fk_companyId], references: [id])
-  companyBranch      CompanyBranch @relation(fields: [fk_companyBranchId], references: [id])
-  remark             Remark[]
+  id                     String            @id @default(uuid())
+  fk_companyId           String
+  fk_companyBranchId     String
+  isStatus               Boolean           @default(true)
+  firstName              String            @default("")
+  lastName               String            @default("")
+  firstName_kana         String            @default("")
+  lastName_kana          String            @default("")
+  birthYear              String            @default("")
+  birthMonth             String            @default("")
+  birthDay               String            @default("")
+  employmentStatus       String            @default("")
+  compMobile             String            @default("")
+  compEmail              String            @default("")
+  postcode               String            @default("")
+  address1               String            @default("")
+  address2               String            @default("")
+  homePhone              String            @default("")
+  persMobile             String            @default("")
+  persEmail              String            @default("")
+  department             String            @default("")
+  position               String            @default("")
+  entryDate              String            @default("") //入社日
+  yearsOfExperience      String            @default("") //経験年数
+  routineCheckupDate     String            @default("") //定期健診
+  routineCheckupHospital String            @default("")
+  specialCheckupDate     String            @default("") //特殊健診
+  specialCheckupHospital String            @default("") //既往症
+  bloodPressureUp        String            @default("") //血圧
+  bloodPressureDown      String            @default("")
+  medicalHistory         String            @default("")
+  employeeNumber         String            @default("")
+  calendarName           String            @default("")
+  placeOfOrigin          String            @default("") //本籍
+  bloodType              String            @default("")
+  bloodTypeRh            String            @default("")
+  emgLastName            String            @default("") //緊急
+  emgLastName_kana       String            @default("")
+  emgFirstName           String            @default("")
+  emgFirstName_kana      String            @default("")
+  emgRelation            String            @default("") //続柄
+  emgPhone               String            @default("")
+  isEmgAddressSame       Boolean           @default(false)
+  emgPostcode            String            @default("")
+  emgAddress1            String            @default("")
+  emgAddress2            String            @default("")
+  company                Company           @relation(fields: [fk_companyId], references: [id])
+  companyBranch          CompanyBranch     @relation(fields: [fk_companyBranchId], references: [id])
+  remark                 Remark[]
+  employeeLicense        EmployeeLicense[]
 }
 
-//car
 model Car {
   id                    String           @id @default(uuid())
   fk_fuelType           String           @default("")
@@ -123,10 +151,49 @@ model Remark {
   fileName           String?
   fileType           String?
   filePath           String?
-  isFile             Boolean          @default(false)
   isPublic           Boolean          @default(true)
   fk_companyEmployee String?
   companyEmployee    CompanyEmployee? @relation(fields: [fk_companyEmployee], references: [id])
   fk_car             String?
   car                Car?             @relation(fields: [fk_car], references: [id])
+}
+
+model EmployeeLicense {
+  id                 String          @id @default(uuid())
+  acquisitionDate    String          @default("")
+  expiryDate         String          @default("")
+  issuingAuthority   String          @default("")
+  licenseNumber      String          @default("")
+  category           String          @default("")
+  remark             String          @default("")
+  fileName           String?
+  fileType           String?
+  filePath           String?
+  fk_companyEmployee String
+  companyEmployee    CompanyEmployee @relation(fields: [fk_companyEmployee], references: [id])
+}
+
+model BankAccount {
+  id               String        @id @default(uuid())
+  fk_companyBranch String
+  bankName         String        @default("")
+  branchName       String        @default("")
+  accountType      String        @default("")
+  accountNumber    String        @default("")
+  remark           String        @default("")
+  companyBranch    CompanyBranch @relation(fields: [fk_companyBranch], references: [id])
+}
+
+// 店社の許可届出
+model PermitNotice {
+  id                 String        @id @default(uuid())
+  fk_companyBranch   String
+  industryType       String        @default("")
+  approvingAuthority String        @default("")
+  permitType         String        @default("")
+  permitNumber       String        @default("")
+  approvalDate       String        @default("")
+  expiryDate         String        @default("")
+  remark             String        @default("")
+  companyBranch      CompanyBranch @relation(fields: [fk_companyBranch], references: [id])
 }

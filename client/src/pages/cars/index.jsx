@@ -4,12 +4,11 @@ import { ItemList } from "@/components/layout/ItemList";
 import { Header } from "@/components/layout/Header";
 import TabCar from "@/components/layout/TabCar";
 import apiClient from "../../../lib/apiClient";
-import { useEffect } from "react";
 
 export const getServerSideProps = async (context) => {
   try {
     const [carData, fuelData] = await Promise.all([
-      apiClient.get(context.resolvedUrl),
+      apiClient.get("/cars"),
       apiClient.get("/cars/fuel"),
     ]);
     return {
@@ -34,7 +33,7 @@ const Car = (props) => {
   );
 
   return (
-    <>
+    <div>
       <Navbar />
       <Header items={cars} type="car" />
 
@@ -53,7 +52,7 @@ const Car = (props) => {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from "react";
-import apiClient from "../../../lib/apiClient";
-import { toast } from "react-toastify";
 import useInfoListItemLogic from "../containers/infoListItemLogic";
 import InfoListButton from "../ui/InfoListButton";
 
-const InfoListCarMaintenance = (props) => {
+const InfoListPermitNotice = (props) => {
   const { sel } = props;
   const {
     items,
@@ -14,7 +11,7 @@ const InfoListCarMaintenance = (props) => {
     handleEdit,
     handleCancel,
     handleChange,
-  } = useInfoListItemLogic(sel, "CAR_MAINTENANCE");
+  } = useInfoListItemLogic(sel, "PERMIT_NOTICES");
 
   return (
     <div>
@@ -27,59 +24,94 @@ const InfoListCarMaintenance = (props) => {
           新規作成
         </button>
         <div className="row h6">
-          <div className="col-3">日付/備考</div>
-          <div className="col-3">内容</div>
-          <div className="col-3">距離</div>
-          <div className="col-3">金額</div>
+          <div className="col-4">業種・種別/許可・届出番号</div>
+          <div className="col-2">区分/区分</div>
+          <div className="col-3">許可年月日</div>
+          <div className="col-3">有効期限日</div>
         </div>
       </div>
 
       <hr />
-
       <div>
         {items.map((item, index) => (
           <div key={item.id}>
             <div className="row">
-              <div className="col-3 pe-1">
+              <div className="col-4 pe-1">
+                <input
+                  type="text"
+                  className="form-control"
+                  name="industryType"
+                  data-index={index.toString()}
+                  value={item.industryType}
+                  disabled={!item.isEditing}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="col-2 px-1">
+                <input
+                  type="text"
+                  className="form-control"
+                  name="approvingAuthority"
+                  data-index={index.toString()}
+                  value={item.approvingAuthority}
+                  disabled={!item.isEditing}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="col-3 px-1">
                 <input
                   type="date"
                   className="form-control"
-                  name="date"
+                  name="approvalDate"
                   data-index={index.toString()}
-                  value={item.date}
-                  disabled={!item.isEditing}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="col-3 px-1">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="content"
-                  data-index={index.toString()}
-                  value={item.content}
-                  disabled={!item.isEditing}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="col-3 px-1">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="odometer"
-                  data-index={index.toString()}
-                  value={item.odometer}
+                  value={item.approvalDate}
                   disabled={!item.isEditing}
                   onChange={handleChange}
                 />
               </div>
               <div className="col-3 ps-1">
                 <input
+                  type="date"
+                  className="form-control"
+                  name="expiryDate"
+                  data-index={index.toString()}
+                  value={item.expiryDate}
+                  disabled={!item.isEditing}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-4 pe-1">
+                <input
                   type="text"
                   className="form-control"
-                  name="cost"
+                  name="permitNumber"
                   data-index={index.toString()}
-                  value={item.cost}
+                  value={item.permitNumber}
+                  disabled={!item.isEditing}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="col-2 px-1">
+                <input
+                  type="text"
+                  className="form-control"
+                  name="permitType"
+                  data-index={index.toString()}
+                  value={item.permitType}
+                  disabled={!item.isEditing}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="col-6 px-1">
+                <input
+                  type="text"
+                  className="form-control"
+                  name="remark"
+                  data-index={index.toString()}
+                  value={item.remark}
                   disabled={!item.isEditing}
                   onChange={handleChange}
                 />
@@ -101,4 +133,4 @@ const InfoListCarMaintenance = (props) => {
   );
 };
 
-export default InfoListCarMaintenance;
+export default InfoListPermitNotice;

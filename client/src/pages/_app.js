@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 export default function App({ Component, pageProps }) {
   return (
     <>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
       <ToastContainer autoClose={1500} pauseOnFocusLoss={false} />
     </>
   );

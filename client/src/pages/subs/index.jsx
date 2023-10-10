@@ -1,12 +1,11 @@
-import TabPrimeCompany from "@/components/layout/TabPrimeCompany";
 import Navbar from "@/components/layout/Navbar";
 import { useRouter } from "next/router";
 import { getData } from "../../utils/SSR";
 import { ItemList } from "@/components/layout/ItemList";
 import { Header } from "@/components/layout/Header";
+import TabSubCompany from "@/components/layout/TabSubCompany";
 
-export const getServerSideProps = (context) =>
-  getData("/companies?isPrime=true");
+export const getServerSideProps = (context) => getData("/companies?isSub=true");
 
 const Company = (props) => {
   // console.log(props.data);
@@ -20,7 +19,7 @@ const Company = (props) => {
   return (
     <div>
       <Navbar />
-      <Header items={companies} type="company" companyType="isPrime" />
+      <Header items={companies} type="company" companyType="isSub" />
 
       <div className="container-lg">
         <div className="row">
@@ -32,7 +31,7 @@ const Company = (props) => {
 
           {sel && (
             <div className="col-8">
-              <TabPrimeCompany companies={companies} />
+              <TabSubCompany companies={companies} />
             </div>
           )}
         </div>

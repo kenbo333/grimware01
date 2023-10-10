@@ -5,9 +5,11 @@ const Navbar = () => {
     <nav className="navbar navbar-light bg-light">
       <div className="d-flex flex-row bd-highlight">
         <div className="p-2 bd-highlight">
+          <Link href="/ownCompany">自社</Link>
+        </div>
+        <div className="p-2 bd-highlight">
           <Link href="/primes">元請会社</Link>
         </div>
-
         <div className="p-2 bd-highlight">
           <Link href="/subs">下請会社</Link>
         </div>

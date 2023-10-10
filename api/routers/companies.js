@@ -29,17 +29,20 @@ router.post("/:companyId/branches/:branchId/employees", (req, res) => {
 });
 
 //------------get-------------------------------------------------
-//クエリ ?isStatus=true 取引中のみ
-const isStatusCondition = (query) =>
-  query.isStatus === undefined ? {} : { isStatus: query.isStatus === "true" };
+const companyTypes = ["isPrime", "isSub", "isPurchase", "isOwn"];
+const buildWhereObject = (query) => {
+  return companyTypes.reduce((acc, type) => {
+    if (query[type] === "true") acc[type] = true;
+    return acc;
+  }, {});
+};
 
-//元請会社取得
+//会社取得
 router.get("/", async (req, res) => {
+  const whereObject = buildWhereObject(req.query);
+
   const companies = await prisma.company.findMany({
-    where: {
-      isPrime: true,
-      ...isStatusCondition(req.query),
-    },
+    where: whereObject,
     include: {
       companyBranch: { where: { isStatus: true } },
       companyEmployee: {
@@ -65,7 +68,7 @@ router.get("/:companyId", async (req, res) => {
   const { companyId } = req.params;
 
   const company = await prisma.company.findUnique({
-    where: { id: companyId, ...isStatusCondition(req.query) },
+    where: { id: companyId },
     select: {
       companyName: true,
       companyBranch: {
@@ -87,7 +90,7 @@ router.get("/:companyId/branches/:branchId", async (req, res) => {
   const { branchId } = req.params;
 
   const branch = await prisma.companyBranch.findUnique({
-    where: { id: branchId, ...isStatusCondition(req.query) },
+    where: { id: branchId },
     select: {
       branchName: true,
       companyEmployee: true,

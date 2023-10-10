@@ -7,7 +7,7 @@ import {
 } from "@/components/containers/handleItem";
 import { NameFrom, SelectForm, StartEndForm } from "../forms/InputForm";
 import InfoListCarMaintenance from "./InfoListCarMaintenance";
-import TabRemark from "./TabRemark";
+import InfoListRemark from "./InfoListRemark";
 import { useRouter } from "next/router";
 import { ButtonEdit } from "../ui/ButtonEdit";
 
@@ -64,11 +64,7 @@ const TabCar = (props) => {
       <div className="tab-content">
         {/* tab1 */}
         {activeTab === "tab1" && (
-          <div
-            className="tab-pane fade show active my-3"
-            id="tab1"
-            role="tabpanel"
-          >
+          <div className="tab-pane fade show active my-3" id="tab1">
             <form>
               <div className="mb-2">
                 <NameFrom
@@ -132,11 +128,7 @@ const TabCar = (props) => {
 
         {/* tab2 */}
         {activeTab === "tab2" && (
-          <div
-            className="tab-pane fade show active my-3"
-            id="tab2"
-            role="tabpanel"
-          >
+          <div className="tab-pane fade show active my-3" id="tab2">
             <form>
               <div className="mb-2">
                 <NameFrom
@@ -217,23 +209,15 @@ const TabCar = (props) => {
 
         {/* tab3 */}
         {activeTab === "tab3" && (
-          <div
-            className="tab-pane fade show active my-3"
-            id="tab3"
-            role="tabpanel"
-          >
+          <div className="tab-pane fade show active my-3" id="tab3">
             <InfoListCarMaintenance sel={sel} />
           </div>
         )}
 
         {/* tab4 */}
         {activeTab === "tab4" && (
-          <div
-            className="tab-pane fade show active my-3"
-            id="tab4"
-            role="tabpanel"
-          >
-            <TabRemark sel={sel} />
+          <div className="tab-pane fade show active my-3" id="tab4">
+            <InfoListRemark sel={sel} fkName="fk_car" />
           </div>
         )}
       </div>

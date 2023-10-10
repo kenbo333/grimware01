@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from "react";
-import apiClient from "../../../lib/apiClient";
-import { toast } from "react-toastify";
 import useInfoListItemLogic from "../containers/infoListItemLogic";
 import InfoListButton from "../ui/InfoListButton";
 
-const InfoListCarMaintenance = (props) => {
+const InfoListBankAccount = (props) => {
   const { sel } = props;
   const {
     items,
@@ -14,7 +11,7 @@ const InfoListCarMaintenance = (props) => {
     handleEdit,
     handleCancel,
     handleChange,
-  } = useInfoListItemLogic(sel, "CAR_MAINTENANCE");
+  } = useInfoListItemLogic(sel, "BANK_ACCOUNTS");
 
   return (
     <div>
@@ -27,26 +24,25 @@ const InfoListCarMaintenance = (props) => {
           新規作成
         </button>
         <div className="row h6">
-          <div className="col-3">日付/備考</div>
-          <div className="col-3">内容</div>
-          <div className="col-3">距離</div>
-          <div className="col-3">金額</div>
+          <div className="col-4">銀行名/備考</div>
+          <div className="col-3">支店名</div>
+          <div className="col-2">預金種目</div>
+          <div className="col-3">口座番号</div>
         </div>
       </div>
 
       <hr />
-
       <div>
         {items.map((item, index) => (
           <div key={item.id}>
             <div className="row">
-              <div className="col-3 pe-1">
+              <div className="col-4 pe-1">
                 <input
-                  type="date"
+                  type="text"
                   className="form-control"
-                  name="date"
+                  name="bankName"
                   data-index={index.toString()}
-                  value={item.date}
+                  value={item.bankName}
                   disabled={!item.isEditing}
                   onChange={handleChange}
                 />
@@ -55,20 +51,20 @@ const InfoListCarMaintenance = (props) => {
                 <input
                   type="text"
                   className="form-control"
-                  name="content"
+                  name="branchName"
                   data-index={index.toString()}
-                  value={item.content}
+                  value={item.branchName}
                   disabled={!item.isEditing}
                   onChange={handleChange}
                 />
               </div>
-              <div className="col-3 px-1">
+              <div className="col-2 px-1">
                 <input
                   type="text"
                   className="form-control"
-                  name="odometer"
+                  name="accountType"
                   data-index={index.toString()}
-                  value={item.odometer}
+                  value={item.accountType}
                   disabled={!item.isEditing}
                   onChange={handleChange}
                 />
@@ -77,9 +73,23 @@ const InfoListCarMaintenance = (props) => {
                 <input
                   type="text"
                   className="form-control"
-                  name="cost"
+                  name="accountNumber"
                   data-index={index.toString()}
-                  value={item.cost}
+                  value={item.accountNumber}
+                  disabled={!item.isEditing}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-12">
+                <input
+                  type="text"
+                  className="form-control"
+                  name="remark"
+                  data-index={index.toString()}
+                  value={item.remark}
                   disabled={!item.isEditing}
                   onChange={handleChange}
                 />
@@ -101,4 +111,4 @@ const InfoListCarMaintenance = (props) => {
   );
 };
 
-export default InfoListCarMaintenance;
+export default InfoListBankAccount;

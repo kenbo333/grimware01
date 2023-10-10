@@ -8,21 +8,48 @@ export const NameFrom = (props) => {
   };
 
   return (
-    <div>
-      <div className="row">
-        <label className="col-form-label col-sm-2" htmlFor={nameKey}>
-          {title}
-        </label>
-        <div className="col-sm-10">
-          <input
-            type="text"
-            className="form-control"
-            id={nameKey}
-            value={formData[nameKey]}
-            onChange={handleChange}
-            disabled={!formData.isEditing}
-          />
-        </div>
+    <div className="row">
+      <label className="col-form-label col-sm-2" htmlFor={nameKey}>
+        {title}
+      </label>
+      <div className="col-sm-10">
+        <input
+          type="text"
+          className="form-control"
+          id={nameKey}
+          value={formData[nameKey]}
+          onChange={handleChange}
+          disabled={!formData.isEditing}
+        />
+      </div>
+    </div>
+  );
+};
+
+//-------------------------------------------------------------------
+export const HalfFrom = (props) => {
+  const { title, nameKey, formUtils, type } = props;
+  const { formData, updateObject } = formUtils;
+
+  const handleChange = (event) => {
+    const { id, value } = event.target;
+    updateObject(id, value);
+  };
+
+  return (
+    <div className="row">
+      <label className="col-form-label col-sm-4" htmlFor={nameKey}>
+        {title}
+      </label>
+      <div className="col-sm-8">
+        <input
+          type={type}
+          className="form-control"
+          id={nameKey}
+          value={formData[nameKey]}
+          onChange={handleChange}
+          disabled={!formData.isEditing}
+        />
       </div>
     </div>
   );
@@ -79,9 +106,27 @@ export const NameFrom_kana = (props) => {
 
 //-------------------------------------------------------------------------------
 export const FullNameForm = (props) => {
-  const { title, formUtils } = props;
+  const { title, formUtils, type } = props;
   const { formData, updateObject } = formUtils;
-  const { lastName, firstName, lastName_kana, firstName_kana } = formData;
+  // const { lastName, firstName, lastName_kana, firstName_kana } = formData;
+  // const { emgLastName, emgFirstName, mggLastName_kana, emgFirstName_kana } =
+  //   formData;
+
+  const fieldMapping = {
+    default: {
+      lastName: "lastName",
+      firstName: "firstName",
+      lastName_kana: "lastName_kana",
+      firstName_kana: "firstName_kana",
+    },
+    emg: {
+      lastName: "emgLastName",
+      firstName: "emgFirstName",
+      lastName_kana: "emgLastName_kana",
+      firstName_kana: "emgFirstName_kana",
+    },
+  };
+  const fields = fieldMapping[type] || fieldMapping.default;
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -91,15 +136,18 @@ export const FullNameForm = (props) => {
   return (
     <div>
       <div className="row">
-        <label className="col-form-label col-sm-2" htmlFor="lastName_kana">
+        <label
+          className="col-form-label col-sm-2"
+          htmlFor={fields.lastName_kana}
+        >
           ﾌﾘｶﾞﾅ
         </label>
         <div className="col-sm-5">
           <input
             type="text"
             className="form-control"
-            id="lastName_kana"
-            value={lastName_kana}
+            id={fields.lastName_kana}
+            value={formData[fields.lastName_kana]}
             onChange={handleChange}
             disabled={!formData.isEditing}
           />
@@ -108,8 +156,8 @@ export const FullNameForm = (props) => {
           <input
             type="text"
             className="form-control"
-            id="firstName_kana"
-            value={firstName_kana}
+            id={fields.firstName_kana}
+            value={formData[fields.firstName_kana]}
             onChange={handleChange}
             disabled={!formData.isEditing}
           />
@@ -117,15 +165,15 @@ export const FullNameForm = (props) => {
       </div>
 
       <div className="row">
-        <label className="col-form-label col-sm-2" htmlFor="lastName">
+        <label className="col-form-label col-sm-2" htmlFor={fields.lastName}>
           {title}
         </label>
         <div className="col-sm-5">
           <input
             type="text"
             className="form-control"
-            id="lastName"
-            value={lastName}
+            id={fields.lastName}
+            value={formData[fields.lastName]}
             onChange={handleChange}
             disabled={!formData.isEditing}
           />
@@ -134,8 +182,8 @@ export const FullNameForm = (props) => {
           <input
             type="text"
             className="form-control"
-            id="firstName"
-            value={firstName}
+            id={fields.firstName}
+            value={formData[fields.firstName]}
             onChange={handleChange}
             disabled={!formData.isEditing}
           />
@@ -190,31 +238,29 @@ export const StartEndForm = (props) => {
     updateObject(id, value);
   };
   return (
-    <div>
-      <div className="row">
-        <label className="col-form-label col-sm-2" htmlFor={startKey}>
-          {title}
-        </label>
-        <div className="col-sm-4 pe-0">
-          <input
-            type="text"
-            className="form-control"
-            id={startKey}
-            value={formData[startKey] || ""}
-            onChange={handleChange}
-            disabled={!formData.isEditing}
-          />
-        </div>
-        <div className="col-sm-4 ps-0">
-          <input
-            type="text"
-            className="form-control"
-            id={endKey}
-            value={formData[endKey] || ""}
-            onChange={handleChange}
-            disabled={!formData.isEditing}
-          />
-        </div>
+    <div className="row">
+      <label className="col-form-label col-sm-2" htmlFor={startKey}>
+        {title}
+      </label>
+      <div className="col-sm-4 pe-0">
+        <input
+          type="text"
+          className="form-control"
+          id={startKey}
+          value={formData[startKey] || ""}
+          onChange={handleChange}
+          disabled={!formData.isEditing}
+        />
+      </div>
+      <div className="col-sm-4 ps-0">
+        <input
+          type="text"
+          className="form-control"
+          id={endKey}
+          value={formData[endKey] || ""}
+          onChange={handleChange}
+          disabled={!formData.isEditing}
+        />
       </div>
     </div>
   );

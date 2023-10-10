@@ -1,6 +1,19 @@
 export const AddressForm = (props) => {
-  const { formData, updateObject } = props.formUtils;
-  const { postcode, address1, address2 } = formData;
+  const { formUtils, type } = props;
+  const { formData, updateObject } = formUtils;
+  const fieldMapping = {
+    default: {
+      postcode: "postcode",
+      address1: "address1",
+      address2: "address2",
+    },
+    emg: {
+      postcode: "emgPostcode",
+      address1: "emgAddress1",
+      address2: "emgAddress2",
+    },
+  };
+  const fields = fieldMapping[type] || fieldMapping.default;
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -10,30 +23,30 @@ export const AddressForm = (props) => {
   return (
     <div>
       <div className="row">
-        <label className="col-form-label col-sm-2" htmlFor="postcode">
+        <label className="col-form-label col-sm-2" htmlFor={fields.postcode}>
           郵便番号
         </label>
         <div className="col-sm-10">
           <input
             type="text"
             className="form-control"
-            id="postcode"
-            value={postcode}
+            id={fields.postcode}
+            value={formData[fields.postcode]}
             onChange={handleChange}
             disabled={!formData.isEditing}
           />
         </div>
       </div>
       <div className="row">
-        <label className="col-form-label col-sm-2" htmlFor="address1">
+        <label className="col-form-label col-sm-2" htmlFor={fields.address1}>
           住所
         </label>
         <div className="col-sm-10">
           <input
             type="text"
             className="form-control"
-            id="address1"
-            value={address1}
+            id={fields.address1}
+            value={formData[fields.address1]}
             onChange={handleChange}
             disabled={!formData.isEditing}
           />
@@ -45,8 +58,8 @@ export const AddressForm = (props) => {
           <input
             type="text"
             className="form-control"
-            id="address2"
-            value={address2}
+            id={fields.address2}
+            value={formData[fields.address2]}
             onChange={handleChange}
             disabled={!formData.isEditing}
           />
