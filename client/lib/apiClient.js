@@ -9,8 +9,8 @@ const apiClient = axios.create({
 
 export const API_ENDPOINTS = {
   CAR_MAINTENANCE: `${baseURL}/cars/:id/maintenance`,
-  BANK_ACCOUNTS: `${baseURL}/companyBranches/:id/bankAccounts`,
-  PERMIT_NOTICES: `${baseURL}/companyBranches/:id/permitNotices`,
+  BRANCH_BANK_ACCOUNTS: `${baseURL}/companyBranches/:id/branchBankAccounts`,
+  BRANCH_PERMIT_NOTICES: `${baseURL}/companyBranches/:id/branchPermitNotices`,
 };
 
 export default apiClient;

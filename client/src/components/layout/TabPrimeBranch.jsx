@@ -11,6 +11,7 @@ import apiClient from "../../../lib/apiClient";
 import { SelectStatus } from "../forms/SelectStatus";
 import { AddressForm } from "../forms/InputAddressForm";
 import { ButtonEdit } from "../ui/ButtonEdit";
+import { InfoListEmployee } from "./InfoListEmployee";
 
 const TabPrimeBranch = (props) => {
   const { branches, company } = props;
@@ -116,40 +117,18 @@ const TabPrimeBranch = (props) => {
         {/* tab2 */}
         {activeTab === "tab2" && (
           <div className="tab-pane fade show active my-3" id="tab2">
-            <div>
-              <div className="row h6">
-                <div className="col-4">氏名/Email</div>
-                <div className="col-8">TEL</div>
-              </div>
-              <hr />
-              {emps.map((emp) => (
-                <div key={emp.id}>
-                  <div className="row">
-                    <div className="col-4">
-                      {emp.lastName} {emp.firstName}
-                    </div>
-                    <div className="col-8">{emp.compMobile}</div>
-                    <div className="row">
-                      <div className="col">{emp.compEmail}</div>
-                    </div>
-                  </div>
-                  <Link
-                    href={`/primes/${companyId}/branches/${branch.id}?sel=${emp.id}`}
-                  >
-                    社員リンク
-                  </Link>
-                  <hr />
-                </div>
-              ))}
+            <InfoListEmployee
+              emps={emps}
+              link={`/primes/${companyId}/branches/${branch.id}?sel=`}
+            />
 
-              <button
-                type="button"
-                className="btn btn-success"
-                onClick={handleCreate}
-              >
-                新規登録
-              </button>
-            </div>
+            <button
+              type="button"
+              className="btn btn-success"
+              onClick={handleCreate}
+            >
+              新規登録
+            </button>
           </div>
         )}
       </div>

@@ -26,21 +26,21 @@ model Company {
 }
 
 model CompanyBranch {
-  id                 String            @id @default(uuid())
+  id                 String               @id @default(uuid())
   fk_companyId       String
-  isStatus           Boolean           @default(true)
-  branchName         String            @default("")
-  branchName_kana    String            @default("")
-  postcode           String            @default("")
-  address1           String            @default("")
-  address2           String            @default("")
-  tel                String            @default("")
-  fax                String            @default("")
-  email              String            @default("")
-  company            Company           @relation(fields: [fk_companyId], references: [id])
+  isStatus           Boolean              @default(true)
+  branchName         String               @default("")
+  branchName_kana    String               @default("")
+  postcode           String               @default("")
+  address1           String               @default("")
+  address2           String               @default("")
+  tel                String               @default("")
+  fax                String               @default("")
+  email              String               @default("")
+  company            Company              @relation(fields: [fk_companyId], references: [id])
   companyEmployee    CompanyEmployee[]
-  bankAccount        BankAccount[]
-  permitNotification PermitNotice[]
+  branchBankAccount  BranchBankAccount[]
+  branchPermitNotice BranchPermitNotice[]
 }
 
 model CompanyEmployee {
@@ -173,7 +173,7 @@ model EmployeeLicense {
   companyEmployee    CompanyEmployee @relation(fields: [fk_companyEmployee], references: [id])
 }
 
-model BankAccount {
+model BranchBankAccount {
   id               String        @id @default(uuid())
   fk_companyBranch String
   bankName         String        @default("")
@@ -184,8 +184,8 @@ model BankAccount {
   companyBranch    CompanyBranch @relation(fields: [fk_companyBranch], references: [id])
 }
 
-// 店社の許可届出
-model PermitNotice {
+// 許可届出
+model BranchPermitNotice {
   id                 String        @id @default(uuid())
   fk_companyBranch   String
   industryType       String        @default("")

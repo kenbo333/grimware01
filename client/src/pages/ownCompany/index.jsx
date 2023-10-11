@@ -15,7 +15,6 @@ const OwnCompany = (props) => {
   const company = props.data[0];
   const branches = company.companyBranch;
 
-  console.log(branches);
   return (
     <div>
       <Navbar />

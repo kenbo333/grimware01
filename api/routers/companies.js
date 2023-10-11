@@ -32,7 +32,13 @@ router.post("/:companyId/branches/:branchId/employees", (req, res) => {
 const companyTypes = ["isPrime", "isSub", "isPurchase", "isOwn"];
 const buildWhereObject = (query) => {
   return companyTypes.reduce((acc, type) => {
-    if (query[type] === "true") acc[type] = true;
+    if (query[type] === "true") {
+      acc[type] = true;
+    }
+    // isOwnがクエリパラメータとして存在しない場合、isOwn: falseをセット
+    if (type !== "isOwn" && !query.hasOwnProperty("isOwn")) {
+      acc["isOwn"] = false;
+    }
     return acc;
   }, {});
 };

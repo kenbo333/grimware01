@@ -13,7 +13,7 @@ import { SelectStatus } from "../forms/SelectStatus";
 import { useRouter } from "next/router";
 import { ButtonEdit } from "../ui/ButtonEdit";
 
-const TabPrimeCompany = (props) => {
+const TabPurchaseCompany = (props) => {
   const { companies } = props;
   const router = useRouter();
   const { sel } = router.query;
@@ -22,7 +22,7 @@ const TabPrimeCompany = (props) => {
   const emps = company.companyEmployee;
 
   //タブ設定
-  const tabs = { tab1: "詳細", tab2: "店社", tab3: "社員" };
+  const tabs = { tab1: "詳細", tab2: "店社", tab3: "担当者" };
   const [activeTab, setActiveTab] = useState("tab1");
 
   //オブジェクトから配列を除去
@@ -39,7 +39,7 @@ const TabPrimeCompany = (props) => {
     saveData(`/companies/${sel}`, newFormData);
     //元請会社のチェック||statusが不変
     const isStatic =
-      company.isPrime === formData.isPrime &&
+      company.isSub === formData.isSub &&
       company.isStatus === formData.isStatus;
     pathMove(isStatic, companies, sel);
   };
@@ -55,7 +55,7 @@ const TabPrimeCompany = (props) => {
       );
       const { id: newBranchId } = response.data;
       router.push({
-        pathname: `/primes/${company.id}`,
+        pathname: `/purchases/${company.id}`,
         query: { sel: newBranchId },
       });
       console.log(`create:${newBranchId}`);
@@ -143,4 +143,4 @@ const TabPrimeCompany = (props) => {
   );
 };
 
-export default TabPrimeCompany;
+export default TabPurchaseCompany;

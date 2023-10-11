@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { getData } from "../../utils/SSR";
 import { ItemList } from "@/components/layout/ItemList";
 import { Header } from "@/components/layout/Header";
-import TabPrimeBranch from "@/components/layout/TabPrimeBranch";
+import TabSubBranch from "@/components/layout/TabSubBranch";
 
 export const getServerSideProps = (context) => {
   const { companyId } = context.params;
@@ -35,7 +35,7 @@ const Branch = (props) => {
 
           {sel && (
             <div className="col-8">
-              <TabPrimeBranch branches={branches} company={company} />
+              <TabSubBranch branches={branches} company={company} />
             </div>
           )}
         </div>

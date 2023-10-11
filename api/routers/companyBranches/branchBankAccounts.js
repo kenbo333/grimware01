@@ -3,9 +3,9 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 //------create-----------------------
-router.post("/:companyBranchId/permitNotices", async (req, res) => {
+router.post("/:companyBranchId/branchBankAccounts", async (req, res) => {
   try {
-    const newItem = await prisma.permitNotice.create({
+    const newItem = await prisma.branchBankAccount.create({
       data: {
         fk_companyBranch: req.params.companyBranchId,
       },
@@ -15,14 +15,14 @@ router.post("/:companyBranchId/permitNotices", async (req, res) => {
     console.error(error);
     return res
       .status(500)
-      .json({ error: "Failed to create a new permitNotice." });
+      .json({ error: "Failed to create a new branchBankAccount." });
   }
 });
 
 //-----------read---------------------------
-router.get("/:companyBranchId/permitNotices", async (req, res) => {
+router.get("/:companyBranchId/branchBankAccounts", async (req, res) => {
   try {
-    const items = await prisma.permitNotice.findMany({
+    const items = await prisma.branchBankAccount.findMany({
       where: {
         fk_companyBranch: req.params.companyBranchId,
       },
@@ -30,17 +30,19 @@ router.get("/:companyBranchId/permitNotices", async (req, res) => {
     return res.status(200).json(items);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to fetch permitNotice." });
+    return res
+      .status(500)
+      .json({ error: "Failed to fetch branchBankAccount." });
   }
 });
 
 //-----update--------------------------------------
 router.put(
-  "/:companyBranchId/permitNotices/:permitNoticeId",
+  "/:companyBranchId/branchBankAccounts/:branchBankAccountId",
   async (req, res) => {
     try {
-      const updateItem = await prisma.permitNotice.update({
-        where: { id: req.params.permitNoticeId },
+      const updateItem = await prisma.branchBankAccount.update({
+        where: { id: req.params.branchBankAccountId },
         data: req.body.updateData,
       });
       return res.status(200).json(updateItem);
@@ -49,25 +51,25 @@ router.put(
       console.log(req.body);
       return res
         .status(500)
-        .json({ error: "Failed to update the permitNotice." });
+        .json({ error: "Failed to update the branchBankAccount." });
     }
   }
 );
 
 //------delete-----------------------
 router.delete(
-  "/:companyBranchId/permitNotices/:permitNoticeId",
+  "/:companyBranchId/branchBankAccounts/:branchBankAccountId",
   async (req, res) => {
     try {
-      await prisma.permitNotice.delete({
-        where: { id: req.params.permitNoticeId },
+      await prisma.branchBankAccount.delete({
+        where: { id: req.params.branchBankAccountId },
       });
       return res.status(204).send();
     } catch (error) {
       console.error(error);
       return res
         .status(500)
-        .json({ error: "Failed to delete the permitNotice." });
+        .json({ error: "Failed to delete the branchBankAccount." });
     }
   }
 );

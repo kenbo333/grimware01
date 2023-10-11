@@ -1,7 +1,7 @@
 import useInfoListItemLogic from "../containers/infoListItemLogic";
 import InfoListButton from "../ui/InfoListButton";
 
-const InfoListPermitNotice = (props) => {
+const InfoListBranchPermitNotice = (props) => {
   const { sel } = props;
   const {
     items,
@@ -11,7 +11,7 @@ const InfoListPermitNotice = (props) => {
     handleEdit,
     handleCancel,
     handleChange,
-  } = useInfoListItemLogic(sel, "PERMIT_NOTICES");
+  } = useInfoListItemLogic(sel, "BRANCH_PERMIT_NOTICES");
 
   return (
     <div>
@@ -133,4 +133,4 @@ const InfoListPermitNotice = (props) => {
   );
 };
 
-export default InfoListPermitNotice;
+export default InfoListBranchPermitNotice;

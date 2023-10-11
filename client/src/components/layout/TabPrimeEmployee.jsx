@@ -103,8 +103,16 @@ const TabPrimeEmployee = (props) => {
                 nameKey="department"
                 formUtils={formUtils}
               />
-              <NameFrom title="TEL" nameKey="tel" formUtils={formUtils} />
-              <NameFrom title="Email" nameKey="email" formUtils={formUtils} />
+              <NameFrom
+                title="TEL"
+                nameKey="compMobile"
+                formUtils={formUtils}
+              />
+              <NameFrom
+                title="Email"
+                nameKey="compEmail"
+                formUtils={formUtils}
+              />
             </div>
             <div>
               <AddressForm formUtils={formUtils} />

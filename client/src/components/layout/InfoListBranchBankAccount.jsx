@@ -1,7 +1,7 @@
 import useInfoListItemLogic from "../containers/infoListItemLogic";
 import InfoListButton from "../ui/InfoListButton";
 
-const InfoListBankAccount = (props) => {
+const InfoListBranchBankAccount = (props) => {
   const { sel } = props;
   const {
     items,
@@ -11,7 +11,7 @@ const InfoListBankAccount = (props) => {
     handleEdit,
     handleCancel,
     handleChange,
-  } = useInfoListItemLogic(sel, "BANK_ACCOUNTS");
+  } = useInfoListItemLogic(sel, "BRANCH_BANK_ACCOUNTS");
 
   return (
     <div>
@@ -111,4 +111,4 @@ const InfoListBankAccount = (props) => {
   );
 };
 
-export default InfoListBankAccount;
+export default InfoListBranchBankAccount;

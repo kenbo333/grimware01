@@ -11,11 +11,10 @@ import apiClient from "../../../lib/apiClient";
 import { SelectStatus } from "../forms/SelectStatus";
 import { AddressForm } from "../forms/InputAddressForm";
 import { ButtonEdit } from "../ui/ButtonEdit";
-import InfoListBranchBankAccount from "./InfoListBranchBankAccount";
 import InfoListBranchPermitNotice from "./InfoListBranchPermitNotice";
 import { InfoListEmployee } from "./InfoListEmployee";
 
-const TabOwnBranch = (props) => {
+const TabSubBranch = (props) => {
   const { branches, company } = props;
   const router = useRouter();
   const { sel, companyId } = router.query;
@@ -23,12 +22,7 @@ const TabOwnBranch = (props) => {
   const emps = branch.companyEmployee;
 
   //タブ設定
-  const tabs = {
-    tab1: "詳細",
-    tab2: "社員",
-    tab3: "口座情報",
-    tab4: "許可/届出",
-  };
+  const tabs = { tab1: "詳細", tab2: "社員", tab3: "支払", tab4: "許可/届出" };
   const [activeTab, setActiveTab] = useState("tab1");
 
   //オブジェクトから配列を除去
@@ -60,7 +54,7 @@ const TabOwnBranch = (props) => {
       );
       const { id: newEmployeeId } = response.data;
       router.push({
-        pathname: `/primes/${companyId}/branches/${branch.id}`,
+        pathname: `/subs/${companyId}/branches/${branch.id}`,
         query: { sel: newEmployeeId },
       });
       console.log(`create:${newEmployeeId}`);
@@ -126,7 +120,7 @@ const TabOwnBranch = (props) => {
           <div className="tab-pane fade show active my-3" id="tab2">
             <InfoListEmployee
               emps={emps}
-              link={`/ownCompany/${companyId}/branches/${branch.id}?sel=`}
+              link={`/subs/${companyId}/branches/${branch.id}?sel=`}
             />
 
             <button
@@ -138,23 +132,21 @@ const TabOwnBranch = (props) => {
             </button>
           </div>
         )}
+
+        {/* tab3 */}
+        {activeTab === "tab3" && (
+          <div className="tab-pane fade show active my-3" id="tab3"></div>
+        )}
+
+        {/* tab4 */}
+        {activeTab === "tab4" && (
+          <div className="tab-pane fade show active my-3" id="tab4">
+            <InfoListBranchPermitNotice sel={sel} />
+          </div>
+        )}
       </div>
-
-      {/* tab3 */}
-      {activeTab === "tab3" && (
-        <div className="tab-pane fade show active my-3" id="tab3">
-          <InfoListBranchBankAccount sel={sel} />
-        </div>
-      )}
-
-      {/* tab4 */}
-      {activeTab === "tab4" && (
-        <div className="tab-pane fade show active my-3" id="tab4">
-          <InfoListBranchPermitNotice sel={sel} />
-        </div>
-      )}
     </div>
   );
 };
 
-export default TabOwnBranch;
+export default TabSubBranch;

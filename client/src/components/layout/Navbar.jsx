@@ -14,6 +14,9 @@ const Navbar = () => {
           <Link href="/subs">下請会社</Link>
         </div>
         <div className="p-2 bd-highlight">
+          <Link href="/purchases">仕入会社</Link>
+        </div>
+        <div className="p-2 bd-highlight">
           <Link href="/cars">車両</Link>
         </div>
       </div>

@@ -32,7 +32,9 @@ router.post("/:companyEmployeeId/employeeLicenses", async (req, res) => {
 router.get("/:companyEmployeeId/employeeLicenses", async (req, res) => {
   try {
     const items = await prisma.employeeLicense.findMany({
-      where: req.query,
+      where: {
+        fk_companyEmployee: req.params.companyEmployeeId,
+      },
     });
 
     return res.json(items);

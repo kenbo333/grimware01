@@ -1,7 +1,7 @@
 import { FullNameForm, NameFrom_kana } from "../forms/InputForm";
 import { TransactionType } from "../forms/InputCheckboxForm";
 import InfoListBranch from "./InfoListBranch";
-import InfoListEmployee from "./InfoListEmployee";
+import { InfoListEmployeeBranch } from "./InfoListEmployee";
 import {
   useFormEditor,
   usePathManager,
@@ -132,7 +132,7 @@ const TabSubCompany = (props) => {
         {activeTab === "tab3" && (
           <div className="tab-pane fade show active my-3" id="tab3">
             {emps.length ? (
-              <InfoListEmployee emps={emps} />
+              <InfoListEmployeeBranch emps={emps} />
             ) : (
               <div>登録されていません</div>
             )}

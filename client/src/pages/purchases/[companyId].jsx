@@ -1,41 +1,42 @@
 import Navbar from "@/components/layout/Navbar";
 import { useRouter } from "next/router";
-import { getData } from "../../../../utils/SSR";
+import { getData } from "../../utils/SSR";
 import { ItemList } from "@/components/layout/ItemList";
 import { Header } from "@/components/layout/Header";
-import TabOwnEmployee from "@/components/layout/TabOwnEmployee";
+import TabSubBranch from "@/components/layout/TabSubBranch";
+import TabPurchaseBranch from "@/components/layout/TabPurchaseBranch";
 
 export const getServerSideProps = (context) => {
-  const { companyId, branchId } = context.params;
-  return getData(`/companies/${companyId}/branches/${branchId}`);
+  const { companyId } = context.params;
+  return getData(`/companies/${companyId}`);
 };
 
-const Employee = (props) => {
+const Branch = (props) => {
   // console.log(props.data);
   const router = useRouter();
   const { sel, isStatus } = router.query;
-  const branch = props.data;
+  const company = props.data;
 
-  const emps = branch.companyEmployee.filter((item) =>
+  const branches = company.companyBranch.filter((item) =>
     isStatus === undefined ? item.isStatus : !item.isStatus
   );
 
   return (
     <div>
       <Navbar />
-      <Header items={emps} type="employee" />
+      <Header items={branches} type="branch" />
 
       <div className="container-lg">
         <div className="row">
-          {emps && (
+          {branches && (
             <div className="col-4">
-              <ItemList items={emps} type="employee" sel={sel} />
+              <ItemList items={branches} type="branch" sel={sel} />
             </div>
           )}
 
           {sel && (
             <div className="col-8">
-              <TabOwnEmployee emps={emps} branch={branch} />
+              <TabPurchaseBranch branches={branches} company={company} />
             </div>
           )}
         </div>
@@ -44,4 +45,4 @@ const Employee = (props) => {
   );
 };
 
-export default Employee;
+export default Branch;
