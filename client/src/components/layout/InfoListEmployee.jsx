@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
+//リンク有り
 export const InfoListEmployee = (props) => {
   const { emps, link } = props;
 
@@ -32,7 +33,7 @@ export const InfoListEmployee = (props) => {
   );
 };
 
-//
+//リンク無し
 export const InfoListEmployeeBranch = (props) => {
   const { emps } = props;
 

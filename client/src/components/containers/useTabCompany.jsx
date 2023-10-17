@@ -19,7 +19,7 @@ const TYPE_MAPPING = {
   },
 };
 
-export const useTabCompany = (companies, isCreateState, type) => {
+export const useTabCompany = (companies, isCreateState, companyType) => {
   const router = useRouter();
   const { sel } = router.query;
   const company = companies.find((item) => item.id === sel);
@@ -42,7 +42,10 @@ export const useTabCompany = (companies, isCreateState, type) => {
     try {
       const newFormData = endEdit();
       saveData(`/companies/${sel}`, newFormData);
-      const isStaticType = TYPE_MAPPING[type].checkStatic(company, formData);
+      const isStaticType = TYPE_MAPPING[companyType].checkStatic(
+        company,
+        formData
+      );
       const isStatic = isStaticType && company.isStatus === formData.isStatus;
       pathMove(isStatic, companies, sel);
     } catch (error) {
@@ -59,7 +62,7 @@ export const useTabCompany = (companies, isCreateState, type) => {
       );
       const { id: newBranchId } = response.data;
       sessionStorage.setItem("sessionIsCreate", "true");
-      const routePath = TYPE_MAPPING[type].routePath(company);
+      const routePath = TYPE_MAPPING[companyType].routePath(company);
       router.push({ pathname: routePath, query: { sel: newBranchId } });
       console.log(`create:${newBranchId}`);
     } catch (error) {
