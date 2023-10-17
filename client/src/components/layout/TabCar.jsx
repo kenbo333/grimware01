@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SelectStatus } from "../forms/SelectStatus";
 import {
   useFormEditor,
@@ -10,33 +10,43 @@ import InfoListCarMaintenance from "./InfoListCarMaintenance";
 import InfoListRemark from "./InfoListRemark";
 import { useRouter } from "next/router";
 import { ButtonEdit } from "../ui/ButtonEdit";
+import NavTabs from "../forms/NavTabs";
+
+const tabs = ["詳細", "保険", "整備履歴", "備考"];
 
 const TabCar = (props) => {
-  const { cars, fuels } = props;
+  const { cars, fuels, isCreateState } = props;
   const router = useRouter();
   const { sel } = router.query;
   const car = cars.find((item) => item.id === sel);
 
-  //タブ設定
-  const tabs = { tab1: "詳細", tab2: "保険", tab3: "整備履歴", tab4: "備考" };
-  const [activeTab, setActiveTab] = useState("tab1");
-
   //オブジェクトから配列を除去
   const { ...initialData } = car;
+
+  const [activeTab, setActiveTab] = useState("詳細");
+
   //inputの表示とオブジェクトの更新
   const formUtils = useFormEditor(initialData);
-  const { formData, endEdit } = formUtils;
+  const { formData, endEdit, startEdit } = formUtils;
 
   //formData保存して更新
   const { saveData } = useSaveData();
   const { pathMove } = usePathManager();
   const handleSave = () => {
-    const newFormData = endEdit();
-    saveData(`/cars/${sel}`, newFormData);
-    //statusが不変
-    const isStatic = car.isStatus === formData.isStatus;
-    pathMove(isStatic, cars, sel);
+    try {
+      const newFormData = endEdit();
+      saveData(`/cars/${sel}`, newFormData);
+      const isStatic = car.isStatus === formData.isStatus;
+      pathMove(isStatic, cars, sel);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  //編集モード
+  useEffect(() => {
+    isCreateState.isCreate && (startEdit(), isCreateState.setIsCreate(false));
+  }, [isCreateState.isCreate]);
 
   return (
     <div>
@@ -47,24 +57,13 @@ const TabCar = (props) => {
         </div>
       </div>
 
-      <ul className="nav nav-tabs">
-        {Object.keys(tabs).map((tab) => (
-          <li className="nav-item" key={tab}>
-            <button
-              className={`nav-link ${activeTab === tab ? "active" : ""}`}
-              onClick={() => setActiveTab(tab)}
-            >
-              {tabs[tab]}
-            </button>
-          </li>
-        ))}
-      </ul>
+      <NavTabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* tab */}
       <div className="tab-content">
-        {/* tab1 */}
-        {activeTab === "tab1" && (
-          <div className="tab-pane fade show active my-3" id="tab1">
+        {/* 詳細 */}
+        {activeTab === "詳細" && (
+          <div className="tab-pane fade show active my-3" id="詳細">
             <form>
               <div className="mb-2">
                 <NameFrom
@@ -126,9 +125,9 @@ const TabCar = (props) => {
           </div>
         )}
 
-        {/* tab2 */}
-        {activeTab === "tab2" && (
-          <div className="tab-pane fade show active my-3" id="tab2">
+        {/* 保険 */}
+        {activeTab === "保険" && (
+          <div className="tab-pane fade show active my-3" id="保険">
             <form>
               <div className="mb-2">
                 <NameFrom
@@ -207,16 +206,16 @@ const TabCar = (props) => {
           </div>
         )}
 
-        {/* tab3 */}
-        {activeTab === "tab3" && (
-          <div className="tab-pane fade show active my-3" id="tab3">
+        {/* 整備履歴 */}
+        {activeTab === "整備履歴" && (
+          <div className="tab-pane fade show active my-3" id="整備履歴">
             <InfoListCarMaintenance sel={sel} />
           </div>
         )}
 
-        {/* tab4 */}
-        {activeTab === "tab4" && (
-          <div className="tab-pane fade show active my-3" id="tab4">
+        {/* 備考 */}
+        {activeTab === "備考" && (
+          <div className="tab-pane fade show active my-3" id="備考">
             <InfoListRemark sel={sel} fkName="fk_car" />
           </div>
         )}

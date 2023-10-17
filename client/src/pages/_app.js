@@ -7,7 +7,11 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Component {...pageProps} />
-      <ToastContainer autoClose={1500} pauseOnFocusLoss={false} />
+      <ToastContainer
+        autoClose={100}
+        pauseOnFocusLoss={false}
+        pauseOnHover={false}
+      />
     </>
   );
 }

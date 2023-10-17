@@ -24,7 +24,9 @@ const OwnCompany = (props) => {
 
       {branches.map((branch) => (
         <div key={branch.id}>
-          <Link href={`/ownCompany/${branch.id}`}>{branch.branchName}</Link>
+          <Link href={`/ownCompany/${company.id}?sel=${branch.id}`}>
+            {branch.branchName}
+          </Link>
         </div>
       ))}
     </div>

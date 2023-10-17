@@ -1,44 +1,11 @@
-import Navbar from "@/components/layout/Navbar";
-import { useRouter } from "next/router";
 import { getData } from "../../utils/SSR";
-import { ItemList } from "@/components/layout/ItemList";
-import { Header } from "@/components/layout/Header";
-import TabPurchaseCompany from "@/components/layout/TabPurchaseCompany";
+import Company from "@/components/pages/Company";
 
 export const getServerSideProps = (context) =>
   getData("/companies?isPurchase=true");
 
-const Company = (props) => {
-  // console.log(props.data);
-  const router = useRouter();
-  const { sel, isStatus } = router.query;
-
-  const companies = props.data.filter((item) =>
-    isStatus === undefined ? item.isStatus : !item.isStatus
-  );
-
-  return (
-    <div>
-      <Navbar />
-      <Header items={companies} type="company" companyType="isPurchase" />
-
-      <div className="container-lg">
-        <div className="row">
-          {companies && (
-            <div className="col-4">
-              <ItemList items={companies} type="company" sel={sel} />
-            </div>
-          )}
-
-          {sel && (
-            <div className="col-8">
-              <TabPurchaseCompany companies={companies} />
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+const PurchaseCompany = (props) => {
+  return <Company data={props.data} companyTypeField="isPurchase" />;
 };
 
-export default Company;
+export default PurchaseCompany;

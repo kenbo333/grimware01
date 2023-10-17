@@ -1,73 +1,28 @@
-import { useState } from "react";
 import { NameFrom, NameFrom_kana } from "../forms/InputForm";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import {
-  useFormEditor,
-  usePathManager,
-  useSaveData,
-} from "@/components/containers/handleItem";
-import apiClient from "../../../lib/apiClient";
 import { SelectStatus } from "../forms/SelectStatus";
 import { AddressForm } from "../forms/InputAddressForm";
 import { ButtonEdit } from "../ui/ButtonEdit";
 import InfoListBranchBankAccount from "./InfoListBranchBankAccount";
 import InfoListBranchPermitNotice from "./InfoListBranchPermitNotice";
 import { InfoListEmployee } from "./InfoListEmployee";
+import { useTabBranch } from "../containers/useTabBranch";
+import NavTabs from "../forms/NavTabs";
+
+const tabs = ["詳細", "社員", "口座情報", "許可/届出"];
 
 const TabOwnBranch = (props) => {
-  const { branches, company } = props;
-  const router = useRouter();
-  const { sel, companyId } = router.query;
-  const branch = branches.find((item) => item.id === sel);
-  const emps = branch.companyEmployee;
-
-  //タブ設定
-  const tabs = {
-    tab1: "詳細",
-    tab2: "社員",
-    tab3: "口座情報",
-    tab4: "許可/届出",
-  };
-  const [activeTab, setActiveTab] = useState("tab1");
-
-  //オブジェクトから配列を除去
-  const { companyEmployee, ...initialData } = branch;
-  //inputの表示とオブジェクトの更新
-  const formUtils = useFormEditor(initialData);
-  const { formData, endEdit } = formUtils;
-
-  //formData保存して更新
-  const { saveData } = useSaveData();
-  const { pathMove } = usePathManager();
-  const handleSave = () => {
-    const newFormData = endEdit();
-    saveData(`/companies/${companyId}/branches/${sel}`, newFormData);
-    //statusが不変
-    const isStatic = branch.isStatus === formData.isStatus;
-    pathMove(isStatic, branches, sel);
-  };
-
-  //社員作成
-  const handleCreate = async () => {
-    try {
-      const response = await apiClient.post(
-        `/companies/${companyId}/branches/${sel}/employees`,
-        {
-          fk_companyId: branch.fk_companyId,
-          fk_companyBranchId: branch.id,
-        }
-      );
-      const { id: newEmployeeId } = response.data;
-      router.push({
-        pathname: `/primes/${companyId}/branches/${branch.id}`,
-        query: { sel: newEmployeeId },
-      });
-      console.log(`create:${newEmployeeId}`);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const { branches, company, isCreateState } = props;
+  const {
+    activeTab,
+    setActiveTab,
+    branch,
+    emps,
+    formUtils,
+    handleSave,
+    handleCreate,
+    companyId,
+    sel,
+  } = useTabBranch("primes", branches, isCreateState);
 
   return (
     <div>
@@ -81,24 +36,13 @@ const TabOwnBranch = (props) => {
         </div>
       </div>
 
-      <ul className="nav nav-tabs">
-        {Object.keys(tabs).map((tab) => (
-          <li className="nav-item" key={tab}>
-            <button
-              className={`nav-link ${activeTab === tab ? "active" : ""}`}
-              onClick={() => setActiveTab(tab)}
-            >
-              {tabs[tab]}
-            </button>
-          </li>
-        ))}
-      </ul>
+      <NavTabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* tab */}
       <div className="tab-content">
-        {/* tab1 */}
-        {activeTab === "tab1" && (
-          <div className="tab-pane fade show active my-3" id="tab1">
+        {/* 詳細 */}
+        {activeTab === "詳細" && (
+          <div className="tab-pane fade show active my-3" id="詳細">
             <div className="mb-2">
               <NameFrom_kana
                 title="店社名"
@@ -121,9 +65,9 @@ const TabOwnBranch = (props) => {
           </div>
         )}
 
-        {/* tab2 */}
-        {activeTab === "tab2" && (
-          <div className="tab-pane fade show active my-3" id="tab2">
+        {/* 社員 */}
+        {activeTab === "社員" && (
+          <div className="tab-pane fade show active my-3" id="社員">
             <InfoListEmployee
               emps={emps}
               link={`/ownCompany/${companyId}/branches/${branch.id}?sel=`}
@@ -140,16 +84,16 @@ const TabOwnBranch = (props) => {
         )}
       </div>
 
-      {/* tab3 */}
-      {activeTab === "tab3" && (
-        <div className="tab-pane fade show active my-3" id="tab3">
+      {/* 口座情報 */}
+      {activeTab === "口座情報" && (
+        <div className="tab-pane fade show active my-3" id="口座情報">
           <InfoListBranchBankAccount sel={sel} />
         </div>
       )}
 
-      {/* tab4 */}
-      {activeTab === "tab4" && (
-        <div className="tab-pane fade show active my-3" id="tab4">
+      {/* 許可/届出 */}
+      {activeTab === "許可/届出" && (
+        <div className="tab-pane fade show active my-3" id="許可/届出">
           <InfoListBranchPermitNotice sel={sel} />
         </div>
       )}

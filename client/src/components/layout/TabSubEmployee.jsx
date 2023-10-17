@@ -15,7 +15,7 @@ import { useTabEmployee } from "../containers/useTabEmployee";
 
 const tabs = ["詳細", "詳細2", "詳細3", "緊急", "資格", "有給", "備考"];
 
-const TabOwnEmployee = (props) => {
+const TabSubEmployee = (props) => {
   const { branch, emps, isCreateState } = props;
   const {
     activeTab,
@@ -106,17 +106,14 @@ const TabOwnEmployee = (props) => {
               </div>
               <div className="col-6">
                 <div className="row">
-                  <label
-                    className="col-form-label col-sm-4"
-                    htmlFor={"nameKey"}
-                  >
+                  <label className="col-form-label col-sm-4" htmlFor="nameKey">
                     勤続年数
                   </label>
                   <div className="col-sm-8">
                     <input
                       type="text"
                       className="form-control"
-                      id={"nameKey"}
+                      id="nameKey"
                       disabled={true}
                       placeholder="自動入力"
                     />
@@ -272,7 +269,7 @@ const TabOwnEmployee = (props) => {
                   id="isEmgAddressSame"
                   disabled={!formUtils.formData.isEditing}
                   checked={formUtils.formData.isEmgAddressSame}
-                  onClick={(e) => formUtils.updateCheckbox(e.target.id)}
+                  onChange={(e) => formUtils.updateCheckbox(e.target.id)}
                 />
                 <label className="form-check-label" htmlFor="isEmgAddressSame">
                   本人と同住所
@@ -296,11 +293,6 @@ const TabOwnEmployee = (props) => {
           </div>
         )}
 
-        {/* 有給 */}
-        {activeTab === "有給" && (
-          <div className="tab-pane fade show active my-3" id="有給"></div>
-        )}
-
         {/* 備考 */}
         {activeTab === "備考" && (
           <div className="tab-pane fade show active my-3" id="備考">
@@ -312,4 +304,4 @@ const TabOwnEmployee = (props) => {
   );
 };
 
-export default TabOwnEmployee;
+export default TabSubEmployee;

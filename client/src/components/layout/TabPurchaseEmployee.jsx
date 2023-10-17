@@ -1,7 +1,6 @@
 import { SelectStatus } from "../forms/SelectStatus";
 import { SelectForm, FullNameForm, NameFrom } from "../forms/InputForm";
 import { BirthdateForm } from "../forms/InputBirthdateForm";
-import { AddressForm } from "../forms/InputAddressForm";
 import { ButtonEdit } from "../ui/ButtonEdit";
 import InfoListRemark from "./InfoListRemark";
 import NavTabs from "../forms/NavTabs";
@@ -9,7 +8,7 @@ import { useTabEmployee } from "../containers/useTabEmployee";
 
 const tabs = ["詳細", "備考"];
 
-const TabPrimeEmployee = (props) => {
+const TabPurchaseEmployee = (props) => {
   const { branch, emps, isCreateState } = props;
   const {
     activeTab,
@@ -80,15 +79,13 @@ const TabPrimeEmployee = (props) => {
                 formUtils={formUtils}
               />
             </div>
-            <div>
-              <AddressForm formUtils={formUtils} />
-            </div>
+
             <hr />
             <ButtonEdit formUtils={formUtils} handleSave={handleSave} />
           </div>
         )}
 
-        {/* tab2 */}
+        {/* 備考 */}
         {activeTab === "備考" && (
           <div className="tab-pane fade show active my-3" id="備考">
             <InfoListRemark fkName="fk_companyEmployee" sel={sel} />
@@ -99,4 +96,4 @@ const TabPrimeEmployee = (props) => {
   );
 };
 
-export default TabPrimeEmployee;
+export default TabPurchaseEmployee;

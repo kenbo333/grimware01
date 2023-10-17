@@ -13,7 +13,7 @@ const urlStrategies = {
 };
 
 export const Header = (props) => {
-  const { items, type, companyType } = props;
+  const { items, table, companyTypeField, setIsCreate } = props;
   const { pathChange, pathMove } = usePathManager();
   const router = useRouter();
   const query = router.query;
@@ -22,7 +22,7 @@ export const Header = (props) => {
   //新規作成
   const createItem = async () => {
     const createDataStrategies = {
-      company: { [companyType]: true },
+      company: { [companyTypeField]: true },
       branch: { fk_companyId: query.companyId },
       employee: {
         fk_companyId: query.companyId,
@@ -30,13 +30,14 @@ export const Header = (props) => {
       },
     };
 
-    const data = createDataStrategies[type];
-    const url = urlStrategies[type](query);
+    const data = createDataStrategies[table];
+    const url = urlStrategies[table](query);
 
     try {
       const response = await apiClient.post(url, data);
       const { id: newId } = response.data;
-      pathChange(newId, false);
+      await pathChange(newId, false);
+      setIsCreate(true);
       console.log(`create:${newId}`);
     } catch (error) {
       console.error(error);
@@ -47,7 +48,7 @@ export const Header = (props) => {
   const deleteItem = async () => {
     // if (!window.confirm("削除してもよろしいですか？")) return;
 
-    const url = urlStrategies[type](router.query);
+    const url = urlStrategies[table](router.query);
 
     try {
       await apiClient.delete(`${url}/${query.sel}`);

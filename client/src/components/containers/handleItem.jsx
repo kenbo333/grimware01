@@ -6,9 +6,9 @@ import { toast } from "react-toastify";
 //パスの管理
 export const usePathManager = () => {
   const router = useRouter();
-  const pathChange = (id, isShallow) => {
+  const pathChange = async (id, isShallow) => {
     //falseでSSRの再レンダリング
-    router.replace(
+    await router.replace(
       {
         pathname: router.pathname,
         query: { ...router.query, sel: id },

@@ -3,6 +3,7 @@ import React from "react";
 
 export const InfoListEmployee = (props) => {
   const { emps, link } = props;
+
   return (
     <div>
       <div className="row h6">
@@ -34,6 +35,7 @@ export const InfoListEmployee = (props) => {
 //
 export const InfoListEmployeeBranch = (props) => {
   const { emps } = props;
+
   return (
     <div>
       <div className="row h6">

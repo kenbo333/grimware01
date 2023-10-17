@@ -2,67 +2,25 @@ import { FullNameForm, NameFrom_kana } from "../forms/InputForm";
 import { TransactionType } from "../forms/InputCheckboxForm";
 import InfoListBranch from "./InfoListBranch";
 import { InfoListEmployeeBranch } from "./InfoListEmployee";
-import {
-  useFormEditor,
-  usePathManager,
-  useSaveData,
-} from "@/components/containers/handleItem";
-import apiClient from "../../../lib/apiClient";
-import { useState } from "react";
 import { SelectStatus } from "../forms/SelectStatus";
-import { useRouter } from "next/router";
 import { ButtonEdit } from "../ui/ButtonEdit";
+import { useTabCompany } from "../containers/useTabCompany";
+import NavTabs from "../forms/NavTabs";
+
+const tabs = ["詳細", "店社", "社員"];
 
 const TabPrimeCompany = (props) => {
-  const { companies } = props;
-  const router = useRouter();
-  const { sel } = router.query;
-  const company = companies.find((item) => item.id === sel);
-  const branches = company.companyBranch;
-  const emps = company.companyEmployee;
-
-  //タブ設定
-  const tabs = { tab1: "詳細", tab2: "店社", tab3: "社員" };
-  const [activeTab, setActiveTab] = useState("tab1");
-
-  //オブジェクトから配列を除去
-  const { companyBranch, companyEmployee, ...initialData } = company;
-  //inputの表示とオブジェクトの更新
-  const formUtils = useFormEditor(initialData);
-  const { formData, endEdit } = formUtils;
-
-  //formData保存して更新
-  const { saveData } = useSaveData();
-  const { pathMove } = usePathManager();
-  const handleSave = () => {
-    const newFormData = endEdit();
-    saveData(`/companies/${sel}`, newFormData);
-    //元請会社のチェック||statusが不変
-    const isStatic =
-      company.isPrime === formData.isPrime &&
-      company.isStatus === formData.isStatus;
-    pathMove(isStatic, companies, sel);
-  };
-
-  //店社作成
-  const handleCreate = async () => {
-    try {
-      const response = await apiClient.post(
-        `/companies/${company.id}/branches`,
-        {
-          fk_companyId: sel,
-        }
-      );
-      const { id: newBranchId } = response.data;
-      router.push({
-        pathname: `/primes/${company.id}`,
-        query: { sel: newBranchId },
-      });
-      console.log(`create:${newBranchId}`);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const { companies, isCreateState } = props;
+  const {
+    company,
+    formUtils,
+    handleSave,
+    handleCreate,
+    activeTab,
+    setActiveTab,
+    branches,
+    emps,
+  } = useTabCompany(companies, isCreateState, "prime");
 
   return (
     <div>
@@ -75,24 +33,13 @@ const TabPrimeCompany = (props) => {
         </div>
       </div>
 
-      <ul className="nav nav-tabs">
-        {Object.keys(tabs).map((tab) => (
-          <li className="nav-item" key={tab}>
-            <button
-              className={`nav-link ${activeTab === tab ? "active" : ""}`}
-              onClick={() => setActiveTab(tab)}
-            >
-              {tabs[tab]}
-            </button>
-          </li>
-        ))}
-      </ul>
+      <NavTabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* tab */}
       <div className="tab-content">
-        {/* tab1 */}
-        {activeTab === "tab1" && (
-          <div className="tab-pane fade show active my-3" id="tab1">
+        {/* 詳細 */}
+        {activeTab === "詳細" && (
+          <div className="tab-pane fade show active my-3" id="詳細">
             <form>
               <div className="mb-2">
                 <NameFrom_kana
@@ -114,8 +61,8 @@ const TabPrimeCompany = (props) => {
         )}
 
         {/* tab2 */}
-        {activeTab === "tab2" && (
-          <div className="tab-pane fade show active my-3" id="tab2">
+        {activeTab === "店社" && (
+          <div className="tab-pane fade show active my-3" id="店社">
             <InfoListBranch branches={branches} />
 
             <button
@@ -129,8 +76,8 @@ const TabPrimeCompany = (props) => {
         )}
 
         {/* tab3 */}
-        {activeTab === "tab3" && (
-          <div className="tab-pane fade show active my-3" id="tab3">
+        {activeTab === "社員" && (
+          <div className="tab-pane fade show active my-3" id="社員">
             {emps.length ? (
               <InfoListEmployeeBranch emps={emps} />
             ) : (
