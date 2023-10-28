@@ -1,10 +1,11 @@
 import Navbar from "@/components/layout/Navbar";
 import { useRouter } from "next/router";
 import { ItemList } from "@/components/layout/ItemList";
-import { Header } from "@/components/layout/Header";
+import { HeaderMaster } from "@/components/layout/HeaderMaster";
 import TabCar from "@/components/layout/TabCar";
 import apiClient from "../../../lib/apiClient";
 import { useState } from "react";
+import { usePathManager } from "@/components/containers/handleItem";
 
 export const getServerSideProps = async (context) => {
   try {
@@ -34,10 +35,15 @@ const Car = (props) => {
     isStatus === undefined ? item.isStatus : !item.isStatus
   );
 
+  const { pathChange } = usePathManager();
+  if (cars.length > 0 && !sel) {
+    pathChange(cars[0].id, true);
+  }
+
   return (
     <div>
       <Navbar />
-      <Header items={cars} table="car" setIsCreate={setIsCreate} />
+      <HeaderMaster items={cars} table="car" setIsCreate={setIsCreate} />
 
       <div className="container-lg">
         <div className="row">

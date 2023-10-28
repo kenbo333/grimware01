@@ -52,7 +52,7 @@ export const InfoListEmployeeBranch = (props) => {
             <div className="col-4">
               {emp.lastName} {emp.firstName}
             </div>
-            <div className="col-8">{emp.companyBranch.branchName}</div>
+            <div className="col-8">{emp.companyBranch.name}</div>
           </div>
           <div className="row">
             <div className="col-4">{emp.compMobile}</div>

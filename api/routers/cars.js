@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-//------create-----------------------
+//------create--------------------------------
 router.post("/", async (req, res) => {
   try {
     const newItem = await prisma.car.create({ data: req.body });
@@ -16,7 +16,7 @@ router.post("/", async (req, res) => {
 router.post("/:carId/maintenance", async (req, res) => {
   try {
     const newItem = await prisma.carMaintenance.create({
-      data: { fk_car: req.params.carId },
+      data: { fk_carId: req.params.carId },
     });
     return res.status(201).json(newItem);
   } catch (err) {
@@ -28,7 +28,6 @@ router.post("/:carId/maintenance", async (req, res) => {
 });
 
 //-----------read---------------------------
-
 router.get("/", async (req, res) => {
   try {
     const items = await prisma.car.findMany({});
@@ -43,7 +42,7 @@ router.get("/:carId/maintenance", async (req, res) => {
   try {
     const items = await prisma.carMaintenance.findMany({
       where: {
-        fk_car: req.params.carId,
+        fk_carId: req.params.carId,
       },
     });
     return res.status(200).json(items);

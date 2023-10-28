@@ -51,7 +51,7 @@ const TabCar = (props) => {
   return (
     <div>
       <div className="d-flex justify-content-between my-3">
-        <div className="h3">{car.carName}</div>
+        <div className="h3">{car.name}</div>
         <div>
           <SelectStatus formUtils={formUtils} />
         </div>
@@ -66,11 +66,7 @@ const TabCar = (props) => {
           <div className="tab-pane fade show active my-3" id="詳細">
             <form>
               <div className="mb-2">
-                <NameFrom
-                  title="車両名"
-                  nameKey="carName"
-                  formUtils={formUtils}
-                />
+                <NameFrom title="車両名" nameKey="name" formUtils={formUtils} />
               </div>
               <div className="mb-2">
                 <NameFrom
@@ -107,8 +103,8 @@ const TabCar = (props) => {
                 <SelectForm
                   title="車両燃料"
                   items={fuels}
-                  nameKey="fk_fuelType"
-                  viewKey="fuelType"
+                  nameKey="fk_fuelTypeId"
+                  viewFn={(item) => item.fuelType}
                   isAllowEmpty={true}
                   formUtils={formUtils}
                 />
@@ -216,7 +212,7 @@ const TabCar = (props) => {
         {/* 備考 */}
         {activeTab === "備考" && (
           <div className="tab-pane fade show active my-3" id="備考">
-            <InfoListRemark sel={sel} fkName="fk_car" />
+            <InfoListRemark sel={sel} fkName="fk_carId" />
           </div>
         )}
       </div>

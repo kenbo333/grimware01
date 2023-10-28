@@ -12,7 +12,7 @@ const urlStrategies = {
   car: () => "/cars",
 };
 
-export const Header = (props) => {
+export const HeaderMaster = (props) => {
   const { items, table, companyTypeField, setIsCreate } = props;
   const { pathChange, pathMove } = usePathManager();
   const router = useRouter();

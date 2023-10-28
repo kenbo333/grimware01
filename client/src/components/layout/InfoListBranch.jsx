@@ -19,7 +19,7 @@ const InfoListBranch = (props) => {
       {branches?.map((branch) => (
         <div key={branch.id}>
           <div className="row">
-            <div className="col-6">{branch.branchName}</div>
+            <div className="col-6">{branch.name}</div>
             <div className="col-3">{branch.tel}</div>
             <div className="col-3">{branch.fax}</div>
           </div>

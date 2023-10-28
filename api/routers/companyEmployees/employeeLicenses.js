@@ -33,7 +33,7 @@ router.get("/:companyEmployeeId/employeeLicenses", async (req, res) => {
   try {
     const items = await prisma.employeeLicense.findMany({
       where: {
-        fk_companyEmployee: req.params.companyEmployeeId,
+        fk_companyEmployeeId: req.params.companyEmployeeId,
       },
     });
 

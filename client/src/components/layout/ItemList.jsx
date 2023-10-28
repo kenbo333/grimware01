@@ -12,18 +12,20 @@ export const ItemList = (props) => {
   };
 
   const filterStrategies = {
-    company: (item) => item.companyName.includes(searchText),
-    branch: (item) => item.branchName.includes(searchText),
+    company: (item) => item.name.includes(searchText),
+    branch: (item) => item.name.includes(searchText),
     employee: (item) =>
       item.lastName.includes(searchText) || item.firstName.includes(searchText),
-    car: (item) => item.carName.includes(searchText),
+    car: (item) => item.name.includes(searchText),
+    project: (item) => item.name.includes(searchText),
   };
 
   const titleStrategies = {
-    company: ["companyName"],
-    branch: ["branchName"],
+    company: ["name"],
+    branch: ["name"],
     employee: ["lastName", "firstName"],
-    car: ["carName"],
+    car: ["name"],
+    project: ["projectId", "name"],
   };
 
   const filteredItems = items.filter(filterStrategies[type]);
@@ -70,6 +72,7 @@ export const ItemList = (props) => {
               type="button"
               className={`list-group-item ${sel === item.id ? "active" : ""}`}
               onClick={() => pathChange(item.id, true)}
+              style={{ minHeight: "40px" }}
             >
               {titles.map((title) => `${item[title]} `)}
             </button>

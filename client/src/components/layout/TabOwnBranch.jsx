@@ -28,8 +28,8 @@ const TabOwnBranch = (props) => {
     <div>
       <div className="d-flex justify-content-between my-3">
         <div>
-          <div className="h1">{company.companyName}</div>
-          <div className="h4">{branch.branchName}</div>
+          <div className="h1">{company.name}</div>
+          <div className="h4">{branch.name}</div>
         </div>
         <div>
           <SelectStatus formUtils={formUtils} />
@@ -46,7 +46,7 @@ const TabOwnBranch = (props) => {
             <div className="mb-2">
               <NameFrom_kana
                 title="店社名"
-                nameKey="branchName"
+                nameKey="name"
                 formUtils={formUtils}
               />
             </div>

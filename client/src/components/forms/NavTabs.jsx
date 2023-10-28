@@ -1,6 +1,8 @@
 import React from "react";
 
-const NavTabs = ({ tabs, activeTab, setActiveTab }) => {
+const NavTabs = (props) => {
+  const { tabs, activeTab, setActiveTab } = props;
+
   return (
     <ul className="nav nav-tabs">
       {tabs.map((tab) => (

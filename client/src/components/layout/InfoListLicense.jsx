@@ -12,7 +12,7 @@ const InfoListLicense = (props) => {
         `/companyEmployees/${sel}/employeeLicenses`,
         {
           postData: {
-            fk_companyEmployee: sel,
+            fk_companyEmployeeId: sel,
           },
         }
       );

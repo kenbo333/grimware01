@@ -7,7 +7,7 @@ router.post("/:companyBranchId/branchBankAccounts", async (req, res) => {
   try {
     const newItem = await prisma.branchBankAccount.create({
       data: {
-        fk_companyBranch: req.params.companyBranchId,
+        fk_companyBranchId: req.params.companyBranchId,
       },
     });
     return res.status(201).json(newItem);
@@ -24,7 +24,7 @@ router.get("/:companyBranchId/branchBankAccounts", async (req, res) => {
   try {
     const items = await prisma.branchBankAccount.findMany({
       where: {
-        fk_companyBranch: req.params.companyBranchId,
+        fk_companyBranchId: req.params.companyBranchId,
       },
     });
     return res.status(200).json(items);

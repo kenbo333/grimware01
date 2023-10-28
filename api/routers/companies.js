@@ -31,16 +31,14 @@ router.post("/:companyId/branches/:branchId/employees", (req, res) => {
 //------------get-------------------------------------------------
 const companyTypes = ["isPrime", "isSub", "isPurchase", "isOwn"];
 const buildWhereObject = (query) => {
-  return companyTypes.reduce((acc, type) => {
+  const where = companyTypes.reduce((acc, type) => {
     if (query[type] === "true") {
       acc[type] = true;
     }
-    // isOwnがクエリパラメータとして存在しない場合、isOwn: falseをセット
-    if (type !== "isOwn" && !query.hasOwnProperty("isOwn")) {
-      acc["isOwn"] = false;
-    }
     return acc;
   }, {});
+  where.isStatus = query.isStatus !== "false";
+  return where;
 };
 
 //会社取得
@@ -57,7 +55,7 @@ router.get("/", async (req, res) => {
         },
         include: {
           companyBranch: {
-            select: { branchName: true },
+            select: { name: true },
           },
         },
       },
@@ -76,7 +74,7 @@ router.get("/:companyId", async (req, res) => {
   const company = await prisma.company.findUnique({
     where: { id: companyId },
     select: {
-      companyName: true,
+      name: true,
       companyBranch: {
         include: {
           companyEmployee: {
@@ -98,16 +96,16 @@ router.get("/:companyId/branches/:branchId", async (req, res) => {
   const branch = await prisma.companyBranch.findUnique({
     where: { id: branchId },
     select: {
-      branchName: true,
+      name: true,
       companyEmployee: true,
       company: {
         select: {
-          companyName: true,
+          name: true,
           companyBranch: {
             where: { isStatus: true },
             select: {
               id: true,
-              branchName: true,
+              name: true,
             },
           },
         },

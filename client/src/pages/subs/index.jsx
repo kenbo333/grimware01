@@ -1,7 +1,13 @@
 import { getData } from "../../utils/SSR";
 import Company from "@/components/pages/Company";
 
-export const getServerSideProps = (context) => getData("/companies?isSub=true");
+export const getServerSideProps = async (context) => {
+  const { isStatus } = context.query;
+  const statusQuery = isStatus === "false" ? "&isStatus=false" : "";
+  const apiUrl = `/companies?isSub=true${statusQuery}`;
+
+  return getData(apiUrl);
+};
 
 const SubCompany = (props) => {
   return <Company data={props.data} companyTypeField="isSub" />;

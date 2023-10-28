@@ -25,8 +25,8 @@ const TabPrimeEmployee = (props) => {
     <div>
       <div className="d-flex justify-content-between my-3">
         <div>
-          <div className="h1">{branch.company.companyName}</div>
-          <div className="h4">{branch.branchName}</div>
+          <div className="h1">{branch.company.name}</div>
+          <div className="h4">{branch.name}</div>
           <div className="h4">
             {emp.lastName} {emp.firstName}
           </div>
@@ -47,7 +47,7 @@ const TabPrimeEmployee = (props) => {
                 title="所属"
                 items={branch.company.companyBranch}
                 nameKey="fk_companyBranchId"
-                viewKey="branchName"
+                viewFn={(item) => item.name}
                 isArrowEmpty={false}
                 formUtils={formUtils}
               />
@@ -91,7 +91,7 @@ const TabPrimeEmployee = (props) => {
         {/* tab2 */}
         {activeTab === "備考" && (
           <div className="tab-pane fade show active my-3" id="備考">
-            <InfoListRemark fkName="fk_companyEmployee" sel={sel} />
+            <InfoListRemark fkName="fk_companyEmployeeId" sel={sel} />
           </div>
         )}
       </div>

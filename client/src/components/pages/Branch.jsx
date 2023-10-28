@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Navbar from "@/components/layout/Navbar";
-import { Header } from "@/components/layout/Header";
+import { HeaderMaster } from "@/components/layout/HeaderMaster";
 import { ItemList } from "@/components/layout/ItemList";
 import TabPrimeBranch from "../layout/TabPrimeBranch";
 import TabPurchaseBranch from "../layout/TabPurchaseBranch";
@@ -33,7 +33,7 @@ const Branch = ({ data, companyTypeField }) => {
   return (
     <div>
       <Navbar />
-      <Header items={branches} table="branch" setIsCreate={setIsCreate} />
+      <HeaderMaster items={branches} table="branch" setIsCreate={setIsCreate} />
 
       <div className="container-lg">
         <div className="row">

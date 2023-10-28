@@ -7,7 +7,7 @@ router.post("/:companyBranchId/branchPermitNotices", async (req, res) => {
   try {
     const newItem = await prisma.branchPermitNotice.create({
       data: {
-        fk_companyBranch: req.params.companyBranchId,
+        fk_companyBranchId: req.params.companyBranchId,
       },
     });
     return res.status(201).json(newItem);
@@ -24,7 +24,7 @@ router.get("/:companyBranchId/branchPermitNotices", async (req, res) => {
   try {
     const items = await prisma.branchPermitNotice.findMany({
       where: {
-        fk_companyBranch: req.params.companyBranchId,
+        fk_companyBranchId: req.params.companyBranchId,
       },
     });
     return res.status(200).json(items);

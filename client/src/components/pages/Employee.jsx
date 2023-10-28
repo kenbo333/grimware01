@@ -4,7 +4,7 @@ import TabSubEmployee from "../layout/TabSubEmployee";
 import TabPurchaseEmployee from "../layout/TabPurchaseEmployee";
 import { useRouter } from "next/router";
 import Navbar from "../layout/Navbar";
-import { Header } from "../layout/Header";
+import { HeaderMaster } from "../layout/HeaderMaster";
 import { ItemList } from "../layout/ItemList";
 import TabOwnEmployee from "../layout/TabOwnEmployee";
 
@@ -33,7 +33,7 @@ const Employee = ({ data, companyTypeField }) => {
   return (
     <div>
       <Navbar />
-      <Header items={emps} table="employee" setIsCreate={setIsCreate} />
+      <HeaderMaster items={emps} table="employee" setIsCreate={setIsCreate} />
 
       <div className="container-lg">
         <div className="row">

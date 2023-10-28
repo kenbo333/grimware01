@@ -60,7 +60,6 @@ export const NameFrom_kana = (props) => {
   const { title, nameKey, formUtils } = props;
   const { formData, updateObject } = formUtils;
   const nameKey_kana = `${nameKey}_kana`;
-  const value_kana = formData[nameKey_kana];
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -78,7 +77,7 @@ export const NameFrom_kana = (props) => {
             type="text"
             className="form-control"
             id={nameKey_kana}
-            value={value_kana}
+            value={formData[nameKey_kana]}
             onChange={handleChange}
             disabled={!formData.isEditing}
           />
@@ -108,9 +107,6 @@ export const NameFrom_kana = (props) => {
 export const FullNameForm = (props) => {
   const { title, formUtils, type } = props;
   const { formData, updateObject } = formUtils;
-  // const { lastName, firstName, lastName_kana, firstName_kana } = formData;
-  // const { emgLastName, emgFirstName, mggLastName_kana, emgFirstName_kana } =
-  //   formData;
 
   const fieldMapping = {
     default: {
@@ -195,8 +191,9 @@ export const FullNameForm = (props) => {
 
 //---------------------------------------------------------------------------
 export const SelectForm = (props) => {
-  const { title, items, nameKey, viewKey, isAllowEmpty, formUtils } = props;
+  const { title, items, nameKey, viewFn, isAllowEmpty, formUtils } = props;
   const { formData, updateObject } = formUtils;
+  const itemsArray = items || [];
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -217,9 +214,9 @@ export const SelectForm = (props) => {
           disabled={!formData.isEditing}
         >
           {isAllowEmpty && <option value=""></option>}
-          {items.map((item) => (
+          {itemsArray.map((item) => (
             <option key={item.id} value={item.id}>
-              {item[viewKey]}
+              {viewFn(item)}
             </option>
           ))}
         </select>
@@ -244,7 +241,7 @@ export const StartEndForm = (props) => {
       </label>
       <div className="col-sm-4 pe-0">
         <input
-          type="text"
+          type="date"
           className="form-control"
           id={startKey}
           value={formData[startKey] || ""}
@@ -254,7 +251,7 @@ export const StartEndForm = (props) => {
       </div>
       <div className="col-sm-4 ps-0">
         <input
-          type="text"
+          type="date"
           className="form-control"
           id={endKey}
           value={formData[endKey] || ""}

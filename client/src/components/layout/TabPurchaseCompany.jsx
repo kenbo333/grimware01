@@ -26,7 +26,7 @@ const TabPurchaseCompany = (props) => {
     <div>
       <div className="d-flex justify-content-between my-3">
         <div>
-          <div className="h3">{company.companyName}</div>
+          <div className="h3">{company.name}</div>
         </div>
         <div>
           <SelectStatus formUtils={formUtils} />
@@ -44,7 +44,7 @@ const TabPurchaseCompany = (props) => {
               <div className="mb-2">
                 <NameFrom_kana
                   title="会社名"
-                  nameKey="companyName"
+                  nameKey="name"
                   formUtils={formUtils}
                 />
               </div>
