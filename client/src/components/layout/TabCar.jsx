@@ -32,10 +32,10 @@ const TabCar = (props) => {
   //formData保存して更新
   const { saveData } = useSaveData();
   const { pathMove } = usePathManager();
-  const handleSave = () => {
+  const handleSave = async () => {
     try {
       const newFormData = endEdit();
-      saveData(`/cars/${sel}`, newFormData);
+      await saveData(`/cars/${sel}`, newFormData);
       const isStatic = car.isStatus === formData.isStatus;
       pathMove(isStatic, cars, sel);
     } catch (error) {

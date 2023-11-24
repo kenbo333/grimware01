@@ -8,9 +8,12 @@ import { useState } from "react";
 import { usePathManager } from "@/components/containers/handleItem";
 
 export const getServerSideProps = async (context) => {
+  const { isStatus } = context.query;
+  const statusQuery = isStatus === "false" ? "?isStatus=false" : "";
+
   try {
     const [carData, fuelData] = await Promise.all([
-      apiClient.get("/cars"),
+      apiClient.get(`/cars${statusQuery}`),
       apiClient.get("/cars/fuel"),
     ]);
     return {
@@ -25,15 +28,11 @@ export const getServerSideProps = async (context) => {
 };
 
 const Car = (props) => {
-  const { fuels } = props;
+  const { fuels, cars } = props;
   const router = useRouter();
-  const { sel, isStatus } = router.query;
+  const { sel } = router.query;
   const [isCreate, setIsCreate] = useState(false);
   const isCreateState = { isCreate, setIsCreate };
-
-  const cars = props.cars.filter((item) =>
-    isStatus === undefined ? item.isStatus : !item.isStatus
-  );
 
   const { pathChange } = usePathManager();
   if (cars.length > 0 && !sel) {

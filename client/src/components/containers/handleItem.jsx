@@ -39,6 +39,7 @@ export const useSaveData = () => {
     } catch (error) {
       toast.error("saveError");
       console.error(error);
+      throw error;
     }
   }, []);
 

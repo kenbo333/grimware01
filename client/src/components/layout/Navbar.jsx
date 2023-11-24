@@ -20,7 +20,7 @@ const Navbar = () => {
           <Link href="/cars">車両</Link>
         </div>
         <div className="p-2 bd-highlight">
-          <Link href="/project">プロジェクト</Link>
+          <Link href="/projects">プロジェクト</Link>
         </div>
       </div>
     </nav>

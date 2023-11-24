@@ -68,7 +68,7 @@ const TabPurchaseBranch = (props) => {
           <div className="tab-pane fade show active my-3" id="担当者">
             <InfoListEmployee
               emps={emps}
-              link={`/purchases/${companyId}/branches/${branch.id}?sel=`}
+              link={`/purchases/${companyId}/branches/${branch.id}/employees?sel=`}
             />
 
             <button

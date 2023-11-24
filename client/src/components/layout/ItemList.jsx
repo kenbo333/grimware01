@@ -18,6 +18,7 @@ export const ItemList = (props) => {
       item.lastName.includes(searchText) || item.firstName.includes(searchText),
     car: (item) => item.name.includes(searchText),
     project: (item) => item.name.includes(searchText),
+    monthlyReport: (item) => item.closingDate.includes(searchText),
   };
 
   const titleStrategies = {
@@ -26,6 +27,7 @@ export const ItemList = (props) => {
     employee: ["lastName", "firstName"],
     car: ["name"],
     project: ["projectId", "name"],
+    monthlyReport: ["closingDate"],
   };
 
   const filteredItems = items.filter(filterStrategies[type]);

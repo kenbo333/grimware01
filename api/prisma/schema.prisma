@@ -21,8 +21,10 @@ model Company {
   firstName_kana  String            @default("")
   lastName        String            @default("")
   lastName_kana   String            @default("")
+  closingDay      String            @default("")
   companyBranch   CompanyBranch[]
   companyEmployee CompanyEmployee[]
+  projectPrime    Project[]         @relation("CompanyPrimeRelation")
   projectPurchase ProjectPurchase[]
   projectSub      ProjectSub[]
 }
@@ -162,8 +164,8 @@ model Remark {
   companyEmployee      CompanyEmployee? @relation(fields: [fk_companyEmployeeId], references: [id])
   fk_carId             String?
   car                  Car?             @relation(fields: [fk_carId], references: [id])
-  fk_project           String?
-  project              Project?         @relation(fields: [fk_project], references: [id])
+  fk_projectId         String?
+  project              Project?         @relation(fields: [fk_projectId], references: [id])
 }
 
 model EmployeeLicense {
@@ -214,7 +216,8 @@ model Project {
   isDedicate                   Boolean           @default(false) //専任
   fk_companyEmployeeId_safety  String            @default("") //安全衛生責任者
   fk_companyEmployeeId_foreman String            @default("") //職長
-  fk_companyId_prime           String            @default("")
+  fk_companyId_prime           String
+  companyPrime                 Company           @relation("CompanyPrimeRelation", fields: [fk_companyId_prime], references: [id])
   fk_companyBranchId_prime     String            @default("")
   fk_companyEmployeeId_prime   String            @default("")
   fk_companyBranchId_billing   String            @default("") //請求先
@@ -235,7 +238,7 @@ model Project {
   ownProjectEndDate            String            @default("")
   estimateAmount               Int               @default(0) //見積金額
   contractAmount               Int               @default(0) //請負金額
-  contractAmountWithTax        Int               @default(0)
+  contractAmountWithTax        Int               @default(0) //請負税込
   isOrderLost                  Boolean           @default(false) //失注
   isConstructed                Boolean           @default(false) //工事完了
   isPaid                       Boolean           @default(false) //入金完了
@@ -243,7 +246,8 @@ model Project {
   laborCostHoliday             Int               @default(0) //請求人工単価休日
   remark                       Remark[]
   projectPurchase              ProjectPurchase[]
-  ProjectSub                   ProjectSub[]
+  projectSub                   ProjectSub[]
+  monthlyReport                MonthlyReport[]
 }
 
 model ProjectPurchase {
@@ -260,6 +264,25 @@ model ProjectSub {
   project      Project? @relation(fields: [fk_projectId], references: [id])
   fk_companyId String?
   company      Company? @relation(fields: [fk_companyId], references: [id])
+}
+
+model MonthlyReport {
+  id                   String  @id @default(uuid())
+  fk_projectId         String
+  project              Project @relation(fields: [fk_projectId], references: [id])
+  closingDate          String
+  invoiceDate          String  @default("")
+  invoiceAmount        Int     @default(0)
+  invoiceAmountWithTax Int     @default(0)
+  paymentDate1         String  @default("")
+  paymentDate2         String  @default("")
+  paymentCash1         Int?
+  paymentCash2         Int?
+  paymentNote1         Int?
+  paymentNote2         Int?
+  paymentEBond1        Int?
+  paymentEBond2        Int?
+  adjustmentAmount     Int?
 }
 
 //オプション

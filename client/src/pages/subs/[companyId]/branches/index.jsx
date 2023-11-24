@@ -1,4 +1,4 @@
-import { getData } from "../../utils/SSR";
+import { getData } from "../../../../utils/SSR";
 import Branch from "@/components/pages/Branch";
 
 export const getServerSideProps = (context) => {

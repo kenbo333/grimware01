@@ -19,12 +19,16 @@ export const useTabBranch = (type, branches, isCreateState) => {
   //formData保存して更新
   const { saveData } = useSaveData();
   const { pathMove } = usePathManager();
-  const handleSave = () => {
-    const newFormData = endEdit();
-    saveData(`/companies/${companyId}/branches/${sel}`, newFormData);
-    //statusが不変
-    const isStatic = branch.isStatus === formData.isStatus;
-    pathMove(isStatic, branches, sel);
+  const handleSave = async () => {
+    try {
+      const newFormData = endEdit();
+      await saveData(`/companies/${companyId}/branches/${sel}`, newFormData);
+      // statusが不変かどうかのチェック
+      const isStatic = branch.isStatus === formData.isStatus;
+      pathMove(isStatic, branches, sel);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   //社員作成

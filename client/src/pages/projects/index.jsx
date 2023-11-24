@@ -18,6 +18,7 @@ const Project = (props) => {
   //   isStatus === undefined ? item.isStatus : !item.isStatus
   // );
   const projects = props.data;
+  // console.log(projects);
 
   return (
     <div>
@@ -34,7 +35,11 @@ const Project = (props) => {
 
           {sel && (
             <div className="col-8">
-              <TabProject projects={projects} isCreateState={isCreateState} />
+              <TabProject
+                projects={projects}
+                isCreateState={isCreateState}
+                sel={sel}
+              />
             </div>
           )}
         </div>

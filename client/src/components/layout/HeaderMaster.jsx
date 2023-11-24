@@ -68,7 +68,7 @@ export const HeaderMaster = (props) => {
   };
 
   return (
-    <form className="bg-secondary">
+    <div className="bg-secondary">
       <div className="d-flex justify-content-end">
         {!isStatus && (
           <button
@@ -96,6 +96,6 @@ export const HeaderMaster = (props) => {
           削除
         </button>
       </div>
-    </form>
+    </div>
   );
 };

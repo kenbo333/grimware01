@@ -30,7 +30,7 @@ export const HeaderProject = (props) => {
   };
 
   return (
-    <form className="bg-secondary">
+    <div className="bg-secondary">
       <div className="d-flex justify-content-end">
         <button
           type="button"
@@ -55,6 +55,6 @@ export const HeaderProject = (props) => {
           削除
         </button>
       </div>
-    </form>
+    </div>
   );
 };

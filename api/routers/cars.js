@@ -30,7 +30,11 @@ router.post("/:carId/maintenance", async (req, res) => {
 //-----------read---------------------------
 router.get("/", async (req, res) => {
   try {
-    const items = await prisma.car.findMany({});
+    const isStatus = req.query.isStatus !== "false";
+
+    const items = await prisma.car.findMany({
+      where: { isStatus },
+    });
     return res.status(200).json(items);
   } catch (error) {
     console.error(error);

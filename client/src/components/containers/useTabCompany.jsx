@@ -38,10 +38,10 @@ export const useTabCompany = (companies, isCreateState, companyType) => {
   //formDataをupdate
   const { saveData } = useSaveData();
   const { pathMove } = usePathManager();
-  const handleSave = () => {
+  const handleSave = async () => {
     try {
       const newFormData = endEdit();
-      saveData(`/companies/${sel}`, newFormData);
+      await saveData(`/companies/${sel}`, newFormData);
       const isStaticType = TYPE_MAPPING[companyType].checkStatic(
         company,
         formData

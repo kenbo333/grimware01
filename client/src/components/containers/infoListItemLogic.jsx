@@ -73,7 +73,7 @@ const useInfoListItemLogic = (sel, type) => {
   };
 
   useEffect(() => {
-    const fetchItems = async () => {
+    const fetchData = async () => {
       try {
         const response = await apiClient.get(apiUrl);
         setItems(response.data);
@@ -81,7 +81,7 @@ const useInfoListItemLogic = (sel, type) => {
         console.error(error);
       }
     };
-    fetchItems();
+    fetchData();
   }, [apiUrl]);
 
   return {

@@ -1,4 +1,4 @@
-import { getData } from "../../../../utils/SSR";
+import { getData } from "../../../../../../utils/SSR";
 import Employee from "@/components/pages/Employee";
 
 export const getServerSideProps = (context) => {

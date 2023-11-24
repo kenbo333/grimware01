@@ -19,17 +19,21 @@ export const useTabEmployee = (emps, isCreateState) => {
   //formData保存して更新
   const { saveData } = useSaveData();
   const { pathMove } = usePathManager();
-  const handleSave = () => {
-    const newFormData = endEdit();
-    saveData(
-      `/companies/${companyId}/branches/${branchId}/employees/${sel}`,
-      newFormData
-    );
-    //所属とstatusが不変時
-    const isStatic =
-      emp.fk_companyBranchId === formData.fk_companyBranchId &&
-      emp.isStatus === formData.isStatus;
-    pathMove(isStatic, emps, sel);
+  const handleSave = async () => {
+    try {
+      const newFormData = endEdit();
+      await saveData(
+        `/companies/${companyId}/branches/${branchId}/employees/${sel}`,
+        newFormData
+      );
+      //所属とstatusが不変時
+      const isStatic =
+        emp.fk_companyBranchId === formData.fk_companyBranchId &&
+        emp.isStatus === formData.isStatus;
+      pathMove(isStatic, emps, sel);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleChange = (event) => {

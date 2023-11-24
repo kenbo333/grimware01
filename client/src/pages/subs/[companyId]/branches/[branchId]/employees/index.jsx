@@ -1,4 +1,4 @@
-import { getData } from "../../../../utils/SSR";
+import { getData } from "../../../../../../utils/SSR";
 import Employee from "@/components/pages/Employee";
 
 export const getServerSideProps = (context) => {
@@ -6,8 +6,8 @@ export const getServerSideProps = (context) => {
   return getData(`/companies/${companyId}/branches/${branchId}`);
 };
 
-const OwnEmployee = (props) => {
-  return <Employee data={props.data} companyTypeField="isOwn" />;
+const PurchaseEmployee = (props) => {
+  return <Employee data={props.data} companyTypeField="isSub" />;
 };
 
-export default OwnEmployee;
+export default PurchaseEmployee;

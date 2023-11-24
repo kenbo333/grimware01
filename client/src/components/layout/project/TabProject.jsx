@@ -4,55 +4,82 @@ import {
   usePathManager,
   useSaveData,
 } from "@/components/containers/handleItem";
-import {
-  NameFrom,
-  NameFrom_kana,
-  SelectForm,
-  StartEndForm,
-} from "../../forms/InputForm";
 import { useRouter } from "next/router";
 import { ButtonEdit } from "../../ui/ButtonEdit";
 import NavTabs from "../../forms/NavTabs";
-import { AddressForm } from "../../forms/InputAddressForm";
-import apiClient from "../../../../lib/apiClient";
 import InfoListRemark from "../InfoListRemark";
-import ProjectModalCompany from "./ProjectModalCompany";
+import PJDetail from "./PJDetail";
+import PJStakeholder from "./PJStakeholder";
+import PJMonthlyReport from "./PJMonthlyReport";
+import {
+  findDifference,
+  formatDate,
+  getClosingDatesList,
+} from "@/components/containers/getClosingDatesList";
+import apiClient from "../../../../lib/apiClient";
 
-const tabs = ["詳細", "商流", "勘定", "ファイル", "仕入"];
+const tabs = ["詳細", "関係者", "勘定", "ファイル", "仕入"];
 
 const TabProject = (props) => {
-  const { projects, isCreateState } = props;
-  const router = useRouter();
-  const { sel } = router.query;
+  const { projects, isCreateState, sel } = props;
   const project = projects.find((item) => item.id === sel);
 
-  //オブジェクトから配列を除去
-  const { ...initialData } = project;
+  const router = useRouter();
 
-  const [activeTab, setActiveTab] = useState("商流");
+  //オブジェクトから配列を除去
+  const { companyPrime, ...initialData } = project;
+
+  const [activeTab, setActiveTab] = useState("詳細");
 
   //inputの表示とオブジェクトの更新
   const formUtils = useFormEditor(initialData);
   const { formData, endEdit, startEdit } = formUtils;
 
-  const [ownCompany, setOwnCompany] = useState([]);
-  const branches = ownCompany.companyBranch;
-  const emps = ownCompany.companyEmployee?.filter(
-    (emp) => emp.fk_companyBranchId === formData.fk_companyBranchId_own
-  );
+  //月報の確認と新規作成
+  const checkAndCreateMonthlyReports = async () => {
+    try {
+      //月報データ取得
+      const response = await apiClient.get(`/projects/${sel}/monthlyReports`);
+      const monthlyReports = response.data;
+      //既存の月報締日の配列
+      const closingDates = monthlyReports.map((item) => item.closingDate);
+      //inputに対しての月報締日の配列
+      const inputClosingDates = getClosingDatesList(
+        formData.ownProjectStartDate,
+        companyPrime.closingDay
+      );
+      //現在とinputの差分の配列
+      const differenceDates = findDifference(
+        closingDates.map((date) => formatDate(new Date(date))),
+        inputClosingDates.map((date) => formatDate(new Date(date)))
+      );
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const isModalOpenState = { isModalOpen, setIsModalOpen };
+      //------月報作成------
+      if (closingDates.length < inputClosingDates.length) {
+        try {
+          //月報の差分だけバルクインサート
+          await apiClient.post(`/projects/${sel}/monthlyReports/bulk`, {
+            closingDates: differenceDates,
+            fk_projectId: sel,
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   //formData保存して更新
   const { saveData } = useSaveData();
   const { pathMove } = usePathManager();
-  const handleSave = () => {
+  const handleSave = async () => {
     try {
       const newFormData = endEdit();
-      saveData(`/projects/${sel}`, newFormData);
-      // const isStatic = car.isStatus === formData.isStatus;
-      pathMove(true, projects, sel);
+      await saveData(`/projects/${sel}`, newFormData);
+      await checkAndCreateMonthlyReports();
+      router.replace(router.asPath);
     } catch (error) {
       console.error(error);
     }
@@ -63,264 +90,43 @@ const TabProject = (props) => {
     isCreateState.isCreate && (startEdit(), isCreateState.setIsCreate(false));
   }, [isCreateState.isCreate]);
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await apiClient.get("/companies?isOwn=true");
-        setOwnCompany(response.data[0]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchItems();
-  }, []);
-
   return (
     <div>
-      <div className="h6">{project.id}</div>
-      <div className="h3">{project.projectId}</div>
-      <div className="d-flex justify-content-between my-3">
-        <div className="h3">{project.name}</div>
-        <div>{/* <SelectStatus formUtils={formUtils} /> */}</div>
+      <div className="d-flex justify-content-between mt-2">
+        <div className="h4">{project.projectId}</div>
+        <div className="h5">{companyPrime.closingDay}日締</div>
       </div>
+      <div className="h2" style={{ color: "#599429" }}>
+        {project.name}
+      </div>
+      <div>{/* <SelectStatus formUtils={formUtils} /> */}</div>
+      <div className="h6">{companyPrime.name}</div>
 
       <NavTabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* tab */}
       <div className="tab-content">
         {/* 詳細 */}
-        {activeTab === "詳細" && (
-          <div className="tab-pane fade show active my-3" id="詳細">
-            <div className="mb-2">
-              <NameFrom_kana
-                title="名称"
-                nameKey="name"
-                formUtils={formUtils}
-              />
-            </div>
-            <div className="mb-2">
-              <NameFrom
-                title="略称"
-                nameKey="shortName"
-                formUtils={formUtils}
-              />
-            </div>
-            <div className="mb-2">
-              <NameFrom
-                title="客先番号"
-                nameKey="clientNumber"
-                formUtils={formUtils}
-              />
-            </div>
-            <div className="mb-2">
-              <NameFrom title="ｶﾗｰｺｰﾄﾞ" nameKey="color" formUtils={formUtils} />
-            </div>
-            <div className="mb-2">
-              <StartEndForm
-                title="全体工期"
-                startKey="projectStartDate"
-                endKey="projectEndDate"
-                formUtils={formUtils}
-              />
-              <StartEndForm
-                title="自社工期"
-                startKey="ownProjectStartDate"
-                endKey="ownProjectEndDate"
-                formUtils={formUtils}
-              />
-            </div>
-            <div className="mb-2">
-              <NameFrom title="TEL" nameKey="tel" formUtils={formUtils} />
-            </div>
-            <div className="mb-2">
-              <AddressForm formUtils={formUtils} />
-            </div>
-            <div className="mb-2">
-              <NameFrom title="距離" nameKey="distance" formUtils={formUtils} />
-            </div>
-          </div>
-        )}
+        {activeTab === "詳細" && <PJDetail formUtils={formUtils} />}
 
-        {/* 商流 */}
-        {activeTab === "商流" && (
-          <div className="tab-pane fade show active my-3" id="商流">
-            <div className="mb-2">
-              <SelectForm
-                title="担当"
-                items={branches}
-                nameKey="fk_companyBranchId_own"
-                viewFn={(item) => item.name}
-                isAllowEmpty={true}
-                formUtils={formUtils}
-              />
-              <div className="row">
-                <div className="col-10">
-                  <div className="row">
-                    <label
-                      className="col-form-label col-sm-3"
-                      htmlFor="isDedicate"
-                    >
-                      主任技術者
-                    </label>
-                    <div className="col-sm-9">
-                      <select
-                        className="form-select"
-                        id="fk_companyEmployeeId_chief"
-                        onChange={(e) =>
-                          formUtils.updateObject(e.target.id, e.target.value)
-                        }
-                        value={formData["fk_companyEmployeeId_chief"]}
-                        disabled={!formData.isEditing}
-                      >
-                        <option value=""></option>
-                        {emps?.map((item) => (
-                          <option key={item.id} value={item.id}>
-                            {`${item.lastName} ${item.firstName}`}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-2 d-flex align-items-center justify-content-center">
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="isDedicate"
-                      checked={formData.isDedicate || false}
-                      onChange={(e) => formUtils.updateCheckbox(e.target.id)}
-                      disabled={!formData.isEditing}
-                    />
-                    <label className="form-check-label" htmlFor="isDedicate">
-                      専任
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <SelectForm
-                title="安全衛生"
-                items={emps}
-                nameKey="fk_companyEmployeeId_safety"
-                viewFn={(item) => `${item.lastName} ${item.firstName}`}
-                isAllowEmpty={true}
-                formUtils={formUtils}
-              />
-              <SelectForm
-                title="職長"
-                items={emps}
-                nameKey="fk_companyEmployeeId_foreman"
-                viewFn={(item) => `${item.lastName} ${item.firstName}`}
-                isAllowEmpty={true}
-                formUtils={formUtils}
-              />
-            </div>
-
-            <div className="mb-2">
-              <div className="row">
-                <label
-                  className="col-form-label col-sm-2"
-                  htmlFor="fk_companyId_prime"
-                >
-                  元請会社
-                </label>
-                <div className="col-sm">
-                  <select
-                    className="form-select"
-                    id="fk_companyId_prime"
-                    onChange={(e) =>
-                      formUtils.updateObject(e.target.id, e.target.value)
-                    }
-                    value={formData["fk_companyId_prime"]}
-                    disabled
-                  >
-                    <option value={formData.fk_companyId_prime}>
-                      {formData.fk_companyId_prime}
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <div className="row">
-                <label
-                  className="col-form-label col-sm-2"
-                  htmlFor="fk_companyId_prime"
-                >
-                  元請店
-                </label>
-                <div className="col-sm">
-                  <select
-                    className="form-select"
-                    id="fk_companyBranchId_prime"
-                    onChange={(e) =>
-                      formUtils.updateObject(e.target.id, e.target.value)
-                    }
-                    value={formData["fk_companyBranchId_prime"]}
-                    disabled
-                  >
-                    <option value={formData.fk_companyBranchId_prime}>
-                      {formData.fk_companyBranchId_prime}
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <div className="row">
-                <label
-                  className="col-form-label col-sm-2"
-                  htmlFor="fk_companyEmployeeId_prime"
-                >
-                  担当
-                </label>
-                <div className="col-sm">
-                  <select
-                    className="form-select"
-                    id="fk_companyEmployeeId_prime"
-                    onChange={(e) =>
-                      formUtils.updateObject(e.target.id, e.target.value)
-                    }
-                    value={formData["fk_companyEmployeeId_prime"]}
-                    disabled
-                  >
-                    <option value={formData.fk_companyEmployeeId_prime}>
-                      {formData.fk_companyEmployeeId_prime}
-                    </option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div className="row mt-4">
-              <div className="col-6">
-                <span>取引する仕入会社</span>
-                <button
-                  type="button"
-                  className="btn btn-info"
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  編集
-                </button>
-                {isModalOpen && (
-                  <ProjectModalCompany
-                    isModalOpenState={isModalOpenState}
-                    sel={sel}
-                  />
-                )}
-              </div>
-              <div className="col-6"></div>
-            </div>
-          </div>
+        {/* 関係者 */}
+        {activeTab === "関係者" && (
+          <PJStakeholder formUtils={formUtils} sel={sel} />
         )}
 
         {/* 勘定 */}
         {activeTab === "勘定" && (
           <div className="tab-pane fade show active my-3" id="勘定">
-            勘定
+            <div>
+              <PJMonthlyReport formUtils={formUtils} sel={sel} />
+            </div>
           </div>
         )}
 
         {/* ファイル */}
         {activeTab === "ファイル" && (
           <div className="tab-pane fade show active my-3" id="ファイル">
-            <InfoListRemark fkName="fk_project" sel={sel} />
+            <InfoListRemark fkName="fk_projectId" sel={sel} />
           </div>
         )}
 
@@ -333,7 +139,7 @@ const TabProject = (props) => {
 
         <hr />
 
-        {["詳細", "商流", "勘定"].includes(activeTab) && (
+        {["詳細", "関係者", "勘定"].includes(activeTab) && (
           <ButtonEdit formUtils={formUtils} handleSave={handleSave} />
         )}
       </div>

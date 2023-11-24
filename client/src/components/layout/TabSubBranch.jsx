@@ -69,7 +69,7 @@ const TabSubBranch = (props) => {
           <div className="tab-pane fade show active my-3" id="社員">
             <InfoListEmployee
               emps={emps}
-              link={`/subs/${companyId}/branches/${branch.id}?sel=`}
+              link={`/subs/${companyId}/branches/${branch.id}/employees?sel=`}
             />
 
             <button

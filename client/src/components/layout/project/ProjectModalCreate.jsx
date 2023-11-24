@@ -101,7 +101,7 @@ export const ProjectModalCreate = (props) => {
   }, [formData.fk_companyBranchId_prime]);
 
   useEffect(() => {
-    const fetchItems = async () => {
+    const fetchData = async () => {
       try {
         const response = await apiClient.get("/options");
         const { id: t1, ...type1 } = response.data.projType1;
@@ -116,7 +116,7 @@ export const ProjectModalCreate = (props) => {
       }
     };
     //新規作成で実行
-    createForm === "new" && fetchItems();
+    createForm === "new" && fetchData();
   }, [createForm]);
 
   return (
@@ -186,7 +186,7 @@ export const ProjectModalCreate = (props) => {
                     <SelectForm
                       title="元請"
                       items={primes}
-                      nameKey="fk_company_prime"
+                      nameKey="fk_companyId_prime"
                       viewFn={(item) => item.name}
                       isAllowEmpty={true}
                       formUtils={formUtils}
