@@ -10,7 +10,7 @@ const PJDetail = (props) => {
   const { formUtils } = props;
 
   return (
-    <div className="tab-pane fade show active my-3" id="詳細">
+    <div className="tab-pane fade show active my-3">
       <div className="mb-2">
         <NameFrom_kana title="名称" nameKey="name" formUtils={formUtils} />
       </div>

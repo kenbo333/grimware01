@@ -27,6 +27,7 @@ model Company {
   projectPrime    Project[]         @relation("CompanyPrimeRelation")
   projectPurchase ProjectPurchase[]
   projectSub      ProjectSub[]
+  DailyReport     DailyReport[]
 }
 
 model CompanyBranch {
@@ -102,6 +103,7 @@ model CompanyEmployee {
   companyBranch              CompanyBranch     @relation(fields: [fk_companyBranchId], references: [id])
   remark                     Remark[]
   employeeLicense            EmployeeLicense[]
+  DailyReport                DailyReport[]
 }
 
 model Car {
@@ -134,6 +136,7 @@ model Car {
   volInsCar             String           @default("")
   carMaintenance        CarMaintenance[]
   remark                Remark[]
+  DailyReport           DailyReport[]
 }
 
 model CarMaintenance {
@@ -267,15 +270,17 @@ model ProjectSub {
 }
 
 model MonthlyReport {
-  id                   String  @id @default(uuid())
+  id                   String        @id @default(uuid())
   fk_projectId         String
-  project              Project @relation(fields: [fk_projectId], references: [id])
+  project              Project       @relation(fields: [fk_projectId], references: [id])
   closingDate          String
-  invoiceDate          String  @default("")
-  invoiceAmount        Int     @default(0)
-  invoiceAmountWithTax Int     @default(0)
-  paymentDate1         String  @default("")
-  paymentDate2         String  @default("")
+  invoiceDate          String        @default("")
+  invoiceAmount        Int           @default(0)
+  invoiceAmountWithTax Int           @default(0)
+  invoiceDueDate1      String? //入金予定日
+  invoiceDueDate2      String?
+  paymentDate1         String        @default("")
+  paymentDate2         String        @default("")
   paymentCash1         Int?
   paymentCash2         Int?
   paymentNote1         Int?
@@ -283,6 +288,47 @@ model MonthlyReport {
   paymentEBond1        Int?
   paymentEBond2        Int?
   adjustmentAmount     Int?
+  DailyReport          DailyReport[]
+}
+
+//日報
+model Daily {
+  id          String        @id @unique
+  DailyReport DailyReport[]
+  isLock      Boolean       @default(false)
+}
+
+model DailyReport {
+  id                    String           @id @default(uuid())
+  fk_daily              String
+  daily                 Daily            @relation(fields: [fk_daily], references: [id])
+  fk_company            String?
+  company               Company?         @relation(fields: [fk_company], references: [id])
+  fk_companyEmployee    String?
+  companyEmployee       CompanyEmployee? @relation(fields: [fk_companyEmployee], references: [id])
+  fk_monthlyReport      String?
+  monthlyReport         MonthlyReport?   @relation(fields: [fk_monthlyReport], references: [id])
+  fk_car                String?
+  car                   Car?             @relation(fields: [fk_car], references: [id])
+  startTime             String?
+  endTime               String?
+  breakTime             String?
+  day                   String?
+  night                 String?
+  overtime              String?
+  lateOvertime          String?
+  businessTripAllowance String?
+  nightMealAllowance    String?
+  drivingAllowance      String?
+  etcFees               String?
+  isDayOff              Boolean          @default(false)
+  isPaidLeave           Boolean          @default(false)
+  isSpecialLeave        Boolean          @default(false)
+  isParentalLeave       Boolean          @default(false) //育児休
+  isCaregivingLeave     Boolean          @default(false) //介護休
+  option1               String?
+  option2               String?
+  option3               String?
 }
 
 //オプション

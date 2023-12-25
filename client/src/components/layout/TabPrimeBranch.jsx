@@ -40,7 +40,7 @@ const TabPrimeBranch = (props) => {
       <div className="tab-content">
         {/* 詳細 */}
         {activeTab === "詳細" && (
-          <div className="tab-pane fade show active my-3" id="詳細">
+          <div className="tab-pane fade show active my-3">
             <div className="mb-2">
               <NameFrom_kana
                 title="店社名"
@@ -65,7 +65,7 @@ const TabPrimeBranch = (props) => {
 
         {/* 社員 */}
         {activeTab === "社員" && (
-          <div className="tab-pane fade show active my-3" id="社員">
+          <div>
             <InfoListEmployee
               emps={emps}
               link={`/primes/${companyId}/branches/${branch.id}/employees/?sel=`}

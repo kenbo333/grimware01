@@ -63,7 +63,7 @@ const TabCar = (props) => {
       <div className="tab-content">
         {/* 詳細 */}
         {activeTab === "詳細" && (
-          <div className="tab-pane fade show active my-3" id="詳細">
+          <div className="tab-pane fade show active my-3">
             <form>
               <div className="mb-2">
                 <NameFrom title="車両名" nameKey="name" formUtils={formUtils} />
@@ -123,7 +123,7 @@ const TabCar = (props) => {
 
         {/* 保険 */}
         {activeTab === "保険" && (
-          <div className="tab-pane fade show active my-3" id="保険">
+          <div className="tab-pane fade show active my-3">
             <form>
               <div className="mb-2">
                 <NameFrom
@@ -203,18 +203,10 @@ const TabCar = (props) => {
         )}
 
         {/* 整備履歴 */}
-        {activeTab === "整備履歴" && (
-          <div className="tab-pane fade show active my-3" id="整備履歴">
-            <InfoListCarMaintenance sel={sel} />
-          </div>
-        )}
+        {activeTab === "整備履歴" && <InfoListCarMaintenance sel={sel} />}
 
         {/* 備考 */}
-        {activeTab === "備考" && (
-          <div className="tab-pane fade show active my-3" id="備考">
-            <InfoListRemark sel={sel} fkName="fk_carId" />
-          </div>
-        )}
+        {activeTab === "備考" && <InfoListRemark sel={sel} fkName="fk_carId" />}
       </div>
     </div>
   );

@@ -72,6 +72,14 @@ const useInfoListItemLogic = (sel, type) => {
     setItems(newItems);
   };
 
+  const handleClick = (item, monthlyReport) => {
+    const newItem = { ...item, fk_monthlyReport: monthlyReport.id };
+    const itemIndex = items.findIndex((i) => i.id === item.id);
+    const newItems = [...items];
+    newItems[itemIndex] = { ...newItem };
+    setItems(newItems);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -92,6 +100,7 @@ const useInfoListItemLogic = (sel, type) => {
     handleEdit,
     handleCancel,
     handleChange,
+    handleClick,
   };
 };
 

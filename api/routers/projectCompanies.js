@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-//---------create------------------------------------------------------------
+//---------create-------------------------------------------
 const bulkInsert = async (model, req, res) => {
   const { fk_projectId, companyIds } = req.body;
   const data = companyIds.map((id) => ({

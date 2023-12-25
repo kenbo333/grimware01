@@ -7,7 +7,7 @@ const InfoListBranch = (props) => {
   const { pathname } = useRouter();
 
   return (
-    <div>
+    <div className="tab-pane fade show active my-3">
       <div className="row h6">
         <div className="col-6">店社名/住所</div>
         <div className="col-3">TEL</div>

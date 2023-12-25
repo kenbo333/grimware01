@@ -116,25 +116,17 @@ const TabProject = (props) => {
 
         {/* 勘定 */}
         {activeTab === "勘定" && (
-          <div className="tab-pane fade show active my-3" id="勘定">
-            <div>
-              <PJMonthlyReport formUtils={formUtils} sel={sel} />
-            </div>
-          </div>
+          <PJMonthlyReport formUtils={formUtils} sel={sel} />
         )}
 
         {/* ファイル */}
         {activeTab === "ファイル" && (
-          <div className="tab-pane fade show active my-3" id="ファイル">
-            <InfoListRemark fkName="fk_projectId" sel={sel} />
-          </div>
+          <InfoListRemark fkName="fk_projectId" sel={sel} />
         )}
 
         {/* 仕入 */}
         {activeTab === "仕入" && (
-          <div className="tab-pane fade show active my-3" id="仕入">
-            仕入
-          </div>
+          <div className="tab-pane fade show active my-3">仕入</div>
         )}
 
         <hr />

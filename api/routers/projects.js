@@ -57,6 +57,20 @@ router.get("/:projectId/monthlyReports", async (req, res) => {
       where: {
         fk_projectId: req.params.projectId,
       },
+      include: {
+        project: {
+          select: {
+            projectId: true,
+            name: true,
+            companyPrime: {
+              select: {
+                name: true,
+                closingDay: true,
+              },
+            },
+          },
+        },
+      },
     });
     return res.status(200).json(items);
   } catch (error) {
@@ -79,20 +93,20 @@ router.put("/:projectId", async (req, res) => {
   }
 });
 
-// router.put("/:projectId", async (req, res) => {
-//   try {
-//     const updateItem = await prisma.monthlyReport.update({
-//       // where: { id: req.params.projectId },
-//       data: req.body.formData,
-//     });
-//     return res.status(200).json(updateItem);
-//   } catch (error) {
-//     console.error(error);
-//     return res
-//       .status(500)
-//       .json({ error: "Failed to update the monthlyReport." });
-//   }
-// });
+router.put("/:projectId/monthlyReports/:monthlyReportId", async (req, res) => {
+  try {
+    const updateItem = await prisma.monthlyReport.update({
+      where: { id: req.params.monthlyReportId },
+      data: req.body.formData,
+    });
+    return res.status(200).json(updateItem);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ error: "Failed to update the monthlyReport." });
+  }
+});
 
 //------delete-----------------------
 router.delete("/:projectId", async (req, res) => {

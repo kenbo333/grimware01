@@ -63,7 +63,7 @@ const PJStakeholder = (props) => {
   }, [sel, modalOpen]);
 
   return (
-    <div className="tab-pane fade show active my-3" id="関係者">
+    <div className="tab-pane fade show active my-3">
       <div className="mb-2">
         <SelectForm
           title="担当"

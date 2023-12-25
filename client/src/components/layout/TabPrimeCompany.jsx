@@ -39,7 +39,7 @@ const TabPrimeCompany = (props) => {
       <div className="tab-content">
         {/* 詳細 */}
         {activeTab === "詳細" && (
-          <div className="tab-pane fade show active my-3" id="詳細">
+          <div className="tab-pane fade show active my-3">
             <form>
               <div className="mb-2">
                 <NameFrom_kana
@@ -62,7 +62,7 @@ const TabPrimeCompany = (props) => {
 
         {/* tab2 */}
         {activeTab === "店社" && (
-          <div className="tab-pane fade show active my-3" id="店社">
+          <div>
             <InfoListBranch branches={branches} />
 
             <button
@@ -76,15 +76,12 @@ const TabPrimeCompany = (props) => {
         )}
 
         {/* tab3 */}
-        {activeTab === "社員" && (
-          <div className="tab-pane fade show active my-3" id="社員">
-            {emps.length ? (
-              <InfoListEmployeeBranch emps={emps} />
-            ) : (
-              <div>登録されていません</div>
-            )}
-          </div>
-        )}
+        {activeTab === "社員" &&
+          (emps.length ? (
+            <InfoListEmployeeBranch emps={emps} />
+          ) : (
+            <div>登録されていません</div>
+          ))}
       </div>
     </div>
   );

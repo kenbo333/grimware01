@@ -47,7 +47,7 @@ const TabOwnEmployee = (props) => {
       <div className="tab-content">
         {/* 詳細 */}
         {activeTab === "詳細" && (
-          <div className="tab-pane fade show active my-3" id="詳細">
+          <div className="tab-pane fade show active my-3">
             <div className="mb-2">
               <SelectForm
                 title="所属"
@@ -94,7 +94,7 @@ const TabOwnEmployee = (props) => {
 
         {/* 詳細2 */}
         {activeTab === "詳細2" && (
-          <div className="tab-pane fade show active my-3" id="詳細2">
+          <div className="tab-pane fade show active my-3">
             <div className="row">
               <div className="col-6">
                 <HalfFrom
@@ -224,7 +224,7 @@ const TabOwnEmployee = (props) => {
 
         {/* 詳細3 */}
         {activeTab === "詳細3" && (
-          <div className="tab-pane fade show active my-3" id="詳細3">
+          <div className="tab-pane fade show active my-3">
             <div className="mb-2">
               <AddressForm formUtils={formUtils} />
             </div>
@@ -249,7 +249,7 @@ const TabOwnEmployee = (props) => {
 
         {/* 緊急 */}
         {activeTab === "緊急" && (
-          <div className="tab-pane fade show active my-3" id="緊急">
+          <div className="tab-pane fade show active my-3">
             <div className="mb-2">
               <FullNameForm title="氏名" formUtils={formUtils} type="emg" />
             </div>
@@ -290,22 +290,16 @@ const TabOwnEmployee = (props) => {
         )}
 
         {/* 資格 */}
-        {activeTab === "資格" && (
-          <div className="tab-pane fade show active my-3" id="資格">
-            <InfoListLicense sel={sel} />
-          </div>
-        )}
+        {activeTab === "資格" && <InfoListLicense sel={sel} />}
 
         {/* 有給 */}
         {activeTab === "有給" && (
-          <div className="tab-pane fade show active my-3" id="有給"></div>
+          <div className="tab-pane fade show active my-3"></div>
         )}
 
         {/* 備考 */}
         {activeTab === "備考" && (
-          <div className="tab-pane fade show active my-3" id="備考">
-            <InfoListRemark fkName="fk_companyEmployeeId" sel={sel} />
-          </div>
+          <InfoListRemark fkName="fk_companyEmployeeId" sel={sel} />
         )}
       </div>
     </div>

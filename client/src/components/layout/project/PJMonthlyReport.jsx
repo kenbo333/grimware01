@@ -21,7 +21,7 @@ const PJMonthlyReport = (props) => {
   }, [sel]);
 
   return (
-    <div>
+    <div className="tab-pane fade show active my-3">
       <div className="row">
         <div className="col-6">
           <HalfFrom

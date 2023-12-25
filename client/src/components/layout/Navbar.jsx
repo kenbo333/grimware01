@@ -22,6 +22,9 @@ const Navbar = () => {
         <div className="p-2 bd-highlight">
           <Link href="/projects">プロジェクト</Link>
         </div>
+        <div className="p-2 bd-highlight">
+          <Link href="/daily">日報</Link>
+        </div>
       </div>
     </nav>
   );

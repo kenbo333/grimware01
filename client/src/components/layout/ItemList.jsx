@@ -34,7 +34,7 @@ export const ItemList = (props) => {
   const titles = titleStrategies[type];
 
   return (
-    <>
+    <div>
       {/* 検索窓 */}
       <div className="my-2 position-relative">
         <input
@@ -81,6 +81,6 @@ export const ItemList = (props) => {
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };

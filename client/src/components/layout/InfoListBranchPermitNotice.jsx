@@ -14,7 +14,7 @@ const InfoListBranchPermitNotice = (props) => {
   } = useInfoListItemLogic(sel, "BRANCH_PERMIT_NOTICES");
 
   return (
-    <div>
+    <div className="tab-pane fade show active my-3">
       <div>
         <button
           type="button"

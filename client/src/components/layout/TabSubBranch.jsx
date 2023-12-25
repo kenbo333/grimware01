@@ -41,7 +41,7 @@ const TabSubBranch = (props) => {
       <div className="tab-content">
         {/* 詳細 */}
         {activeTab === "詳細" && (
-          <div className="tab-pane fade show active my-3" id="詳細">
+          <div className="tab-pane fade show active my-3">
             <div className="mb-2">
               <NameFrom_kana
                 title="店社名"
@@ -66,7 +66,7 @@ const TabSubBranch = (props) => {
 
         {/* 社員 */}
         {activeTab === "社員" && (
-          <div className="tab-pane fade show active my-3" id="社員">
+          <div>
             <InfoListEmployee
               emps={emps}
               link={`/subs/${companyId}/branches/${branch.id}/employees?sel=`}
@@ -84,15 +84,11 @@ const TabSubBranch = (props) => {
 
         {/* 支払 */}
         {activeTab === "支払" && (
-          <div className="tab-pane fade show active my-3" id="支払"></div>
+          <div className="tab-pane fade show active my-3"></div>
         )}
 
         {/* 許可/届出 */}
-        {activeTab === "許可/届出" && (
-          <div className="tab-pane fade show active my-3" id="許可/届出">
-            <InfoListBranchPermitNotice sel={sel} />
-          </div>
-        )}
+        {activeTab === "許可/届出" && <InfoListBranchPermitNotice sel={sel} />}
       </div>
     </div>
   );

@@ -40,7 +40,7 @@ const TabPurchaseBranch = (props) => {
       <div className="tab-content">
         {/* 詳細 */}
         {activeTab === "詳細" && (
-          <div className="tab-pane fade show active my-3" id="詳細">
+          <div className="tab-pane fade show active my-3">
             <div className="mb-2">
               <NameFrom_kana
                 title="店社名"
@@ -65,7 +65,7 @@ const TabPurchaseBranch = (props) => {
 
         {/* 担当者 */}
         {activeTab === "担当者" && (
-          <div className="tab-pane fade show active my-3" id="担当者">
+          <div>
             <InfoListEmployee
               emps={emps}
               link={`/purchases/${companyId}/branches/${branch.id}/employees?sel=`}
@@ -83,7 +83,7 @@ const TabPurchaseBranch = (props) => {
 
         {/* 仕入 */}
         {activeTab === "仕入" && (
-          <div className="tab-pane fade show active my-3" id="仕入"></div>
+          <div className="tab-pane fade show active my-3"></div>
         )}
       </div>
     </div>

@@ -120,7 +120,7 @@ export const ProjectModalCreate = (props) => {
   }, [createForm]);
 
   return (
-    <>
+    <div>
       <div
         className={`modal ${isModalOpen ? "d-block show" : ""}`}
         tabIndex="-1"
@@ -154,6 +154,7 @@ export const ProjectModalCreate = (props) => {
                 </button>
               </div>
 
+              {/* 新規作成 */}
               {createForm === "new" && (
                 <div>
                   <RadioGroup
@@ -216,6 +217,7 @@ export const ProjectModalCreate = (props) => {
                 </div>
               )}
 
+              {/* 過去を参照 */}
               {createForm === "old" && (
                 <div className="list-group">
                   {items.map((item, index) => (
@@ -248,6 +250,6 @@ export const ProjectModalCreate = (props) => {
       {isModalOpen && (
         <div className={`modal-backdrop ${isModalOpen ? "show" : ""}`}></div>
       )}
-    </>
+    </div>
   );
 };

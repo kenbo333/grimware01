@@ -41,7 +41,7 @@ const TabPrimeEmployee = (props) => {
       <div className="tab-content">
         {/* 詳細 */}
         {activeTab === "詳細" && (
-          <div className="tab-pane fade show active my-3" id="詳細">
+          <div className="tab-pane fade show active my-3">
             <div className="mb-2">
               <SelectForm
                 title="所属"
@@ -90,9 +90,7 @@ const TabPrimeEmployee = (props) => {
 
         {/* tab2 */}
         {activeTab === "備考" && (
-          <div className="tab-pane fade show active my-3" id="備考">
-            <InfoListRemark fkName="fk_companyEmployeeId" sel={sel} />
-          </div>
+          <InfoListRemark fkName="fk_companyEmployeeId" sel={sel} />
         )}
       </div>
     </div>

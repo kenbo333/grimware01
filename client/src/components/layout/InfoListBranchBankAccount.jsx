@@ -14,7 +14,7 @@ const InfoListBranchBankAccount = (props) => {
   } = useInfoListItemLogic(sel, "BRANCH_BANK_ACCOUNTS");
 
   return (
-    <div>
+    <div className="tab-pane fade show active my-3">
       <div>
         <button
           type="button"

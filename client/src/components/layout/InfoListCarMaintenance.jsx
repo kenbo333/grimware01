@@ -15,7 +15,7 @@ const InfoListCarMaintenance = (props) => {
   } = useInfoListItemLogic(sel, "CAR_MAINTENANCE");
 
   return (
-    <div>
+    <div className="tab-pane fade show active my-3">
       <div>
         <button
           type="button"

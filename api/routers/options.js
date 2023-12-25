@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-//-----------read---------------------------
+//-----------read------------------------------------
 router.get("/", async (req, res) => {
   try {
     const items = await prisma.option.findUnique({
