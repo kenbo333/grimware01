@@ -40,7 +40,7 @@ const TabPurchaseBranch = (props) => {
       <div className="tab-content">
         {/* 詳細 */}
         {activeTab === "詳細" && (
-          <div className="tab-pane fade show active my-3">
+          <div className="tab-pane active my-3">
             <div className="mb-2">
               <NameFrom_kana
                 title="店社名"
@@ -82,9 +82,7 @@ const TabPurchaseBranch = (props) => {
         )}
 
         {/* 仕入 */}
-        {activeTab === "仕入" && (
-          <div className="tab-pane fade show active my-3"></div>
-        )}
+        {activeTab === "仕入" && <div className="tab-pane my-3"></div>}
       </div>
     </div>
   );

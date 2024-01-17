@@ -6,16 +6,16 @@ import { useFormEditor, usePathManager, useSaveData } from "./handleItem";
 const TYPE_MAPPING = {
   prime: {
     checkStatic: (company, formData) => company.isPrime === formData.isPrime,
-    routePath: (company) => `/primes/${company.id}`,
+    routePath: (company) => `/primes/${company.id}/branches`,
   },
   sub: {
     checkStatic: (company, formData) => company.isSub === formData.isSub,
-    routePath: (company) => `/subs/${company.id}`,
+    routePath: (company) => `/subs/${company.id}/branches`,
   },
   purchase: {
     checkStatic: (company, formData) =>
       company.isPurchase === formData.isPurchase,
-    routePath: (company) => `/purchases/${company.id}`,
+    routePath: (company) => `/purchases/${company.id}/branches`,
   },
 };
 

@@ -17,7 +17,7 @@ router.post("/:dailyId/dailyReports", async (req, res) => {
   try {
     const newItem = await prisma.dailyReport.create({
       data: {
-        fk_daily: req.params.dailyId,
+        fk_dailyId: req.params.dailyId,
       },
     });
     return res.status(201).json(newItem);
@@ -44,7 +44,7 @@ router.get("/:dailyId/dailyReports", async (req, res) => {
   const { dailyId } = req.params;
   try {
     const items = await prisma.dailyReport.findMany({
-      where: { fk_daily: dailyId },
+      where: { fk_dailyId: dailyId },
     });
     return res.status(200).json(items);
   } catch (error) {
@@ -58,7 +58,7 @@ router.put("/:dailyId/dailyReports/:dailyReportId", async (req, res) => {
   try {
     const updateItem = await prisma.dailyReport.update({
       where: { id: req.params.dailyReportId },
-      data: req.body.updateData,
+      data: req.body,
     });
     return res.status(200).json(updateItem);
   } catch (error) {

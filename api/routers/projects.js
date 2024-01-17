@@ -84,7 +84,7 @@ router.put("/:projectId", async (req, res) => {
   try {
     const updateItem = await prisma.project.update({
       where: { id: req.params.projectId },
-      data: req.body.formData,
+      data: req.body,
     });
     return res.status(200).json(updateItem);
   } catch (error) {
@@ -97,7 +97,7 @@ router.put("/:projectId/monthlyReports/:monthlyReportId", async (req, res) => {
   try {
     const updateItem = await prisma.monthlyReport.update({
       where: { id: req.params.monthlyReportId },
-      data: req.body.formData,
+      data: req.body,
     });
     return res.status(200).json(updateItem);
   } catch (error) {

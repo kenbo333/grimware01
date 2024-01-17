@@ -41,7 +41,7 @@ const TabPrimeEmployee = (props) => {
       <div className="tab-content">
         {/* 詳細 */}
         {activeTab === "詳細" && (
-          <div className="tab-pane fade show active my-3">
+          <div className="tab-pane active my-3">
             <div className="mb-2">
               <SelectForm
                 title="所属"

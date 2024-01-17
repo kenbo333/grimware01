@@ -6,7 +6,7 @@ export const InfoListEmployee = (props) => {
   const { emps, link } = props;
 
   return (
-    <div className="tab-pane fade show active my-3">
+    <div className="tab-pane active my-3">
       <div className="row h6">
         <div className="col-4">氏名/TEL</div>
         <div className="col-8">Email</div>
@@ -38,7 +38,7 @@ export const InfoListEmployeeBranch = (props) => {
   const { emps } = props;
 
   return (
-    <div className="tab-pane fade show active my-3">
+    <div className="tab-pane active my-3">
       <div className="row h6">
         <div className="col-4">氏名/TEL</div>
         <div className="col-8">店社名/Email</div>

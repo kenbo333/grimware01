@@ -44,7 +44,7 @@ export const useTabBranch = (type, branches, isCreateState) => {
       const { id: newEmployeeId } = response.data;
       sessionStorage.setItem("sessionIsCreate", "true");
       router.push({
-        pathname: `/${type}/${companyId}/branches/${branch.id}`,
+        pathname: `/${type}/${companyId}/branches/${branch.id}/employees`,
         query: { sel: newEmployeeId },
       });
       console.log(`create:${newEmployeeId}`);

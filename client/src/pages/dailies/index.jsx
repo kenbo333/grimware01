@@ -7,10 +7,11 @@ import { usePathManager } from "@/components/containers/handleItem";
 import NavTabs from "@/components/forms/NavTabs";
 import DailyReportA from "@/components/layout/dairyReport/DailyReportA";
 import DailyReportB from "@/components/layout/dairyReport/DailyReportB";
+import DailyReportC from "@/components/layout/dairyReport/DailyReportC";
 
 export const getServerSideProps = (context) => getData("/dailies");
 
-const Daily = (props) => {
+const Dailies = (props) => {
   const router = useRouter();
   const { sel } = router.query;
 
@@ -112,6 +113,7 @@ const Daily = (props) => {
 
               {activeTab === "A" && <DailyReportA sel={sel} />}
               {activeTab === "B" && <DailyReportB sel={sel} />}
+              {activeTab === "計算" && <DailyReportC sel={sel} />}
             </div>
           )}
         </div>
@@ -120,4 +122,4 @@ const Daily = (props) => {
   );
 };
 
-export default Daily;
+export default Dailies;

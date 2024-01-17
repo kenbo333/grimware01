@@ -47,7 +47,7 @@ const TabOwnEmployee = (props) => {
       <div className="tab-content">
         {/* 詳細 */}
         {activeTab === "詳細" && (
-          <div className="tab-pane fade show active my-3">
+          <div className="tab-pane active my-3">
             <div className="mb-2">
               <SelectForm
                 title="所属"
@@ -94,7 +94,7 @@ const TabOwnEmployee = (props) => {
 
         {/* 詳細2 */}
         {activeTab === "詳細2" && (
-          <div className="tab-pane fade show active my-3">
+          <div className="tab-pane active my-3">
             <div className="row">
               <div className="col-6">
                 <HalfFrom
@@ -224,11 +224,11 @@ const TabOwnEmployee = (props) => {
 
         {/* 詳細3 */}
         {activeTab === "詳細3" && (
-          <div className="tab-pane fade show active my-3">
+          <div className="tab-pane active my-3">
             <div className="mb-2">
               <AddressForm formUtils={formUtils} />
             </div>
-            <div>
+            <div className="mb-2">
               <NameFrom title="TEL" nameKey="homePhone" formUtils={formUtils} />
               <NameFrom
                 title="phone"
@@ -242,6 +242,35 @@ const TabOwnEmployee = (props) => {
               />
             </div>
 
+            <div className="row mb-2">
+              <div className="col-6">
+                <HalfFrom
+                  title="日勤原価"
+                  nameKey="laborCostDayShift"
+                  formUtils={formUtils}
+                  type="text"
+                />
+                <HalfFrom
+                  title="深夜原価"
+                  nameKey="laborCostNightShift"
+                  formUtils={formUtils}
+                  type="text"
+                />
+                <HalfFrom
+                  title="残業原価"
+                  nameKey="laborCostOvertime"
+                  formUtils={formUtils}
+                  type="text"
+                />
+                <HalfFrom
+                  title="深夜残業原価"
+                  nameKey="laborCostLateOvertime"
+                  formUtils={formUtils}
+                  type="text"
+                />
+              </div>
+            </div>
+
             <hr />
             <ButtonEdit formUtils={formUtils} handleSave={handleSave} />
           </div>
@@ -249,7 +278,7 @@ const TabOwnEmployee = (props) => {
 
         {/* 緊急 */}
         {activeTab === "緊急" && (
-          <div className="tab-pane fade show active my-3">
+          <div className="tab-pane active my-3">
             <div className="mb-2">
               <FullNameForm title="氏名" formUtils={formUtils} type="emg" />
             </div>
@@ -293,9 +322,7 @@ const TabOwnEmployee = (props) => {
         {activeTab === "資格" && <InfoListLicense sel={sel} />}
 
         {/* 有給 */}
-        {activeTab === "有給" && (
-          <div className="tab-pane fade show active my-3"></div>
-        )}
+        {activeTab === "有給" && <div className="tab-pane active my-3"></div>}
 
         {/* 備考 */}
         {activeTab === "備考" && (

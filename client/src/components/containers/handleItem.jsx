@@ -34,7 +34,7 @@ export const usePathManager = () => {
 export const useSaveData = () => {
   const saveData = useCallback(async (url, formData) => {
     try {
-      await apiClient.put(url, { formData });
+      await apiClient.put(url, formData);
       toast.success("保存しました");
     } catch (error) {
       toast.error("saveError");
@@ -60,6 +60,22 @@ export const useFormEditor = (initialData) => {
   const updateCheckbox = useCallback((key) => {
     setFormData((prevData) => ({ ...prevData, [key]: !prevData[key] }));
   }, []);
+
+  const updateCheckedItemsArray = (list, key) => {
+    if (formData[key].includes(list)) {
+      // 既にチェックされている場合は、配列から削除
+      setFormData((prevData) => ({
+        ...prevData,
+        [key]: prevData[key].filter((item) => item !== list),
+      }));
+    } else {
+      // チェックされていない場合は、配列に追加
+      setFormData((prevData) => ({
+        ...prevData,
+        [key]: [...prevData[key], list],
+      }));
+    }
+  };
 
   const startEdit = () => {
     const newFormData = { ...formData };
@@ -91,6 +107,7 @@ export const useFormEditor = (initialData) => {
     formData,
     updateObject,
     updateCheckbox,
+    updateCheckedItemsArray,
     startEdit,
     cancelEdit,
     endEdit,

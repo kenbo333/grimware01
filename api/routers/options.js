@@ -42,26 +42,52 @@ router.get("/", async (req, res) => {
 //-----update--------------------------------------
 router.put("/:optionId", async (req, res) => {
   try {
-    const updateItem = await prisma.car.update({
-      where: { id: req.params.carId },
-      data: req.body.formData,
+    const updateItem = await prisma.option.update({
+      where: { id: req.params.optionId },
+      data: req.body,
     });
     return res.status(200).json(updateItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to update the car." });
+    return res.status(500).json({ error: "Failed to update the option." });
+  }
+});
+
+router.put("/:optionId/projType1/:projType1Id", async (req, res) => {
+  try {
+    const updateItem = await prisma.projType1.update({
+      where: { id: req.params.optionId },
+      data: req.body,
+    });
+    return res.status(200).json(updateItem);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to update the option." });
+  }
+});
+
+router.put("/:optionId/projType2/:projType2Id", async (req, res) => {
+  try {
+    const updateItem = await prisma.projType2.update({
+      where: { id: req.params.optionId },
+      data: req.body,
+    });
+    return res.status(200).json(updateItem);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to update the option." });
   }
 });
 
 //------delete-----------------------------------
-router.delete("/:carId", async (req, res) => {
-  try {
-    await prisma.car.delete({ where: { id: req.params.carId } });
-    return res.status(204).send();
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Failed to delete the car." });
-  }
-});
+// router.delete("/:optionId", async (req, res) => {
+//   try {
+//     await prisma.option.delete({ where: { id: req.params.optionId } });
+//     return res.status(204).send();
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ error: "Failed to delete the option." });
+//   }
+// });
 
 module.exports = router;

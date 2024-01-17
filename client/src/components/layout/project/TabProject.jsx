@@ -125,9 +125,7 @@ const TabProject = (props) => {
         )}
 
         {/* 仕入 */}
-        {activeTab === "仕入" && (
-          <div className="tab-pane fade show active my-3">仕入</div>
-        )}
+        {activeTab === "仕入" && <div className="tab-pane my-3">仕入</div>}
 
         <hr />
 

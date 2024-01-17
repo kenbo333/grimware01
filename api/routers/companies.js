@@ -132,29 +132,19 @@ const updateEntity = async (model, id, data, res) => {
 
 // 会社情報アップデート
 router.put("/:companyId", (req, res) => {
-  updateEntity(prisma.company, req.params.companyId, req.body.formData, res);
+  updateEntity(prisma.company, req.params.companyId, req.body, res);
 });
 
 // 店社情報アップデート
 router.put("/:companyId/branches/:branchId", (req, res) => {
-  updateEntity(
-    prisma.companyBranch,
-    req.params.branchId,
-    req.body.formData,
-    res
-  );
+  updateEntity(prisma.companyBranch, req.params.branchId, req.body, res);
 });
 
 // 社員情報アップデート
 router.put(
   "/:companyId/branches/:branchId/employees/:employeeId",
   (req, res) => {
-    updateEntity(
-      prisma.companyEmployee,
-      req.params.employeeId,
-      req.body.formData,
-      res
-    );
+    updateEntity(prisma.companyEmployee, req.params.employeeId, req.body, res);
   }
 );
 

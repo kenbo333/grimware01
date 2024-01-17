@@ -62,8 +62,9 @@ const InfoListRemark = (props) => {
     }
   };
 
-  const handleCheck = async (e, index) => {
+  const handleCheck = async (e) => {
     try {
+      const index = parseInt(e.target.dataset.index, 10);
       const { name } = e.target;
       const newItems = [...items];
       newItems[index][name] = !newItems[index][name];
@@ -95,7 +96,7 @@ const InfoListRemark = (props) => {
   }, [sel]);
 
   return (
-    <div className="tab-pane fade show active my-3">
+    <div className="tab-pane active my-3">
       <div>
         <button
           type="button"
@@ -147,7 +148,7 @@ const InfoListRemark = (props) => {
               </div>
 
               <div className="col-2">
-                <div className="form-check">
+                {/* <div className="form-check">
                   <input
                     type="checkbox"
                     className="form-check-input"
@@ -160,6 +161,23 @@ const InfoListRemark = (props) => {
                     className="form-check-label"
                     htmlFor={`isPublic-${index}`}
                   >
+                    公開
+                  </label>
+                </div> */}
+                <div className="form-check">
+                  <label
+                    className="form-check-label"
+                    // htmlFor={`isPublic-${index}`}
+                  >
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      // id={`isPublic-${index}`}
+                      data-index={index.toString()}
+                      name="isPublic"
+                      checked={item.isPublic || false}
+                      onChange={handleCheck}
+                    />
                     公開
                   </label>
                 </div>

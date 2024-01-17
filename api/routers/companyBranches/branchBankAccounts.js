@@ -43,12 +43,11 @@ router.put(
     try {
       const updateItem = await prisma.branchBankAccount.update({
         where: { id: req.params.branchBankAccountId },
-        data: req.body.updateData,
+        data: req.body,
       });
       return res.status(200).json(updateItem);
     } catch (error) {
       console.error(error);
-      console.log(req.body);
       return res
         .status(500)
         .json({ error: "Failed to update the branchBankAccount." });

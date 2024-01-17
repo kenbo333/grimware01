@@ -54,7 +54,7 @@ const DailyReportA = (props) => {
   }, []);
 
   return (
-    <div className="tab-pane fade show active my-3">
+    <div className="tab-pane active my-3">
       <div>
         <button
           type="button"
@@ -83,6 +83,7 @@ const DailyReportA = (props) => {
           <div className="col-2">車両</div>
           <div className="col-2">運転</div>
           <div className="col-2">ETC代</div>
+          <div className="col-2">距離</div>
         </div>
       </div>
 
@@ -95,13 +96,13 @@ const DailyReportA = (props) => {
               <div className="col-3 px-1">
                 <select
                   className="form-select form-select-sm"
-                  name="fk_company"
+                  name="fk_companyId"
                   data-index={index.toString()}
-                  value={item.fk_company || ""}
+                  value={item.fk_companyId || ""}
                   disabled={!item.isEditing}
                   onChange={handleChange}
                 >
-                  {!item.fk_company && <option value=""></option>}
+                  {!item.fk_companyId && <option value=""></option>}
                   {companies.map((company) => (
                     <option key={company.id} value={company.id}>
                       {company.name}
@@ -112,14 +113,14 @@ const DailyReportA = (props) => {
               <div className="col-3 px-1">
                 <select
                   className="form-select form-select-sm"
-                  name="fk_companyEmployee"
+                  name="fk_companyEmployeeId"
                   data-index={index.toString()}
-                  value={item.fk_companyEmployee || ""}
+                  value={item.fk_companyEmployeeId || ""}
                   disabled={!item.isEditing}
                   onChange={handleChange}
                 >
                   <option value=""></option>
-                  {getCompanyEmployees(item.fk_company).map((emp) => (
+                  {getCompanyEmployees(item.fk_companyId).map((emp) => (
                     <option key={emp.id} value={emp.id}>
                       {emp.lastName + emp.firstName}
                     </option>
@@ -131,13 +132,13 @@ const DailyReportA = (props) => {
               <div className="col-4 px-1">
                 <select
                   className="form-select form-select-sm"
-                  name="fk_monthlyReport"
+                  name="fk_monthlyReportId"
                   data-index={index.toString()}
-                  value={item.fk_monthlyReport || ""}
+                  value={item.fk_monthlyReportId || ""}
                   disabled={!item.isEditing}
                   onChange={handleChange}
                 >
-                  {!item.fk_monthlyReport && <option value=""></option>}
+                  {!item.fk_monthlyReportId && <option value=""></option>}
                   {monthlyReports.map((item) => (
                     <option key={item.id} value={item.id}>
                       {item.project.name}
@@ -258,7 +259,7 @@ const DailyReportA = (props) => {
                   type="text"
                   className="form-control form-control-sm"
                   disabled={!item.isEditing}
-                  value={item.fk_car || ""}
+                  value={item.fk_carId || ""}
                   onChange={handleChange}
                 />
               </div>
@@ -277,6 +278,15 @@ const DailyReportA = (props) => {
                   className="form-control form-control-sm"
                   disabled={!item.isEditing}
                   value={item.etcFees || ""}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="col-2 px-1">
+                <input
+                  type="text"
+                  className="form-control form-control-sm"
+                  disabled={!item.isEditing}
+                  value={item.distance || ""}
                   onChange={handleChange}
                 />
               </div>

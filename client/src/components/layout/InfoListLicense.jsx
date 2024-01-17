@@ -109,7 +109,7 @@ const InfoListLicense = (props) => {
   }, [sel]);
 
   return (
-    <div className="tab-pane fade show active my-3">
+    <div className="tab-pane active my-3">
       <div>
         <button
           type="button"

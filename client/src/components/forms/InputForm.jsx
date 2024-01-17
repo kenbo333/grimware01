@@ -210,7 +210,7 @@ export const SelectForm = (props) => {
           className="form-select"
           id={nameKey}
           onChange={handleChange}
-          value={formData[nameKey]}
+          value={formData[nameKey] || ""}
           disabled={!formData.isEditing}
         >
           {isAllowEmpty && <option value=""></option>}

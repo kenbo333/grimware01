@@ -13,6 +13,7 @@ const generateProjectIdRoute = require("./routers/generateProjectId");
 const projectCompanyRoute = require("./routers/projectCompanies");
 const dailyRoute = require("./routers/dailies");
 const monthlyReportsRoute = require("./routers/monthlyReports");
+const expenseRoute = require("./routers/expenses");
 
 const cors = require("cors");
 
@@ -34,5 +35,6 @@ app.use("/api/generateProjectId", generateProjectIdRoute);
 app.use("/api/projectCompanies", projectCompanyRoute);
 app.use("/api/dailies", dailyRoute);
 app.use("/api/monthlyReports", monthlyReportsRoute);
+app.use("/api/expenses", expenseRoute);
 
 app.listen(PORT, () => console.log(`server is running on Port ${PORT}`));

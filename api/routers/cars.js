@@ -71,7 +71,7 @@ router.put("/:carId", async (req, res) => {
   try {
     const updateItem = await prisma.car.update({
       where: { id: req.params.carId },
-      data: req.body.formData,
+      data: req.body,
     });
     return res.status(200).json(updateItem);
   } catch (error) {
@@ -84,7 +84,7 @@ router.put("/:carId/maintenance/:maintenanceId", async (req, res) => {
   try {
     const updateItem = await prisma.carMaintenance.update({
       where: { id: req.params.maintenanceId },
-      data: req.body.updateData,
+      data: req.body,
     });
     return res.status(200).json(updateItem);
   } catch (error) {

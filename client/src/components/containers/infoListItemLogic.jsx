@@ -25,7 +25,7 @@ const useInfoListItemLogic = (sel, type) => {
       delete newItems[index].isEditing;
       delete newItems[index].originalItem;
       const updateData = newItems[index];
-      await apiClient.put(`${apiUrl}/${items[index].id}`, { updateData });
+      await apiClient.put(`${apiUrl}/${items[index].id}`, updateData);
       setItems(newItems);
       toast.success("保存しました");
     } catch (error) {
@@ -72,6 +72,15 @@ const useInfoListItemLogic = (sel, type) => {
     setItems(newItems);
   };
 
+  const handleCheck = (e) => {
+    const index = parseInt(e.target.dataset.index, 10);
+    const { name } = e.target;
+    const newItems = [...items];
+    newItems[index][name] = !newItems[index][name];
+    setItems(newItems);
+  };
+
+  // 未使用
   const handleClick = (item, monthlyReport) => {
     const newItem = { ...item, fk_monthlyReport: monthlyReport.id };
     const itemIndex = items.findIndex((i) => i.id === item.id);
@@ -100,6 +109,7 @@ const useInfoListItemLogic = (sel, type) => {
     handleEdit,
     handleCancel,
     handleChange,
+    handleCheck,
     handleClick,
   };
 };

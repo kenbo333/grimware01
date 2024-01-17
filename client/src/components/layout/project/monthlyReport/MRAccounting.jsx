@@ -5,7 +5,7 @@ const MRAccounting = (props) => {
   const { formUtils } = props;
 
   return (
-    <div className="tab-pane fade show active my-3">
+    <div className="tab-pane active my-3">
       <div className="row mb-2">
         <div className="col-6">
           <HalfFrom

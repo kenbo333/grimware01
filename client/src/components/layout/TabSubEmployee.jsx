@@ -47,7 +47,7 @@ const TabSubEmployee = (props) => {
       <div className="tab-content">
         {/* 詳細 */}
         {activeTab === "詳細" && (
-          <div className="tab-pane fade show active my-3">
+          <div className="tab-pane active my-3">
             <div className="mb-2">
               <SelectForm
                 title="所属"
@@ -94,7 +94,7 @@ const TabSubEmployee = (props) => {
 
         {/* 詳細2 */}
         {activeTab === "詳細2" && (
-          <div className="tab-pane fade show active my-3">
+          <div className="tab-pane active my-3">
             <div className="row">
               <div className="col-6">
                 <HalfFrom
@@ -221,7 +221,7 @@ const TabSubEmployee = (props) => {
 
         {/* 詳細3 */}
         {activeTab === "詳細3" && (
-          <div className="tab-pane fade show active my-3">
+          <div className="tab-pane active my-3">
             <div className="mb-2">
               <AddressForm formUtils={formUtils} />
             </div>
@@ -246,7 +246,7 @@ const TabSubEmployee = (props) => {
 
         {/* 緊急 */}
         {activeTab === "緊急" && (
-          <div className="tab-pane fade show active my-3">
+          <div className="tab-pane active my-3">
             <div className="mb-2">
               <FullNameForm title="氏名" formUtils={formUtils} type="emg" />
             </div>

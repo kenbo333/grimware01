@@ -39,7 +39,7 @@ const TabSubCompany = (props) => {
       <div className="tab-content">
         {/* 詳細 */}
         {activeTab === "詳細" && (
-          <div className="tab-pane fade show active my-3">
+          <div className="tab-pane active my-3">
             <form>
               <div className="mb-2">
                 <NameFrom_kana
@@ -62,7 +62,7 @@ const TabSubCompany = (props) => {
 
         {/* 店社 */}
         {activeTab === "店社" && (
-          <div className="tab-pane fade show active my-3">
+          <div className="tab-pane active my-3">
             <InfoListBranch branches={branches} />
 
             <button

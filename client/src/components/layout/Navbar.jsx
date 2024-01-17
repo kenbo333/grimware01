@@ -23,7 +23,13 @@ const Navbar = () => {
           <Link href="/projects">プロジェクト</Link>
         </div>
         <div className="p-2 bd-highlight">
-          <Link href="/daily">日報</Link>
+          <Link href="/dailies">日報</Link>
+        </div>
+        <div className="p-2 bd-highlight">
+          <Link href="/expenses">経費</Link>
+        </div>
+        <div className="p-2 bd-highlight">
+          <Link href="/options">オプション</Link>
         </div>
       </div>
     </nav>

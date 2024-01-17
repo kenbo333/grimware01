@@ -27,7 +27,7 @@ model Company {
   projectPrime    Project[]         @relation("CompanyPrimeRelation")
   projectPurchase ProjectPurchase[]
   projectSub      ProjectSub[]
-  DailyReport     DailyReport[]
+  dailyReport     DailyReport[]
 }
 
 model CompanyBranch {
@@ -49,61 +49,62 @@ model CompanyBranch {
 }
 
 model CompanyEmployee {
-  id                         String            @id @default(uuid())
-  fk_companyId               String
-  fk_companyBranchId         String
-  isStatus                   Boolean           @default(true)
-  firstName                  String            @default("")
-  lastName                   String            @default("")
-  firstName_kana             String            @default("")
-  lastName_kana              String            @default("")
-  birthYear                  String            @default("")
-  birthMonth                 String            @default("")
-  birthDay                   String            @default("")
-  employmentStatus           String            @default("")
-  compMobile                 String            @default("")
-  compEmail                  String            @default("")
-  postcode                   String            @default("")
-  address1                   String            @default("")
-  address2                   String            @default("")
-  homePhone                  String            @default("")
-  persMobile                 String            @default("")
-  persEmail                  String            @default("")
-  department                 String            @default("")
-  position                   String            @default("")
-  entryDate                  String            @default("") //入社日
-  yearsOfExperience          String            @default("") //経験年数
-  routineCheckupDate         String            @default("") //定期健診
-  routineCheckupHospital     String            @default("")
-  specialCheckupDate         String            @default("") //特殊健診
-  specialCheckupHospital     String            @default("") //既往症
-  bloodPressureUp            String            @default("") //血圧
-  bloodPressureDown          String            @default("")
-  medicalHistory             String            @default("")
-  employeeNumber             String            @default("")
-  calendarName               String            @default("")
-  placeOfOrigin              String            @default("") //本籍
-  bloodType                  String            @default("")
-  bloodTypeRh                String            @default("")
-  emgLastName                String            @default("") //緊急
-  emgLastName_kana           String            @default("")
-  emgFirstName               String            @default("")
-  emgFirstName_kana          String            @default("")
-  emgRelation                String            @default("") //続柄
-  emgPhone                   String            @default("")
-  isEmgAddressSame           Boolean           @default(false)
-  emgPostcode                String            @default("")
-  emgAddress1                String            @default("")
-  emgAddress2                String            @default("")
-  laborCostDayShift          String            @default("") //日勤
-  laborCostNightShift        String            @default("") //夜勤
-  laborCostOvertime          String            @default("") //残業
-  laborCostLateNightOvertime String            @default("") //深夜残業
-  company                    Company           @relation(fields: [fk_companyId], references: [id])
-  companyBranch              CompanyBranch     @relation(fields: [fk_companyBranchId], references: [id])
-  remark                     Remark[]
-  employeeLicense            EmployeeLicense[]
-  DailyReport                DailyReport[]
+  id                     String            @id @default(uuid())
+  fk_companyId           String
+  fk_companyBranchId     String
+  isStatus               Boolean           @default(true)
+  firstName              String            @default("")
+  lastName               String            @default("")
+  firstName_kana         String            @default("")
+  lastName_kana          String            @default("")
+  birthYear              String            @default("")
+  birthMonth             String            @default("")
+  birthDay               String            @default("")
+  employmentStatus       String            @default("")
+  compMobile             String            @default("")
+  compEmail              String            @default("")
+  postcode               String            @default("")
+  address1               String            @default("")
+  address2               String            @default("")
+  homePhone              String            @default("")
+  persMobile             String            @default("")
+  persEmail              String            @default("")
+  department             String            @default("")
+  position               String            @default("")
+  entryDate              String            @default("") //入社日
+  yearsOfExperience      String            @default("") //経験年数
+  routineCheckupDate     String            @default("") //定期健診
+  routineCheckupHospital String            @default("")
+  specialCheckupDate     String            @default("") //特殊健診
+  specialCheckupHospital String            @default("") //既往症
+  bloodPressureUp        String            @default("") //血圧
+  bloodPressureDown      String            @default("")
+  medicalHistory         String            @default("")
+  employeeNumber         String            @default("")
+  calendarName           String            @default("")
+  placeOfOrigin          String            @default("") //本籍
+  bloodType              String            @default("")
+  bloodTypeRh            String            @default("")
+  emgLastName            String            @default("") //緊急
+  emgLastName_kana       String            @default("")
+  emgFirstName           String            @default("")
+  emgFirstName_kana      String            @default("")
+  emgRelation            String            @default("") //続柄
+  emgPhone               String            @default("")
+  isEmgAddressSame       Boolean           @default(false)
+  emgPostcode            String            @default("")
+  emgAddress1            String            @default("")
+  emgAddress2            String            @default("")
+  laborCostDayShift      String            @default("") //日勤
+  laborCostNightShift    String            @default("") //夜勤
+  laborCostOvertime      String            @default("") //残業
+  laborCostLateOvertime  String            @default("") //深夜残業
+  company                Company           @relation(fields: [fk_companyId], references: [id])
+  companyBranch          CompanyBranch     @relation(fields: [fk_companyBranchId], references: [id])
+  remark                 Remark[]
+  employeeLicense        EmployeeLicense[]
+  dailyReport            DailyReport[]
+  expense                Expense[]
 }
 
 model Car {
@@ -136,7 +137,7 @@ model Car {
   volInsCar             String           @default("")
   carMaintenance        CarMaintenance[]
   remark                Remark[]
-  DailyReport           DailyReport[]
+  dailyReport           DailyReport[]
 }
 
 model CarMaintenance {
@@ -159,9 +160,9 @@ model Remark {
   id                   String           @id @default(uuid())
   date                 String           @default("")
   remark               String           @default("")
-  fileName             String?
-  fileType             String?
-  filePath             String?
+  fileName             String           @default("")
+  fileType             String           @default("")
+  filePath             String           @default("")
   isPublic             Boolean          @default(true)
   fk_companyEmployeeId String?
   companyEmployee      CompanyEmployee? @relation(fields: [fk_companyEmployeeId], references: [id])
@@ -179,9 +180,9 @@ model EmployeeLicense {
   licenseNumber        String          @default("")
   category             String          @default("")
   remark               String          @default("")
-  fileName             String?
-  fileType             String?
-  filePath             String?
+  fileName             String          @default("")
+  fileType             String          @default("")
+  filePath             String          @default("")
   fk_companyEmployeeId String
   companyEmployee      CompanyEmployee @relation(fields: [fk_companyEmployeeId], references: [id])
 }
@@ -270,17 +271,17 @@ model ProjectSub {
 }
 
 model MonthlyReport {
-  id                   String        @id @default(uuid())
+  id                   String          @id @default(uuid())
   fk_projectId         String
-  project              Project       @relation(fields: [fk_projectId], references: [id])
+  project              Project         @relation(fields: [fk_projectId], references: [id])
   closingDate          String
-  invoiceDate          String        @default("")
-  invoiceAmount        Int           @default(0)
-  invoiceAmountWithTax Int           @default(0)
-  invoiceDueDate1      String? //入金予定日
-  invoiceDueDate2      String?
-  paymentDate1         String        @default("")
-  paymentDate2         String        @default("")
+  invoiceDate          String          @default("")
+  invoiceAmount        Int             @default(0)
+  invoiceAmountWithTax Int             @default(0)
+  invoiceDueDate1      String          @default("") //入金予定日
+  invoiceDueDate2      String          @default("")
+  paymentDate1         String          @default("")
+  paymentDate2         String          @default("")
   paymentCash1         Int?
   paymentCash2         Int?
   paymentNote1         Int?
@@ -288,55 +289,103 @@ model MonthlyReport {
   paymentEBond1        Int?
   paymentEBond2        Int?
   adjustmentAmount     Int?
-  DailyReport          DailyReport[]
+  dailyReport          DailyReport[]
+  expenseDetail        ExpenseDetail[]
 }
 
 //日報
 model Daily {
   id          String        @id @unique
-  DailyReport DailyReport[]
+  dailyReport DailyReport[]
   isLock      Boolean       @default(false)
 }
 
 model DailyReport {
   id                    String           @id @default(uuid())
-  fk_daily              String
-  daily                 Daily            @relation(fields: [fk_daily], references: [id])
-  fk_company            String?
-  company               Company?         @relation(fields: [fk_company], references: [id])
-  fk_companyEmployee    String?
-  companyEmployee       CompanyEmployee? @relation(fields: [fk_companyEmployee], references: [id])
-  fk_monthlyReport      String?
-  monthlyReport         MonthlyReport?   @relation(fields: [fk_monthlyReport], references: [id])
+  fk_dailyId            String
+  daily                 Daily            @relation(fields: [fk_dailyId], references: [id])
+  fk_companyId          String?
+  company               Company?         @relation(fields: [fk_companyId], references: [id])
+  fk_companyEmployeeId  String?
+  companyEmployee       CompanyEmployee? @relation(fields: [fk_companyEmployeeId], references: [id])
+  fk_monthlyReportId    String?
+  monthlyReport         MonthlyReport?   @relation(fields: [fk_monthlyReportId], references: [id])
   fk_car                String?
   car                   Car?             @relation(fields: [fk_car], references: [id])
-  startTime             String?
-  endTime               String?
-  breakTime             String?
-  day                   String?
-  night                 String?
-  overtime              String?
-  lateOvertime          String?
-  businessTripAllowance String?
-  nightMealAllowance    String?
-  drivingAllowance      String?
-  etcFees               String?
+  startTime             String           @default("")
+  endTime               String           @default("")
+  breakTime             String           @default("")
+  day                   String           @default("")
+  night                 String           @default("")
+  overtime              String           @default("")
+  lateOvertime          String           @default("")
+  businessTripAllowance String           @default("")
+  nightMealAllowance    String           @default("")
+  drivingAllowance      String           @default("")
+  etcFees               String           @default("")
+  distance              String           @default("")
   isDayOff              Boolean          @default(false)
   isPaidLeave           Boolean          @default(false)
   isSpecialLeave        Boolean          @default(false)
   isParentalLeave       Boolean          @default(false) //育児休
   isCaregivingLeave     Boolean          @default(false) //介護休
-  option1               String?
-  option2               String?
-  option3               String?
+  option1               String           @default("")
+  option2               String           @default("")
+  option3               String           @default("")
+  // 計算用
+  // fuelCost              String @default("")
+  // transportationCost    String @default("")
+  // laborCost             String @default("")
+  // billedLaborCost       String @default("")
+}
+
+model Expense {
+  id                   String           @id @default(uuid())
+  fk_companyEmployeeId String?
+  companyEmployee      CompanyEmployee? @relation(fields: [fk_companyEmployeeId], references: [id])
+  isInProcess          Boolean          @default(false)
+  isSettled            Boolean          @default(false)
+  advancePaymentDate   String           @default("")
+  advancePaymentAmount String           @default("")
+  yearMonth            String           @default("")
+  expenseDetail        ExpenseDetail[]
+}
+
+model ExpenseDetail {
+  id                 String         @id @default(uuid())
+  fk_expenseId       String
+  expense            Expense        @relation(fields: [fk_expenseId], references: [id])
+  fk_monthlyReportId String?
+  monthlyReport      MonthlyReport? @relation(fields: [fk_monthlyReportId], references: [id])
+  date               String         @default("")
+  amount             String         @default("")
+  account            String         @default("")
+  description        String         @default("")
+  isCredit           Boolean        @default(false)
 }
 
 //オプション
 model Option {
-  id           String     @id @default("1")
-  closingMonth Int        @default(3) //決算月
-  projType1    ProjType1?
-  projType2    ProjType2?
+  id                    String     @id @default("1")
+  closingMonth          Int        @default(3) //決算月
+  SalesTaxRate          String     @default("") //消費税率
+  markupRateMaterial    String     @default("") //請求上乗率_材料
+  markupRateSubcontract String     @default("") //請求上乗率_外注
+  markupRateExpense     String     @default("") //請求上乗率_経費
+  allowanceDriving      String     @default("") //手当_運転
+  allowanceTravel       String     @default("") //手当_出張
+  allowanceMeal         String     @default("") //手当_夜食
+  fuelRegular           String     @default("") //レギュラー
+  fuelPremium           String     @default("") //ハイオク
+  fuelDiesel            String     @default("") //軽油
+  laborChargeWeekday    String     @default("") //人工請求額_平日
+  laborChargeHoliday    String     @default("") //人工請求額_日祝
+  projType1             ProjType1?
+  projType2             ProjType2?
+  expenseAccount        String[]   @default([])
+  dailyReport1          String[]   @default([])
+  dailyReport2          String[]   @default([])
+  dailyReport3          String[]   @default([])
 }
 
 model ProjType1 {

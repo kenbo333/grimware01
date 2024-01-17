@@ -39,24 +39,22 @@ const TabPrimeCompany = (props) => {
       <div className="tab-content">
         {/* 詳細 */}
         {activeTab === "詳細" && (
-          <div className="tab-pane fade show active my-3">
-            <form>
-              <div className="mb-2">
-                <NameFrom_kana
-                  title="会社名"
-                  nameKey="name"
-                  formUtils={formUtils}
-                />
-              </div>
-              <div className="mb-2">
-                <FullNameForm title="代表者" formUtils={formUtils} />
-              </div>
-              <div>
-                <TransactionType formUtils={formUtils} />
-              </div>
-              <hr />
-              <ButtonEdit formUtils={formUtils} handleSave={handleSave} />
-            </form>
+          <div className="tab-pane active my-3">
+            <div className="mb-2">
+              <NameFrom_kana
+                title="会社名"
+                nameKey="name"
+                formUtils={formUtils}
+              />
+            </div>
+            <div className="mb-2">
+              <FullNameForm title="代表者" formUtils={formUtils} />
+            </div>
+            <div>
+              <TransactionType formUtils={formUtils} />
+            </div>
+            <hr />
+            <ButtonEdit formUtils={formUtils} handleSave={handleSave} />
           </div>
         )}
 
