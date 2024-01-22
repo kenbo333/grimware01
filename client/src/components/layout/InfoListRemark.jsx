@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import apiClient from "../../../lib/apiClient";
+import { apiClient } from "../../../lib/apiClient";
 import { toast } from "react-toastify";
 
 const InfoListRemark = (props) => {

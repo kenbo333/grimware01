@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import apiClient from "../../../../lib/apiClient";
+import { apiClient } from "../../../../lib/apiClient";
 import { NameFrom, NameFrom_kana, SelectForm } from "../../forms/InputForm";
 import { useFormEditor, usePathManager } from "../../containers/handleItem";
 

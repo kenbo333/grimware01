@@ -16,7 +16,7 @@ import {
   formatDate,
   getClosingDatesList,
 } from "@/components/containers/getClosingDatesList";
-import apiClient from "../../../../lib/apiClient";
+import { apiClient } from "../../../../lib/apiClient";
 
 const tabs = ["詳細", "関係者", "勘定", "ファイル", "仕入"];
 

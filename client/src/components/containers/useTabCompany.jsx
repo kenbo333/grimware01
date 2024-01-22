@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import apiClient from "../../../lib/apiClient";
+import { apiClient } from "../../../lib/apiClient";
 import { useFormEditor, usePathManager, useSaveData } from "./handleItem";
 
 const TYPE_MAPPING = {

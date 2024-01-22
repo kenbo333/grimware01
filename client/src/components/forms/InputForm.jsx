@@ -28,7 +28,7 @@ export const NameFrom = (props) => {
 
 //-------------------------------------------------------------------
 export const HalfFrom = (props) => {
-  const { title, nameKey, formUtils, type } = props;
+  const { title, type, nameKey, formUtils } = props;
   const { formData, updateObject } = formUtils;
 
   const handleChange = (event) => {

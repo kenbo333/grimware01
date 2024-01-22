@@ -1,7 +1,7 @@
 import useInfoListItemLogic from "@/components/containers/infoListItemLogic";
 import InfoListButton from "@/components/ui/InfoListButton";
 import React, { useEffect, useState } from "react";
-import apiClient from "../../../../lib/apiClient";
+import { apiClient } from "../../../../lib/apiClient";
 import MonthlyReportSelect from "./MonthlyReportSelect";
 
 const DailyReportB = (props) => {

@@ -1,6 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import React, { useState } from "react";
-import apiClient from "../../../lib/apiClient";
+import { apiClient } from "../../../lib/apiClient";
 import { getData } from "@/utils/SSR";
 import { useRouter } from "next/router";
 import { usePathManager } from "@/components/containers/handleItem";
@@ -29,7 +29,6 @@ const Dailies = (props) => {
     const month = (today.getMonth() + 1).toString().padStart(2, "0"); // 1を足すことで月を1-12の範囲に調整
     const day = today.getDate().toString().padStart(2, "0");
     const dateString = `${year}-${month}-${day}`;
-
     try {
       await apiClient.post("/dailies", { id: dateString });
     } catch (error) {
@@ -48,7 +47,6 @@ const Dailies = (props) => {
     // 曜日の取得
     const dayNames = ["日", "月", "火", "水", "木", "金", "土"];
     const dayName = dayNames[date.getDay()];
-
     // 新しい形式で組み立て
     return `${year}/${month.toString().padStart(2, "0")}/${day
       .toString()
@@ -70,7 +68,6 @@ const Dailies = (props) => {
           >
             新規作成
           </button>
-
           <button
             type="button"
             className="btn btn-danger m-1"

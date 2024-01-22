@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useFormEditor, usePathManager, useSaveData } from "./handleItem";
-import apiClient from "../../../lib/apiClient";
+import { apiClient } from "../../../lib/apiClient";
 
 export const useTabBranch = (type, branches, isCreateState) => {
   const router = useRouter();

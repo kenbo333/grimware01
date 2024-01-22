@@ -1,15 +1,12 @@
 import useInfoListItemLogic from "@/components/containers/infoListItemLogic";
 import InfoListButton from "@/components/ui/InfoListButton";
-import React, { useEffect, useState } from "react";
-import apiClient from "../../../../lib/apiClient";
-import MonthlyReportSelect from "./MonthlyReportSelect";
+import React, { useState } from "react";
+import { useFetch } from "@/components/containers/useSWR";
 
 const DailyReportA = (props) => {
   const { sel } = props;
-  const [companies, setCompanies] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isModalOpenState = { isModalOpen, setIsModalOpen };
-  const [monthlyReports, setMonthlyReports] = useState([]);
 
   const {
     items,
@@ -27,31 +24,27 @@ const DailyReportA = (props) => {
     return company ? company.companyEmployee : [];
   };
 
-  // 会社データ取得
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await apiClient.get("/companies?isPrime=true");
-        setCompanies(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
+  const {
+    data: companies,
+    error: companiesError,
+    isLoading: isCompaniesLoading,
+  } = useFetch("/companies?isPrime=true");
 
-  // 月報データ取得(select用)
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await apiClient.get(`/monthlyReports?sel=${sel}`);
-        setMonthlyReports(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
+  const {
+    data: monthlyReports,
+    error: monthlyReportsError,
+    isLoading: isMonthlyReportsLoading,
+  } = useFetch(`/monthlyReports?sel=${sel}`);
+
+  const { data: options } = useFetch("/options");
+
+  if (companiesError || monthlyReportsError) {
+    return <div>failed to load</div>;
+  }
+
+  if (isCompaniesLoading || isMonthlyReportsLoading) {
+    return <div>loading...</div>;
+  }
 
   return (
     <div className="tab-pane active my-3">
@@ -122,7 +115,7 @@ const DailyReportA = (props) => {
                   <option value=""></option>
                   {getCompanyEmployees(item.fk_companyId).map((emp) => (
                     <option key={emp.id} value={emp.id}>
-                      {emp.lastName + emp.firstName}
+                      {`${emp.lastName} ${emp.firstName}`}
                     </option>
                   ))}
                 </select>
@@ -289,6 +282,42 @@ const DailyReportA = (props) => {
                   value={item.distance || ""}
                   onChange={handleChange}
                 />
+              </div>
+
+              {/* オプション選択 */}
+              <div className="col-3 px-1">
+                <select
+                  className="form-select form-select-sm"
+                  name="option1"
+                  data-index={index.toString()}
+                  value={item.option1 || ""}
+                  disabled={!item.isEditing}
+                  onChange={handleChange}
+                >
+                  {!item.option1 && <option value=""></option>}
+                  {options.dailyReport1.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-3 px-1">
+                <select
+                  className="form-select form-select-sm"
+                  name="option2"
+                  data-index={index.toString()}
+                  value={item.option2 || ""}
+                  disabled={!item.isEditing}
+                  onChange={handleChange}
+                >
+                  {!item.option2 && <option value=""></option>}
+                  {options.dailyReport2.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 

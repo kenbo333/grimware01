@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import apiClient from "../../../../lib/apiClient";
+import { apiClient } from "../../../../lib/apiClient";
 import { HalfFrom } from "@/components/forms/InputForm";
 import Link from "next/link";
 

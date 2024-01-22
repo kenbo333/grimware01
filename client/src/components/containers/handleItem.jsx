@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import apiClient from "../../../lib/apiClient";
+import { apiClient } from "../../../lib/apiClient";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 

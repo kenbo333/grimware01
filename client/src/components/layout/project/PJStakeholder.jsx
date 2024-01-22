@@ -1,7 +1,7 @@
 import { SelectForm } from "@/components/forms/InputForm";
 import React, { useEffect, useState } from "react";
 import ProjectModalCompany from "./ProjectModalCompany";
-import apiClient from "../../../../lib/apiClient";
+import { apiClient } from "../../../../lib/apiClient";
 import { toast } from "react-toastify";
 
 const PJStakeholder = (props) => {

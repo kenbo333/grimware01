@@ -6,6 +6,7 @@ import React from "react";
 import { getData } from "@/utils/SSR";
 import OPExpense from "@/components/layout/option/OPExpense";
 import OPDaily from "@/components/layout/option/OPDaily";
+import OPAnnounce from "@/components/layout/option/OPAnnounce";
 
 export const getServerSideProps = (context) => getData("/options");
 
@@ -69,6 +70,7 @@ const Options = (props) => {
             {sel === "プロジェクト" && <OPProject option={option} />}
             {sel === "経費" && <OPExpense option={option} />}
             {sel === "日報" && <OPDaily option={option} sel={sel} />}
+            {sel === "お知らせ" && <OPAnnounce option={option} />}
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import apiClient from "../../../../lib/apiClient";
+import { apiClient } from "../../../../lib/apiClient";
 
 const MonthlyReportSelect = (props) => {
   const { isModalOpenState, sel, item, handleClick } = props;

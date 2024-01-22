@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import apiClient, { API_ENDPOINTS } from "../../../lib/apiClient";
+import { apiClient, API_ENDPOINTS } from "../../../lib/apiClient";
 import { toast } from "react-toastify";
 
 const useInfoListItemLogic = (sel, type) => {

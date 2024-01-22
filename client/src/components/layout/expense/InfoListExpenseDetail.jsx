@@ -76,16 +76,20 @@ const InfoListExpenseDetail = (props) => {
               </div>
               <div className="col-2 d-flex justify-content-center align-items-center">
                 <div className="form-check">
-                  <label className="form-check-label">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      data-index={index.toString()}
-                      name="isCredit"
-                      checked={item.isCredit || false}
-                      disabled={!item.isEditing}
-                      onChange={handleCheck}
-                    />
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    data-index={index.toString()}
+                    id={`isCredit-${index}`}
+                    name="isCredit"
+                    checked={item.isCredit || false}
+                    disabled={!item.isEditing}
+                    onChange={handleCheck}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor={`isCredit-${index}`}
+                  >
                     ｸﾚｼﾞｯﾄ
                   </label>
                 </div>

@@ -34,6 +34,38 @@ const OPProject = (props) => {
     const updateData = formUtils.endEdit();
     await saveData("/options/1", updateData);
   };
+
+  const LocalFrom = (props) => {
+    const { title, type, nameKey, span, formUtils } = props;
+    const { formData, updateObject } = formUtils;
+
+    const handleChange = (event) => {
+      const { id, value } = event.target;
+      updateObject(id, value);
+    };
+
+    return (
+      <div className="row">
+        <label className="col-form-label col-sm-4" htmlFor={nameKey}>
+          {title}
+        </label>
+        <div className="col-sm-8">
+          <div className="input-group">
+            <input
+              type={type}
+              className="form-control"
+              id={nameKey}
+              value={formData[nameKey] || ""}
+              onChange={handleChange}
+              disabled={!formData.isEditing}
+            />
+            <span className="input-group-text">{span}</span>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div>
       <div className="row">
@@ -92,56 +124,64 @@ const OPProject = (props) => {
         <div className="row">
           <div className="col-6">
             <div className="mb-4">
-              <HalfFrom
+              <LocalFrom
                 title="消費税率"
                 nameKey="SalesTaxRate"
+                span="%"
                 formUtils={formUtils}
               />
             </div>
 
             <div className="mb-4">
               <h6 className="text-center">請求上乗せ率</h6>
-              <HalfFrom
+              <LocalFrom
                 title="材料,外注"
                 nameKey="markupRateMaterial"
+                span="%"
                 formUtils={formUtils}
               />
-              <HalfFrom
+              <LocalFrom
                 title="経費"
                 nameKey="markupRateSubcontract"
+                span="%"
                 formUtils={formUtils}
               />
             </div>
 
             <div className="mb-4">
               <h6 className="text-center">手当</h6>
-              <HalfFrom
+              <LocalFrom
                 title="運転"
                 nameKey="allowanceDriving"
+                span="円"
                 formUtils={formUtils}
               />
-              <HalfFrom
+              <LocalFrom
                 title="出張"
                 nameKey="allowanceTravel"
+                span="円"
                 formUtils={formUtils}
               />
-              <HalfFrom
+              <LocalFrom
                 title="夜食"
                 nameKey="allowanceMeal"
+                span="円"
                 formUtils={formUtils}
               />
             </div>
 
             <div className="mb-4">
               <h6 className="text-center">希望請求額</h6>
-              <HalfFrom
+              <LocalFrom
                 title="月-土"
                 nameKey="laborChargeWeekday"
+                span="円"
                 formUtils={formUtils}
               />
-              <HalfFrom
+              <LocalFrom
                 title="日･祝"
                 nameKey="laborChargeHoliday"
+                span="円"
                 formUtils={formUtils}
               />
             </div>
@@ -150,19 +190,22 @@ const OPProject = (props) => {
           <div className="col-6">
             <div className="mb-4">
               <h6 className="text-center">ガソリン</h6>
-              <HalfFrom
+              <LocalFrom
                 title="レギュラー"
                 nameKey="fuelRegular"
+                span="円"
                 formUtils={formUtils}
               />
-              <HalfFrom
+              <LocalFrom
                 title="ハイオク"
                 nameKey="fuelPremium"
+                span="円"
                 formUtils={formUtils}
               />
-              <HalfFrom
+              <LocalFrom
                 title="軽油"
                 nameKey="fuelDiesel"
+                span="円"
                 formUtils={formUtils}
               />
             </div>

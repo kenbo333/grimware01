@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { usePathManager } from "@/components/containers/handleItem";
-import apiClient from "../../../../lib/apiClient";
+import { apiClient } from "../../../../lib/apiClient";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { ProjectModalCreate } from "./ProjectModalCreate";

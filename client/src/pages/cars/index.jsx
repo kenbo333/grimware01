@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { ItemList } from "@/components/layout/ItemList";
 import { HeaderMaster } from "@/components/layout/HeaderMaster";
 import TabCar from "@/components/layout/TabCar";
-import apiClient from "../../../lib/apiClient";
+import { apiClient } from "../../../lib/apiClient";
 import { useState } from "react";
 import { usePathManager } from "@/components/containers/handleItem";
 
