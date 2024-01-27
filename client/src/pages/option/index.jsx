@@ -8,9 +8,9 @@ import OPExpense from "@/components/layout/option/OPExpense";
 import OPDaily from "@/components/layout/option/OPDaily";
 import OPAnnounce from "@/components/layout/option/OPAnnounce";
 
-export const getServerSideProps = (context) => getData("/options");
+export const getServerSideProps = (context) => getData("/option");
 
-const Options = (props) => {
+const Option = (props) => {
   const router = useRouter();
   const { sel } = router.query;
   const items = ["プロジェクト", "経費", "日報", "お知らせ"];
@@ -78,4 +78,4 @@ const Options = (props) => {
   );
 };
 
-export default Options;
+export default Option;

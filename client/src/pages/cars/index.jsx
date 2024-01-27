@@ -6,29 +6,18 @@ import TabCar from "@/components/layout/TabCar";
 import { apiClient } from "../../../lib/apiClient";
 import { useState } from "react";
 import { usePathManager } from "@/components/containers/handleItem";
+import { getData } from "@/utils/SSR";
 
 export const getServerSideProps = async (context) => {
   const { isStatus } = context.query;
   const statusQuery = isStatus === "false" ? "?isStatus=false" : "";
+  const apiUrl = `/cars${statusQuery}`;
 
-  try {
-    const [carData, fuelData] = await Promise.all([
-      apiClient.get(`/cars${statusQuery}`),
-      apiClient.get("/cars/fuel"),
-    ]);
-    return {
-      props: {
-        cars: carData.data,
-        fuels: fuelData.data,
-      },
-    };
-  } catch (error) {
-    console.error(error);
-  }
+  return getData(apiUrl);
 };
 
 const Car = (props) => {
-  const { fuels, cars } = props;
+  const { data: cars } = props;
   const router = useRouter();
   const { sel } = router.query;
   const [isCreate, setIsCreate] = useState(false);
@@ -54,7 +43,7 @@ const Car = (props) => {
 
           {sel && (
             <div className="col-8">
-              <TabCar cars={cars} fuels={fuels} isCreateState={isCreateState} />
+              <TabCar cars={cars} isCreateState={isCreateState} />
             </div>
           )}
         </div>

@@ -103,7 +103,7 @@ export const ProjectModalCreate = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await apiClient.get("/options");
+        const response = await apiClient.get("/option");
         const { id: t1, ...type1 } = response.data.projType1;
         const { id: t2, ...type2 } = response.data.projType2;
         setProjType1(type1);

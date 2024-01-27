@@ -38,7 +38,7 @@ const OPExpense = (props) => {
   const { saveData } = useSaveData();
   const handleSave = async () => {
     const updateData = formUtils.endEdit();
-    await saveData("/options/1", updateData);
+    await saveData("/option/1", updateData);
   };
 
   return (

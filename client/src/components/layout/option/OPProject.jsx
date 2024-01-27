@@ -4,12 +4,43 @@ import NavTabs from "@/components/forms/NavTabs";
 import { ButtonEdit } from "@/components/ui/ButtonEdit";
 import React, { useState } from "react";
 
-const tabs = ["区分1", "区分2", "その他"];
+const tabs = ["その他", "区分1", "区分2"];
+
+const LocalFrom = (props) => {
+  const { title, type, nameKey, span, formUtils } = props;
+  const { formData, updateObject } = formUtils;
+
+  const handleChange = (event) => {
+    const { id, value } = event.target;
+    updateObject(id, value);
+  };
+
+  return (
+    <div className="row">
+      <label className="col-form-label col-sm-4" htmlFor={nameKey}>
+        {title}
+      </label>
+      <div className="col-sm-8">
+        <div className="input-group">
+          <input
+            type={type}
+            className="form-control"
+            id={nameKey}
+            value={formData[nameKey] || ""}
+            onChange={handleChange}
+            disabled={!formData.isEditing}
+          />
+          <span className="input-group-text">{span}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const OPProject = (props) => {
   const { projType1, projType2, ...other } = props.option;
 
-  const [activeTab, setActiveTab] = useState("区分1");
+  const [activeTab, setActiveTab] = useState("その他");
 
   const fields1 = Object.keys(projType1).filter((key) => key !== "id");
   const fields2 = Object.keys(projType2).filter((key) => key !== "id");
@@ -23,47 +54,16 @@ const OPProject = (props) => {
 
   const handleSave1 = async () => {
     const updateData = formUtils1.endEdit();
-    await saveData("/options/1/projType1/1", updateData);
+    await saveData("/option/1/projType1/1", updateData);
   };
   const handleSave2 = async () => {
     const updateData = formUtils2.endEdit();
-    await saveData("/options/1/projType2/1", updateData);
+    await saveData("/option/1/projType2/1", updateData);
   };
 
   const handleSave = async () => {
     const updateData = formUtils.endEdit();
-    await saveData("/options/1", updateData);
-  };
-
-  const LocalFrom = (props) => {
-    const { title, type, nameKey, span, formUtils } = props;
-    const { formData, updateObject } = formUtils;
-
-    const handleChange = (event) => {
-      const { id, value } = event.target;
-      updateObject(id, value);
-    };
-
-    return (
-      <div className="row">
-        <label className="col-form-label col-sm-4" htmlFor={nameKey}>
-          {title}
-        </label>
-        <div className="col-sm-8">
-          <div className="input-group">
-            <input
-              type={type}
-              className="form-control"
-              id={nameKey}
-              value={formData[nameKey] || ""}
-              onChange={handleChange}
-              disabled={!formData.isEditing}
-            />
-            <span className="input-group-text">{span}</span>
-          </div>
-        </div>
-      </div>
-    );
+    await saveData("/option/1", updateData);
   };
 
   return (
@@ -158,13 +158,13 @@ const OPProject = (props) => {
               />
               <LocalFrom
                 title="出張"
-                nameKey="allowanceTravel"
+                nameKey="allowanceBusinessTrip"
                 span="円"
                 formUtils={formUtils}
               />
               <LocalFrom
                 title="夜食"
-                nameKey="allowanceMeal"
+                nameKey="allowanceNightMeal"
                 span="円"
                 formUtils={formUtils}
               />

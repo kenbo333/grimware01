@@ -14,4 +14,5 @@ export const API_ENDPOINTS = {
   EXPENSE_DETAIL: `${baseURL}/expenses/:id/expenseDetails`,
   BRANCH_BANK_ACCOUNTS: `${baseURL}/companyBranches/:id/branchBankAccounts`,
   BRANCH_PERMIT_NOTICES: `${baseURL}/companyBranches/:id/branchPermitNotices`,
+  PAID_REAVES: `${baseURL}/paidLeaves`,
 };

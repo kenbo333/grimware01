@@ -12,8 +12,9 @@ import InfoListLicense from "./InfoListLicense";
 import InfoListRemark from "./InfoListRemark";
 import NavTabs from "../forms/NavTabs";
 import { useTabEmployee } from "../containers/useTabEmployee";
+import InfoListPaidLeave from "./InfoListPaidLeave";
 
-const tabs = ["詳細", "詳細2", "詳細3", "緊急", "資格", "有給", "備考"];
+const tabs = ["詳細", "詳細2", "詳細3", "緊急", "資格", "有休", "備考"];
 
 const TabOwnEmployee = (props) => {
   const { branch, emps, isCreateState } = props;
@@ -321,8 +322,8 @@ const TabOwnEmployee = (props) => {
         {/* 資格 */}
         {activeTab === "資格" && <InfoListLicense sel={sel} />}
 
-        {/* 有給 */}
-        {activeTab === "有給" && <div className="tab-pane active my-3"></div>}
+        {/* 有休 */}
+        {activeTab === "有休" && <InfoListPaidLeave sel={sel} />}
 
         {/* 備考 */}
         {activeTab === "備考" && (

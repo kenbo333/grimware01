@@ -13,9 +13,14 @@ import { ButtonEdit } from "../ui/ButtonEdit";
 import NavTabs from "../forms/NavTabs";
 
 const tabs = ["詳細", "保険", "整備履歴", "備考"];
+const items = [
+  { id: "fuelRegular", name: "レギュラー" },
+  { id: "fuelPremium", name: "ハイオク" },
+  { id: "fuelDiesel", name: "軽油" },
+];
 
 const TabCar = (props) => {
-  const { cars, fuels, isCreateState } = props;
+  const { cars, isCreateState } = props;
   const router = useRouter();
   const { sel } = router.query;
   const car = cars.find((item) => item.id === sel);
@@ -97,9 +102,9 @@ const TabCar = (props) => {
             <div className="mb-2">
               <SelectForm
                 title="車両燃料"
-                items={fuels}
-                nameKey="fk_fuelTypeId"
-                viewFn={(item) => item.fuelType}
+                items={items}
+                nameKey="fuelType"
+                viewFn={(item) => item.name}
                 isAllowEmpty={true}
                 formUtils={formUtils}
               />

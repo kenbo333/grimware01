@@ -29,7 +29,7 @@ const Navbar = () => {
           <Link href="/expenses">経費</Link>
         </div>
         <div className="p-2 bd-highlight">
-          <Link href="/options">オプション</Link>
+          <Link href="/option">オプション</Link>
         </div>
       </div>
     </nav>

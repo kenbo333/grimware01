@@ -17,7 +17,7 @@ export const getServerSideProps = async (context) => {
     const [expenseData, empData, optionData] = await Promise.all([
       apiClient.get(`/expenses`),
       apiClient.get("/companies?isOwn=true"),
-      apiClient.get("/options"),
+      apiClient.get("/option"),
     ]);
     return {
       props: {

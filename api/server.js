@@ -1,40 +1,51 @@
 const express = require("express");
-const app = express();
+const cors = require("cors");
 
+// ルーターのインポート
 const companiesRoute = require("./routers/companies");
 const carsRoute = require("./routers/cars");
 const remarksRoute = require("./routers/remarks");
 const branchBankAccountsRoute = require("./routers/companyBranches/branchBankAccounts");
 const branchPermitNoticesRoute = require("./routers/companyBranches/branchPermitNotices");
-const employeeLicenseRoute = require("./routers/companyEmployees/employeeLicenses");
+const employeeLicensesRoute = require("./routers/companyEmployees/employeeLicenses");
 const projectsRoute = require("./routers/projects");
-const optionsRoute = require("./routers/options");
+const optionRoute = require("./routers/option");
 const generateProjectIdRoute = require("./routers/generateProjectId");
-const projectCompanyRoute = require("./routers/projectCompanies");
-const dailyRoute = require("./routers/dailies");
+const projectCompaniesRoute = require("./routers/projectCompanies");
+const dailiesRoute = require("./routers/dailies");
 const monthlyReportsRoute = require("./routers/monthlyReports");
-const expenseRoute = require("./routers/expenses");
+const expensesRoute = require("./routers/expenses");
+const paidLeavesRoute = require("./routers/paidLeave");
 
-const cors = require("cors");
+// スケジューラのインポート
+const scheduler = require("./scheduler/scheduler");
 
+const app = express();
 const PORT = 5000;
 
+// スケジューラの実行
+scheduler();
+
+// ミドルウェアの設定
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// ルートの設定
 app.use("/api/companies", companiesRoute);
 app.use("/api/cars", carsRoute);
 app.use("/api/remarks", remarksRoute);
 app.use("/api/companyBranches", branchBankAccountsRoute);
 app.use("/api/companyBranches", branchPermitNoticesRoute);
-app.use("/api/companyEmployees", employeeLicenseRoute);
+app.use("/api/companyEmployees", employeeLicensesRoute);
+app.use("/api/paidLeaves", paidLeavesRoute);
 app.use("/api/projects", projectsRoute);
-app.use("/api/options", optionsRoute);
+app.use("/api/option", optionRoute);
 app.use("/api/generateProjectId", generateProjectIdRoute);
-app.use("/api/projectCompanies", projectCompanyRoute);
-app.use("/api/dailies", dailyRoute);
+app.use("/api/projectCompanies", projectCompaniesRoute);
+app.use("/api/dailies", dailiesRoute);
 app.use("/api/monthlyReports", monthlyReportsRoute);
-app.use("/api/expenses", expenseRoute);
+app.use("/api/expenses", expensesRoute);
 
-app.listen(PORT, () => console.log(`server is running on Port ${PORT}`));
+// サーバーの起動
+app.listen(PORT, () => console.log(`Server is running on Port ${PORT}`));

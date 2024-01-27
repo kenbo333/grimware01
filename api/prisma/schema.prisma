@@ -76,14 +76,14 @@ model CompanyEmployee {
   routineCheckupDate     String            @default("") //定期健診
   routineCheckupHospital String            @default("")
   specialCheckupDate     String            @default("") //特殊健診
-  specialCheckupHospital String            @default("") //既往症
+  specialCheckupHospital String            @default("")
   bloodPressureUp        String            @default("") //血圧
   bloodPressureDown      String            @default("")
-  medicalHistory         String            @default("")
-  employeeNumber         String            @default("")
+  medicalHistory         String            @default("") //既往症
+  employeeNumber         String            @default("") //社員番号
   calendarName           String            @default("")
   placeOfOrigin          String            @default("") //本籍
-  bloodType              String            @default("")
+  bloodType              String            @default("") //血液型
   bloodTypeRh            String            @default("")
   emgLastName            String            @default("") //緊急
   emgLastName_kana       String            @default("")
@@ -105,18 +105,19 @@ model CompanyEmployee {
   employeeLicense        EmployeeLicense[]
   dailyReport            DailyReport[]
   expense                Expense[]
+  paidLeave              PaidLeave[]
 }
 
 model Car {
   id                    String           @id @default(uuid())
-  fk_fuelTypeId         String           @default("")
   isStatus              Boolean          @default(true)
   name                  String           @default("")
   frameNumber           String           @default("")
   model                 String           @default("")
-  fuelConsumption       String           @default("")
+  fuelType              String           @default("") //油種
+  fuelConsumption       String           @default("") //燃費
   carNumber             String           @default("")
-  firstRegistration     String           @default("")
+  firstRegistration     String           @default("") //初年度登録
   etcNumber             String           @default("")
   inspectionStartDate   String           @default("")
   inspectionEndDate     String           @default("")
@@ -148,12 +149,6 @@ model CarMaintenance {
   cost     String @default("")
   content  String @default("")
   car      Car    @relation(fields: [fk_carId], references: [id])
-}
-
-model CarFuelType {
-  id       String @id @default(uuid())
-  fuelType String @default("")
-  price    String @default("")
 }
 
 model Remark {
@@ -301,42 +296,51 @@ model Daily {
 }
 
 model DailyReport {
-  id                    String           @id @default(uuid())
-  fk_dailyId            String
-  daily                 Daily            @relation(fields: [fk_dailyId], references: [id])
-  fk_companyId          String?
-  company               Company?         @relation(fields: [fk_companyId], references: [id])
-  fk_companyEmployeeId  String?
-  companyEmployee       CompanyEmployee? @relation(fields: [fk_companyEmployeeId], references: [id])
-  fk_monthlyReportId    String?
-  monthlyReport         MonthlyReport?   @relation(fields: [fk_monthlyReportId], references: [id])
-  fk_car                String?
-  car                   Car?             @relation(fields: [fk_car], references: [id])
-  startTime             String           @default("")
-  endTime               String           @default("")
-  breakTime             String           @default("")
-  day                   String           @default("")
-  night                 String           @default("")
-  overtime              String           @default("")
-  lateOvertime          String           @default("")
-  businessTripAllowance String           @default("")
-  nightMealAllowance    String           @default("")
-  drivingAllowance      String           @default("")
-  etcFees               String           @default("")
-  distance              String           @default("")
-  isDayOff              Boolean          @default(false)
-  isPaidLeave           Boolean          @default(false)
-  isSpecialLeave        Boolean          @default(false)
-  isParentalLeave       Boolean          @default(false) //育児休
-  isCaregivingLeave     Boolean          @default(false) //介護休
-  option1               String           @default("")
-  option2               String           @default("")
-  option3               String           @default("")
-  // 計算用
-  // fuelCost              String @default("")
-  // transportationCost    String @default("")
-  // laborCost             String @default("")
-  // billedLaborCost       String @default("")
+  id                   String           @id @default(uuid())
+  fk_dailyId           String
+  daily                Daily            @relation(fields: [fk_dailyId], references: [id])
+  fk_companyId         String?
+  company              Company?         @relation(fields: [fk_companyId], references: [id])
+  fk_companyEmployeeId String?
+  companyEmployee      CompanyEmployee? @relation(fields: [fk_companyEmployeeId], references: [id])
+  fk_monthlyReportId   String?
+  monthlyReport        MonthlyReport?   @relation(fields: [fk_monthlyReportId], references: [id])
+  fk_carId             String?
+  car                  Car?             @relation(fields: [fk_carId], references: [id])
+  fk_paidLeaveId       String?
+  paidLeave            PaidLeave?       @relation(fields: [fk_paidLeaveId], references: [id])
+  startTime            String           @default("")
+  endTime              String           @default("")
+  breakTime            String           @default("")
+  day                  String           @default("")
+  night                String           @default("")
+  overtime             String           @default("")
+  lateOvertime         String           @default("")
+  isBusinessTrip       Boolean          @default(false) //出張
+  isNightMeal          Boolean          @default(false) //夜食
+  driving              String           @default("") //運転
+  etcFees              String           @default("")
+  distance             String           @default("")
+  isDayOff             Boolean          @default(false) //休日
+  isSpecialLeave       Boolean          @default(false) //特別給
+  isParentalLeave      Boolean          @default(false) //育児休
+  isCaregivingLeave    Boolean          @default(false) //介護休
+  option1              String           @default("")
+  option2              String           @default("")
+  // 計算用(lookup)
+  calcFuelCost         Int? //燃料代
+  calcLaborCost        Int? //労務原価
+}
+
+model PaidLeave {
+  id                   String          @id @default(uuid())
+  fk_companyEmployeeId String
+  companyEmployee      CompanyEmployee @relation(fields: [fk_companyEmployeeId], references: [id])
+  grantDate            String //付与日
+  grantDay             Int //付与日数
+  expirationDate       String //失効日
+  takenDates           String[]        @default([]) //取得日
+  dailyReport          DailyReport[]
 }
 
 model Expense {
@@ -373,8 +377,8 @@ model Option {
   markupRateSubcontract String     @default("") //請求上乗率_外注
   markupRateExpense     String     @default("") //請求上乗率_経費
   allowanceDriving      String     @default("") //手当_運転
-  allowanceTravel       String     @default("") //手当_出張
-  allowanceMeal         String     @default("") //手当_夜食
+  allowanceBusinessTrip String     @default("") //手当_出張
+  allowanceNightMeal    String     @default("") //手当_夜食
   fuelRegular           String     @default("") //レギュラー
   fuelPremium           String     @default("") //ハイオク
   fuelDiesel            String     @default("") //軽油
@@ -385,7 +389,6 @@ model Option {
   expenseAccount        String[]   @default([])
   dailyReport1          String[]   @default([])
   dailyReport2          String[]   @default([])
-  dailyReport3          String[]   @default([])
 }
 
 model ProjType1 {
