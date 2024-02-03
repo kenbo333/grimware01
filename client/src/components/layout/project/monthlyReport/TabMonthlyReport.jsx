@@ -67,12 +67,12 @@ const TabMonthlyReport = (props) => {
     <div>
       <div className="d-flex justify-content-between mt-2">
         <div className="h4">{project.projectId}</div>
-        <div className="h5">{project.companyPrime.closingDay}日締</div>
+        <div className="h5">{project.primeCompany.closingDay}日締</div>
       </div>
       <div className="h2" style={{ color: "#599429" }}>
         {project.name}
       </div>
-      <div className="h6">{project.companyPrime.name}</div>
+      <div className="h6">{project.primeCompany.name}</div>
 
       <NavTabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
 

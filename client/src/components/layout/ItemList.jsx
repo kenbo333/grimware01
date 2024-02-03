@@ -3,6 +3,8 @@ import { useState } from "react";
 
 export const ItemList = (props) => {
   const { items, type, sel } = props;
+  if (!items) return;
+
   const { pathChange } = usePathManager();
 
   // 検索用

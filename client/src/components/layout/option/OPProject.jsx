@@ -133,22 +133,6 @@ const OPProject = (props) => {
             </div>
 
             <div className="mb-4">
-              <h6 className="text-center">請求上乗せ率</h6>
-              <LocalFrom
-                title="材料,外注"
-                nameKey="markupRateMaterial"
-                span="%"
-                formUtils={formUtils}
-              />
-              <LocalFrom
-                title="経費"
-                nameKey="markupRateSubcontract"
-                span="%"
-                formUtils={formUtils}
-              />
-            </div>
-
-            <div className="mb-4">
               <h6 className="text-center">手当</h6>
               <LocalFrom
                 title="運転"
@@ -165,22 +149,6 @@ const OPProject = (props) => {
               <LocalFrom
                 title="夜食"
                 nameKey="allowanceNightMeal"
-                span="円"
-                formUtils={formUtils}
-              />
-            </div>
-
-            <div className="mb-4">
-              <h6 className="text-center">希望請求額</h6>
-              <LocalFrom
-                title="月-土"
-                nameKey="laborChargeWeekday"
-                span="円"
-                formUtils={formUtils}
-              />
-              <LocalFrom
-                title="日･祝"
-                nameKey="laborChargeHoliday"
                 span="円"
                 formUtils={formUtils}
               />

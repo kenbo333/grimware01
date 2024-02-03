@@ -27,7 +27,7 @@ const TabProject = (props) => {
   const router = useRouter();
 
   //オブジェクトから配列を除去
-  const { companyPrime, ...initialData } = project;
+  const { primeCompany, ...initialData } = project;
 
   const [activeTab, setActiveTab] = useState("詳細");
 
@@ -46,7 +46,7 @@ const TabProject = (props) => {
       //inputに対しての月報締日の配列
       const inputClosingDates = getClosingDatesList(
         formData.ownProjectStartDate,
-        companyPrime.closingDay
+        primeCompany.closingDay
       );
       //現在とinputの差分の配列
       const differenceDates = findDifference(
@@ -94,13 +94,13 @@ const TabProject = (props) => {
     <div>
       <div className="d-flex justify-content-between mt-2">
         <div className="h4">{project.projectId}</div>
-        <div className="h5">{companyPrime.closingDay}日締</div>
+        <div className="h5">{primeCompany.closingDay}日締</div>
       </div>
       <div className="h2" style={{ color: "#599429" }}>
         {project.name}
       </div>
       <div>{/* <SelectStatus formUtils={formUtils} /> */}</div>
-      <div className="h6">{companyPrime.name}</div>
+      <div className="h6">{primeCompany.name}</div>
 
       <NavTabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
 
@@ -111,7 +111,11 @@ const TabProject = (props) => {
 
         {/* 関係者 */}
         {activeTab === "関係者" && (
-          <PJStakeholder formUtils={formUtils} sel={sel} />
+          <PJStakeholder
+            formUtils={formUtils}
+            sel={sel}
+            primeCompanyId={primeCompany.id}
+          />
         )}
 
         {/* 勘定 */}

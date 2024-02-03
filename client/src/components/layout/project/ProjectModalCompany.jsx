@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { apiClient } from "../../../../lib/apiClient";
+import { useFetch } from "@/components/containers/useFetchData";
+
+const apiConfig = {
+  purchase: {
+    endpoint: "purchases",
+    queryParam: "isPurchase=true",
+  },
+  sub: {
+    endpoint: "subs",
+    queryParam: "isSub=true",
+  },
+};
 
 const ProjectModalCompany = (props) => {
   const { modalOpenState, sel, ids } = props;
   const { modalOpen, setModalOpen } = modalOpenState;
-  const [items, setItems] = useState([]);
   const [selectedCompanyIds, setSelectedCompanyIds] = useState(ids);
 
-  const apiConfig = {
-    purchase: { endpoint: "purchases", queryParam: "isPurchase=true" },
-    sub: { endpoint: "subs", queryParam: "isSub=true" },
-  };
   const { endpoint, queryParam } = apiConfig[modalOpen];
 
   const handleCheckboxChange = (e) => {
@@ -34,17 +41,13 @@ const ProjectModalCompany = (props) => {
   };
 
   //チェック用 会社リスト取得
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await apiClient.get(`/companies?${queryParam}`);
-        setItems(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
+  const {
+    data: companies,
+    error,
+    isLoading,
+  } = useFetch(`/companies?${queryParam}`);
+  if (error) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
 
   return (
     <>
@@ -62,21 +65,21 @@ const ProjectModalCompany = (props) => {
 
             <div className="modal-body">
               <ul className="list-group">
-                {items.map((item) => (
-                  <li key={item.id} className="list-group-item">
+                {companies.map((company) => (
+                  <li key={company.id} className="list-group-item">
                     <input
                       className="form-check-input me-1"
                       type="checkbox"
-                      id={`checkbox-${item.id}`}
-                      value={item.id}
+                      id={`checkbox-${company.id}`}
+                      value={company.id}
                       onChange={handleCheckboxChange}
-                      checked={selectedCompanyIds.includes(item.id)}
+                      checked={selectedCompanyIds.includes(company.id)}
                     />
                     <label
                       className="form-check-label"
-                      htmlFor={`checkbox-${item.id}`}
+                      htmlFor={`checkbox-${company.id}`}
                     >
-                      {item.name}
+                      {company.name}
                     </label>
                   </li>
                 ))}

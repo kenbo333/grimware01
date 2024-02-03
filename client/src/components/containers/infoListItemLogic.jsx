@@ -3,12 +3,13 @@ import { apiClient, API_ENDPOINTS } from "../../../lib/apiClient";
 import { toast } from "react-toastify";
 
 const useInfoListItemLogic = (sel, type) => {
-  const apiUrl = API_ENDPOINTS[type].replace(":id", sel);
+  const { url, query, body } = API_ENDPOINTS[type];
+
   const [items, setItems] = useState([]);
 
   const handleCreate = async () => {
     try {
-      const response = await apiClient.post(apiUrl);
+      const response = await apiClient.post(url, body(sel));
       const newItem = response.data;
       newItem.isEditing = true;
       newItem.originalItem = { ...newItem };
@@ -25,7 +26,7 @@ const useInfoListItemLogic = (sel, type) => {
       delete newItems[index].isEditing;
       delete newItems[index].originalItem;
       const updateData = newItems[index];
-      await apiClient.put(`${apiUrl}/${items[index].id}`, updateData);
+      await apiClient.put(`${url}/${items[index].id}`, updateData);
       setItems(newItems);
       toast.success("保存しました");
     } catch (error) {
@@ -38,7 +39,7 @@ const useInfoListItemLogic = (sel, type) => {
     if (!window.confirm("削除してもよろしいですか？")) return;
 
     try {
-      await apiClient.delete(`${apiUrl}/${items[index].id}`);
+      await apiClient.delete(`${url}/${items[index].id}`);
       const newItems = [...items];
       newItems.splice(index, 1);
       setItems(newItems);
@@ -105,14 +106,14 @@ const useInfoListItemLogic = (sel, type) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await apiClient.get(apiUrl);
+        const response = await apiClient.get(url + query(sel));
         setItems(response.data);
       } catch (error) {
         console.error(error);
       }
     };
     fetchData();
-  }, [apiUrl]);
+  }, [sel]);
 
   return {
     items,

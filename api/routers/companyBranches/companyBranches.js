@@ -1,54 +1,60 @@
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
-const { queryObject } = require("../conditions");
+const { queryObject } = require("../../conditions");
 const prisma = new PrismaClient();
 
-//------create--------------------------------
+//------create-----------------------
 router.post("/", async (req, res) => {
   try {
-    const newItem = await prisma.car.create({ data: {} });
+    const newItem = await prisma.companyBranch.create({ data: req.body });
     return res.status(201).json(newItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to create a new car." });
+    return res
+      .status(500)
+      .json({ error: "Failed to create a new companyBranch." });
   }
 });
 
 //-----------read---------------------------
 router.get("/", async (req, res) => {
   try {
-    const items = await prisma.car.findMany({
+    const items = await prisma.companyBranch.findMany({
       where: queryObject(req.query),
     });
     return res.status(200).json(items);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to fetch cars." });
+    return res.status(500).json({ error: "Failed to fetch companyBranch." });
   }
 });
 
 //-----update--------------------------------------
 router.put("/:id", async (req, res) => {
   try {
-    const updateItem = await prisma.car.update({
+    const updateItem = await prisma.companyBranch.update({
       where: { id: req.params.id },
       data: req.body,
     });
     return res.status(200).json(updateItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to update the car." });
+    return res
+      .status(500)
+      .json({ error: "Failed to update the companyBranch." });
   }
 });
 
 //------delete-----------------------
 router.delete("/:id", async (req, res) => {
   try {
-    await prisma.car.delete({ where: { id: req.params.id } });
+    await prisma.companyBranch.delete({ where: { id: req.params.id } });
     return res.status(204).send();
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to delete the car." });
+    return res
+      .status(500)
+      .json({ error: "Failed to delete the companyBranch." });
   }
 });
 

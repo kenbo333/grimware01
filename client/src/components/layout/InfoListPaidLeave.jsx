@@ -3,16 +3,16 @@ import useInfoListItemLogic from "../containers/infoListItemLogic";
 
 const splitArrayIntoRows = (array, rowSize = 5, totalSize = 20) => {
   // 配列を指定サイズに満たす
-  const fullArray = [...array];
-  while (fullArray.length < totalSize) {
-    fullArray.push(""); // 空の文字列で埋める
-  }
+  const paddedArray = [
+    ...array,
+    ...new Array(Math.max(totalSize - array.length, 0)).fill(""),
+  ];
+
   // 配列を行サイズごとに分割
-  const rows = [];
-  for (let i = 0; i < fullArray.length; i += rowSize) {
-    rows.push(fullArray.slice(i, i + rowSize));
-  }
-  return rows;
+  return Array.from(
+    { length: Math.ceil(paddedArray.length / rowSize) },
+    (_, i) => paddedArray.slice(i * rowSize, (i + 1) * rowSize)
+  );
 };
 
 const InfoListPaidLeave = (props) => {
@@ -77,19 +77,21 @@ const InfoListPaidLeave = (props) => {
               />
             </div>
             <div className="col-2 pe-1">
-              {item.grantDay - item.takenDates.length}
-            </div>
-            <div className="col-2 pe-1">
-              {/* {item.grantDay - item.takenDates.length} */}
+              {item.grantDay - item.dailyReport.length}
             </div>
           </div>
 
           <table className="table table-bordered">
             <tbody>
-              {splitArrayIntoRows(item.takenDates).map((row, i) => (
+              {splitArrayIntoRows(
+                item.dailyReport.map((d) => d.fk_dailyId)
+              ).map((row, i) => (
                 <tr key={`row-${item.id}-${i}`}>
                   {row.map((date, j) => (
-                    <td key={`cell-${item.id}-${j}`} style={{ width: "50px" }}>
+                    <td
+                      key={`cell-${item.id}-${i}-${j}`}
+                      style={{ width: "50px" }}
+                    >
                       {date}
                     </td>
                   ))}

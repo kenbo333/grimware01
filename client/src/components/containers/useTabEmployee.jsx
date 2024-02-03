@@ -7,7 +7,7 @@ export const useTabEmployee = (emps, isCreateState) => {
   const { sel, companyId, branchId } = router.query;
   const emp = emps.find((item) => item.id === sel);
 
-  const [activeTab, setActiveTab] = useState("有休");
+  const [activeTab, setActiveTab] = useState("詳細");
 
   //オブジェクトから配列を除去
   const { ...initialData } = emp;

@@ -1,5 +1,5 @@
 import useInfoListItemLogic from "@/components/containers/infoListItemLogic";
-import { useFetchAll } from "@/components/containers/useSWR";
+import { useFetchAll } from "@/components/containers/useFetchData";
 import InfoListButton from "@/components/ui/InfoListButton";
 import React from "react";
 
@@ -21,9 +21,28 @@ const DailyReportB = (props) => {
     lookupSelect,
   } = useInfoListItemLogic(sel, "DAILY_REPORT");
 
-  const getCompanyEmployees = (companyId) => {
-    const company = companies.find((c) => c.id === companyId);
-    return company ? company.companyEmployee : [];
+  const getCompanyEmployeesOptions = ({ fk_companyId }) => {
+    const company = companies.find((c) => c.id === fk_companyId);
+    if (!company) return [];
+
+    return company.companyEmployee.map((emp) => (
+      <option key={emp.id} value={emp.id}>
+        {`${emp.lastName} ${emp.firstName}`}
+      </option>
+    ));
+  };
+
+  const optionsPaidLeaves = ({ fk_companyEmployeeId }) => {
+    const empPaidLeaves = paidLeaves.filter(
+      (p) => p.fk_companyEmployeeId === fk_companyEmployeeId
+    );
+    empPaidLeaves.sort((a, b) => a.grantDate.localeCompare(b.grantDate));
+
+    return empPaidLeaves.map((e) => (
+      <option key={e.id} value={e.id}>
+        {e.grantDate}
+      </option>
+    ));
   };
 
   const urls = [
@@ -34,14 +53,9 @@ const DailyReportB = (props) => {
     `/paidLeaves?expirationDate_gte=${sel}`,
   ];
   const { data, error, isLoading } = useFetchAll(urls);
-  const [companies, monthlyReports, option, cars, paidLeaves] = data;
   if (error) return <div>Failed to load data.</div>;
   if (isLoading) return <div>Loading...</div>;
-
-  const selectedPaidLeaves = (item) =>
-    paidLeaves.filter(
-      (p) => p.fk_companyEmployeeId === item.fk_companyEmployeeId
-    );
+  const [companies, monthlyReports, option, cars, paidLeaves] = data;
 
   return (
     <div className="tab-pane active my-3">
@@ -100,11 +114,7 @@ const DailyReportB = (props) => {
                   onChange={handleChange}
                 >
                   <option value=""></option>
-                  {getCompanyEmployees(item.fk_companyId).map((emp) => (
-                    <option key={emp.id} value={emp.id}>
-                      {`${emp.lastName} ${emp.firstName}`}
-                    </option>
-                  ))}
+                  {getCompanyEmployeesOptions(item)}
                 </select>
               </div>
 
@@ -147,21 +157,6 @@ const DailyReportB = (props) => {
                 </div>
               </div>
 
-              {/* <div className="col-1 px-1 d-flex justify-content-center align-items-center">
-                <div className="form-check form-switch">
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    data-index={index}
-                    name="fk_paidLeaveId"
-                    checked={!!item.fk_paidLeaveId}
-                    value={"aaa"}
-                    disabled={!item.isEditing}
-                    onChange={lookupCheckbox}
-                  />
-                </div>
-              </div> */}
-
               <div className="col-4 px-1">
                 <select
                   className="form-select form-select-sm"
@@ -172,11 +167,7 @@ const DailyReportB = (props) => {
                   onChange={handleChange}
                 >
                   <option value=""></option>
-                  {selectedPaidLeaves(item).map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.grantDate}
-                    </option>
-                  ))}
+                  {optionsPaidLeaves(item)}
                 </select>
               </div>
 

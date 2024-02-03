@@ -1,18 +1,12 @@
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
+const { queryObject } = require("../../conditions");
 const prisma = new PrismaClient();
 
 //------create-----------------------
-router.post("/:companyEmployeeId/paidLeaves", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    const newItem = await prisma.paidLeave.create({
-      data: {
-        fk_companyEmployeeId: req.params.companyEmployeeId,
-        grantDate: "2024-01-27",
-        grantDay: 10,
-        expirationDate: "2026-01-27",
-      },
-    });
+    const newItem = await prisma.paidLeave.create({ data: req.body });
     return res.status(201).json(newItem);
   } catch (error) {
     console.error(error);
@@ -25,28 +19,17 @@ router.post("/:companyEmployeeId/paidLeaves", async (req, res) => {
 //-----------read---------------------------
 router.get("/", async (req, res) => {
   try {
-    // クエリパラメータを動的にwhere追加
-    let queryOptions = {
-      where: {},
-    };
-    for (const [key, value] of Object.entries(req.query)) {
-      const operatorMatch = key.match(/(.*)(_(gt|gte|lt|lte))$/);
-      if (operatorMatch) {
-        // _で比較演算追加
-        const [, fieldName, , operator] = operatorMatch;
-        queryOptions.where[fieldName] = {
-          ...queryOptions.where[fieldName],
-          [operator]: value,
-        };
-      } else if (value === "true" || value === "false") {
-        // booleanに変換
-        queryOptions.where[key] = value === "true";
-      } else {
-        queryOptions.where[key] = value;
-      }
-    }
+    const items = await prisma.paidLeave.findMany({
+      where: queryObject(req.query),
+      include: {
+        dailyReport: {
+          select: {
+            fk_dailyId: true,
+          },
+        },
+      },
+    });
 
-    const items = await prisma.paidLeave.findMany(queryOptions);
     return res.status(200).json(items);
   } catch (error) {
     console.error(error);

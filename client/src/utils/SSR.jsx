@@ -1,9 +1,8 @@
 import { apiClient } from "../../lib/apiClient";
 
-export const getData = async (context) => {
+export const getData = async (url) => {
   try {
-    // const response = await apiClient.get(context.resolvedUrl);
-    const response = await apiClient.get(context);
+    const response = await apiClient.get(url);
     return {
       props: {
         data: response.data,

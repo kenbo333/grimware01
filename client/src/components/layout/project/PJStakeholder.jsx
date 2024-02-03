@@ -3,64 +3,43 @@ import React, { useEffect, useState } from "react";
 import ProjectModalCompany from "./ProjectModalCompany";
 import { apiClient } from "../../../../lib/apiClient";
 import { toast } from "react-toastify";
+import { useFetch, useFetchAll } from "@/components/containers/useFetchData";
+import { Love_Light } from "next/font/google";
 
 const PJStakeholder = (props) => {
-  const { formUtils, sel } = props;
+  const { formUtils, sel, primeCompanyId } = props;
   const { formData } = formUtils;
-
-  //仕入､下請会社
-  const [purchases, setPurchases] = useState([]);
-  const purchaseIds = purchases.map((purchase) => purchase.fk_companyId);
-  const [subs, setSubs] = useState([]);
-  const subIds = subs.map((sub) => sub.fk_companyId);
 
   //モーダル
   const [modalOpen, setModalOpen] = useState("");
   const modalOpenState = { modalOpen, setModalOpen };
 
+  const urls = [
+    "/companies?isOwn=true", //自社select
+    `/companies/${primeCompanyId}`, //元請select
+    `/projectCompanies/purchases/${sel}`,
+    `/projectCompanies/subs/${sel}`,
+  ];
+
+  const { data, isLoading, isError } = useFetchAll(urls);
+  if (isError) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
+
+  const [ownCompany, primeCompany, purchases, subs] = data;
+  const purchaseIds = purchases.map((purchase) => purchase.fk_companyId);
+  const subIds = subs.map((sub) => sub.fk_companyId);
+
   //自社select
-  const [ownCompany, setOwnCompany] = useState([]);
-  const branches = ownCompany.companyBranch;
-  const emps = ownCompany.companyEmployee?.filter(
+  const branches = ownCompany[0].companyBranch;
+  const emps = ownCompany[0].companyEmployee?.filter(
     (emp) => emp.fk_companyBranchId === formData.fk_companyBranchId_own
   );
-
-  //自社情報取得
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await apiClient.get("/companies?isOwn=true");
-        setOwnCompany(response.data[0]);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  //仕入､下請取得
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [resPurchases, resSubs] = await Promise.all([
-          apiClient.get(`/projectCompanies/purchases/${sel}`),
-          apiClient.get(`/projectCompanies/subs/${sel}`),
-        ]);
-        setPurchases(resPurchases.data);
-        setSubs(resSubs.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (sel || modalOpen === "edit") {
-      fetchData();
-      if (modalOpen === "edit") {
-        setModalOpen("");
-        toast.success("保存しました。");
-      }
-    }
-  }, [sel, modalOpen]);
+  //元請select
+  const primeBranches = primeCompany.companyBranch;
+  const primeEmps =
+    primeBranches.find(
+      (primeBranch) => primeBranch.id === formData.fk_companyBranchId_prime
+    )?.companyEmployee || [];
 
   return (
     <div className="tab-pane active my-3">
@@ -76,7 +55,10 @@ const PJStakeholder = (props) => {
         <div className="row">
           <div className="col-10">
             <div className="row">
-              <label className="col-form-label col-sm-3" htmlFor="isDedicate">
+              <label
+                className="col-form-label col-sm-3"
+                htmlFor="fk_companyEmployeeId_chief"
+              >
                 主任技術者
               </label>
               <div className="col-sm-9">
@@ -90,9 +72,9 @@ const PJStakeholder = (props) => {
                   disabled={!formData.isEditing}
                 >
                   <option value=""></option>
-                  {emps?.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {`${item.lastName} ${item.firstName}`}
+                  {emps?.map((emp) => (
+                    <option key={emp.id} value={emp.id}>
+                      {`${emp.lastName} ${emp.firstName}`}
                     </option>
                   ))}
                 </select>
@@ -141,20 +123,13 @@ const PJStakeholder = (props) => {
           >
             元請会社
           </label>
-          <div className="col-sm">
-            <select
-              className="form-select"
+          <div className="col-sm-10">
+            <input
+              className="form-control-plaintext mx-2"
               id="fk_companyId_prime"
-              onChange={(e) =>
-                formUtils.updateObject(e.target.id, e.target.value)
-              }
-              value={formData["fk_companyId_prime"]}
-              disabled
-            >
-              <option value={formData.fk_companyId_prime}>
-                {formData.fk_companyId_prime}
-              </option>
-            </select>
+              value={primeCompany.name}
+              readOnly
+            />
           </div>
         </div>
         <div className="row">
@@ -172,11 +147,14 @@ const PJStakeholder = (props) => {
                 formUtils.updateObject(e.target.id, e.target.value)
               }
               value={formData["fk_companyBranchId_prime"]}
-              disabled
+              disabled={!formData.isEditing}
             >
-              <option value={formData.fk_companyBranchId_prime}>
-                {formData.fk_companyBranchId_prime}
-              </option>
+              <option value=""></option>
+              {primeBranches.map((primeBranch) => (
+                <option key={primeBranch.id} value={primeBranch.id}>
+                  {primeBranch.name}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -195,11 +173,14 @@ const PJStakeholder = (props) => {
                 formUtils.updateObject(e.target.id, e.target.value)
               }
               value={formData["fk_companyEmployeeId_prime"]}
-              disabled
+              disabled={!formData.isEditing}
             >
-              <option value={formData.fk_companyEmployeeId_prime}>
-                {formData.fk_companyEmployeeId_prime}
-              </option>
+              <option value=""></option>
+              {primeEmps.map((primeEmp) => (
+                <option key={primeEmp.id} value={primeEmp.id}>
+                  {`${primeEmp.lastName} ${primeEmp.firstName}`}
+                </option>
+              ))}
             </select>
           </div>
         </div>

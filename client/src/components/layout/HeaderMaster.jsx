@@ -46,7 +46,7 @@ export const HeaderMaster = (props) => {
 
   //削除
   const deleteItem = async () => {
-    // if (!window.confirm("削除してもよろしいですか？")) return;
+    if (!window.confirm("削除してもよろしいですか？")) return;
 
     const url = urlStrategies[table](router.query);
 

@@ -1,15 +1,12 @@
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
+const { queryObject } = require("../../conditions");
 const prisma = new PrismaClient();
 
 //------create-----------------------
-router.post("/:companyBranchId/branchBankAccounts", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    const newItem = await prisma.branchBankAccount.create({
-      data: {
-        fk_companyBranchId: req.params.companyBranchId,
-      },
-    });
+    const newItem = await prisma.branchBankAccount.create({ data: req.body });
     return res.status(201).json(newItem);
   } catch (error) {
     console.error(error);
@@ -20,12 +17,10 @@ router.post("/:companyBranchId/branchBankAccounts", async (req, res) => {
 });
 
 //-----------read---------------------------
-router.get("/:companyBranchId/branchBankAccounts", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const items = await prisma.branchBankAccount.findMany({
-      where: {
-        fk_companyBranchId: req.params.companyBranchId,
-      },
+      where: queryObject(req.query),
     });
     return res.status(200).json(items);
   } catch (error) {
@@ -37,40 +32,32 @@ router.get("/:companyBranchId/branchBankAccounts", async (req, res) => {
 });
 
 //-----update--------------------------------------
-router.put(
-  "/:companyBranchId/branchBankAccounts/:branchBankAccountId",
-  async (req, res) => {
-    try {
-      const updateItem = await prisma.branchBankAccount.update({
-        where: { id: req.params.branchBankAccountId },
-        data: req.body,
-      });
-      return res.status(200).json(updateItem);
-    } catch (error) {
-      console.error(error);
-      return res
-        .status(500)
-        .json({ error: "Failed to update the branchBankAccount." });
-    }
+router.put("/:id", async (req, res) => {
+  try {
+    const updateItem = await prisma.branchBankAccount.update({
+      where: { id: req.params.id },
+      data: req.body,
+    });
+    return res.status(200).json(updateItem);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ error: "Failed to update the branchBankAccount." });
   }
-);
+});
 
 //------delete-----------------------
-router.delete(
-  "/:companyBranchId/branchBankAccounts/:branchBankAccountId",
-  async (req, res) => {
-    try {
-      await prisma.branchBankAccount.delete({
-        where: { id: req.params.branchBankAccountId },
-      });
-      return res.status(204).send();
-    } catch (error) {
-      console.error(error);
-      return res
-        .status(500)
-        .json({ error: "Failed to delete the branchBankAccount." });
-    }
+router.delete("/:id", async (req, res) => {
+  try {
+    await prisma.branchBankAccount.delete({ where: { id: req.params.id } });
+    return res.status(204).send();
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ error: "Failed to delete the branchBankAccount." });
   }
-);
+});
 
 module.exports = router;

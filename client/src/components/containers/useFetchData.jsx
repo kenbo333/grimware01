@@ -12,26 +12,19 @@ export const useFetch = (url) => {
   const { data, error, isLoading } = useSWR(url, fetcher);
   return { data, error, isLoading };
 };
+// if (error) return <div>failed to load</div>;
+// if (isLoading) return <div>loading...</div>;
 
 // 複数のURLに対するデータフェッチを行う
 export const useFetchAll = (urls) => {
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const results = await Promise.all(urls.map((url) => fetcher(url)));
-        setData(results);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  return { data, error, isLoading };
+  const { data, error } = useSWR(urls, () =>
+    Promise.all(urls.map((url) => fetcher(url)))
+  );
+  return {
+    data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+  // if (isError) return <div>failed to load</div>;
+  // if (isLoading) return <div>loading...</div>;
 };

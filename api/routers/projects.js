@@ -36,8 +36,9 @@ router.get("/", async (req, res) => {
   try {
     const items = await prisma.project.findMany({
       include: {
-        companyPrime: {
+        primeCompany: {
           select: {
+            id: true,
             name: true,
             closingDay: true,
           },
@@ -62,7 +63,7 @@ router.get("/:projectId/monthlyReports", async (req, res) => {
           select: {
             projectId: true,
             name: true,
-            companyPrime: {
+            primeCompany: {
               select: {
                 name: true,
                 closingDay: true,

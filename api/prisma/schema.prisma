@@ -24,10 +24,11 @@ model Company {
   closingDay      String            @default("")
   companyBranch   CompanyBranch[]
   companyEmployee CompanyEmployee[]
-  projectPrime    Project[]         @relation("CompanyPrimeRelation")
+  projectPrime    Project[]         @relation("primeCompanyRelation")
   projectPurchase ProjectPurchase[]
   projectSub      ProjectSub[]
   dailyReport     DailyReport[]
+  Project         Project[]
 }
 
 model CompanyBranch {
@@ -216,7 +217,7 @@ model Project {
   fk_companyEmployeeId_safety  String            @default("") //安全衛生責任者
   fk_companyEmployeeId_foreman String            @default("") //職長
   fk_companyId_prime           String
-  companyPrime                 Company           @relation("CompanyPrimeRelation", fields: [fk_companyId_prime], references: [id])
+  primeCompany                 Company           @relation("primeCompanyRelation", fields: [fk_companyId_prime], references: [id])
   fk_companyBranchId_prime     String            @default("")
   fk_companyEmployeeId_prime   String            @default("")
   fk_companyBranchId_billing   String            @default("") //請求先
@@ -247,6 +248,8 @@ model Project {
   projectPurchase              ProjectPurchase[]
   projectSub                   ProjectSub[]
   monthlyReport                MonthlyReport[]
+  Company                      Company?          @relation(fields: [companyId], references: [id])
+  companyId                    String?
 }
 
 model ProjectPurchase {
@@ -339,7 +342,6 @@ model PaidLeave {
   grantDate            String //付与日
   grantDay             Int //付与日数
   expirationDate       String //失効日
-  takenDates           String[]        @default([]) //取得日
   dailyReport          DailyReport[]
 }
 
@@ -373,17 +375,12 @@ model Option {
   id                    String     @id @default("1")
   closingMonth          Int        @default(3) //決算月
   SalesTaxRate          String     @default("") //消費税率
-  markupRateMaterial    String     @default("") //請求上乗率_材料
-  markupRateSubcontract String     @default("") //請求上乗率_外注
-  markupRateExpense     String     @default("") //請求上乗率_経費
   allowanceDriving      String     @default("") //手当_運転
   allowanceBusinessTrip String     @default("") //手当_出張
   allowanceNightMeal    String     @default("") //手当_夜食
   fuelRegular           String     @default("") //レギュラー
   fuelPremium           String     @default("") //ハイオク
   fuelDiesel            String     @default("") //軽油
-  laborChargeWeekday    String     @default("") //人工請求額_平日
-  laborChargeHoliday    String     @default("") //人工請求額_日祝
   projType1             ProjType1?
   projType2             ProjType2?
   expenseAccount        String[]   @default([])

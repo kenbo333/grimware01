@@ -1,64 +1,60 @@
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
+const { queryObject } = require("../conditions");
 const prisma = new PrismaClient();
 
 //---------create--------------------------------
 router.post("/", async (req, res) => {
   try {
-    const newItem = await prisma.expense.create({ data: req.body });
+    const newItem = await prisma.expenseDetail.create({ data: req.body });
     return res.status(201).json(newItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to create a new expense." });
+    return res
+      .status(500)
+      .json({ error: "Failed to create a new expenseDetail." });
   }
 });
 
 //-----------read--------------------------------
-router.get("/", async (req, res) => {
+router.get("", async (req, res) => {
   try {
-    const items = await prisma.expense.findMany({
-      include: {
-        companyEmployee: {
-          select: { lastName: true, firstName: true },
-        },
-        expenseDetail: true,
-      },
+    const items = await prisma.expenseDetail.findMany({
+      where: queryObject(req.query),
     });
     return res.status(200).json(items);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to fetch expenses." });
+    return res.status(500).json({ error: "Failed to fetch expenseDetails." });
   }
 });
 
 //------update-------------------------------------------------
-router.put("/:expenseId", async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
-    const updateItem = await prisma.expense.update({
-      where: { id: req.params.expenseId },
+    const updateItem = await prisma.expenseDetail.update({
+      where: { id: req.params.id },
       data: req.body,
     });
     return res.status(200).json(updateItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to update the expense." });
+    return res
+      .status(500)
+      .json({ error: "Failed to update the expenseDetail record." });
   }
 });
 
 //-----------delete--------------------------------
-router.delete("/:expenseId", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
-    await prisma.expense.delete({
-      where: {
-        id: req.params.expenseId,
-      },
-    });
+    await prisma.expenseDetail.delete({ where: { id: req.params.id } });
     return res.status(204).send();
   } catch (error) {
     console.error(error);
     return res
       .status(500)
-      .json({ error: "Failed to delete the expense record." });
+      .json({ error: "Failed to delete the expenseDetail record." });
   }
 });
 
