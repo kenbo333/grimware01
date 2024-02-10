@@ -9,7 +9,7 @@ router.post("/", async (req, res) => {
     return res.status(201).json(newItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to create a new project." });
+    return res.status(500).json({ error: "Failed to create a new data." });
   }
 });
 
@@ -25,9 +25,7 @@ router.post("/:projectId/monthlyReports/bulk", async (req, res) => {
     return res.status(201).json(newItem);
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ error: "Failed to bulk insert monthlyReport." });
+    return res.status(500).json({ error: "Failed to bulk insert data." });
   }
 });
 
@@ -48,27 +46,29 @@ router.get("/", async (req, res) => {
     return res.status(200).json(items);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to fetch project." });
+    return res.status(500).json({ error: "Failed to fetch data." });
   }
 });
 
-router.get("/:projectId/monthlyReports", async (req, res) => {
+router.get("/:projectId", async (req, res) => {
   try {
-    const items = await prisma.monthlyReport.findMany({
+    const items = await prisma.project.findUnique({
       where: {
-        fk_projectId: req.params.projectId,
+        id: req.params.projectId,
       },
-      include: {
-        project: {
+      select: {
+        id: true,
+        projectNumber: true,
+        name: true,
+        //テーブル
+        monthlyReport: {
+          orderBy: {
+            closingDate: "desc",
+          },
+        },
+        primeCompany: {
           select: {
-            projectId: true,
             name: true,
-            primeCompany: {
-              select: {
-                name: true,
-                closingDay: true,
-              },
-            },
           },
         },
       },
@@ -76,7 +76,7 @@ router.get("/:projectId/monthlyReports", async (req, res) => {
     return res.status(200).json(items);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to fetch monthlyReport." });
+    return res.status(500).json({ error: "Failed to fetch data." });
   }
 });
 
@@ -90,7 +90,7 @@ router.put("/:projectId", async (req, res) => {
     return res.status(200).json(updateItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to update the project." });
+    return res.status(500).json({ error: "Failed to update the data." });
   }
 });
 
@@ -103,9 +103,7 @@ router.put("/:projectId/monthlyReports/:monthlyReportId", async (req, res) => {
     return res.status(200).json(updateItem);
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ error: "Failed to update the monthlyReport." });
+    return res.status(500).json({ error: "Failed to update the data." });
   }
 });
 
@@ -116,7 +114,7 @@ router.delete("/:projectId", async (req, res) => {
     return res.status(204).send();
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to delete the project." });
+    return res.status(500).json({ error: "Failed to delete the data." });
   }
 });
 

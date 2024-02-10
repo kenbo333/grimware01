@@ -1,8 +1,46 @@
+import { useSaveData } from "@/components/containers/handleItem";
 import { HalfFrom } from "@/components/forms/InputForm";
+import { ButtonEdit } from "@/components/ui/ButtonEdit";
+import { useRouter } from "next/router";
 import React from "react";
 
+const keysToParse = [
+  "invoiceAmount",
+  "invoiceAmountWithTax",
+  "paymentCash1",
+  "paymentCash2",
+  "paymentNote1",
+  "paymentNote2",
+  "paymentEBond1",
+  "paymentEBond2",
+  "adjustmentAmount",
+];
+
 const MRAccounting = (props) => {
-  const { formUtils } = props;
+  const { formUtils, sel } = props;
+  const { endEdit } = formUtils;
+  const router = useRouter();
+
+  const { saveData } = useSaveData();
+  const handleSave = async () => {
+    try {
+      const newFormData = endEdit();
+      // strをintに変換
+      keysToParse.forEach((key) => {
+        const value = newFormData[key];
+        if (value === "") {
+          newFormData[key] = null;
+        } else {
+          const parsedValue = parseInt(value, 10);
+          newFormData[key] = isNaN(parsedValue) ? null : parsedValue;
+        }
+      });
+      await saveData(`/monthlyReports/${sel}`, newFormData);
+      router.replace(router.asPath);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="tab-pane active my-3">
@@ -12,13 +50,11 @@ const MRAccounting = (props) => {
             title="請求金額"
             nameKey="invoiceAmount"
             formUtils={formUtils}
-            type="text"
           />
           <HalfFrom
             title="税込"
             nameKey="invoiceAmountWithTax"
             formUtils={formUtils}
-            type="text"
           />
         </div>
         <div className="col-6">
@@ -58,19 +94,16 @@ const MRAccounting = (props) => {
             title="入金額1|現金"
             nameKey="paymentCash1"
             formUtils={formUtils}
-            type="text"
           />
           <HalfFrom
             title="(手形)"
             nameKey="paymentNote1"
             formUtils={formUtils}
-            type="text"
           />
           <HalfFrom
             title="(電債)"
             nameKey="paymentEBond1"
             formUtils={formUtils}
-            type="text"
           />
         </div>
       </div>
@@ -101,13 +134,11 @@ const MRAccounting = (props) => {
             title="(手形)"
             nameKey="paymentNote2"
             formUtils={formUtils}
-            type="text"
           />
           <HalfFrom
             title="(電債)"
             nameKey="paymentEBond2"
             formUtils={formUtils}
-            type="text"
           />
         </div>
       </div>
@@ -118,7 +149,6 @@ const MRAccounting = (props) => {
             title="調整金額"
             nameKey="adjustmentAmount"
             formUtils={formUtils}
-            type="text"
           />
         </div>
       </div>
@@ -126,6 +156,10 @@ const MRAccounting = (props) => {
       <div className="row">
         <div className="col-6 offset-6">入金差額(計算)</div>
       </div>
+
+      <hr />
+
+      <ButtonEdit formUtils={formUtils} handleSave={handleSave} />
     </div>
   );
 };

@@ -6,6 +6,7 @@ const InfoListCarMaintenance = (props) => {
   const { sel } = props;
   const {
     items,
+    error,
     handleCreate,
     handleSave,
     handleDelete,
@@ -13,6 +14,9 @@ const InfoListCarMaintenance = (props) => {
     handleCancel,
     handleChange,
   } = useInfoListItemLogic(sel, "CAR_MAINTENANCE");
+
+  if (error) return <div>failed to load</div>;
+  if (!items) return <div>loading...</div>;
 
   return (
     <div className="tab-pane active my-3">

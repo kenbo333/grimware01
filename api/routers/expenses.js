@@ -9,7 +9,7 @@ router.post("/", async (req, res) => {
     return res.status(201).json(newItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to create a new expense." });
+    return res.status(500).json({ error: "Failed to create a new data." });
   }
 });
 
@@ -27,7 +27,7 @@ router.get("/", async (req, res) => {
     return res.status(200).json(items);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to fetch expenses." });
+    return res.status(500).json({ error: "Failed to fetch data." });
   }
 });
 
@@ -41,7 +41,7 @@ router.put("/:expenseId", async (req, res) => {
     return res.status(200).json(updateItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to update the expense." });
+    return res.status(500).json({ error: "Failed to update the data." });
   }
 });
 
@@ -56,9 +56,7 @@ router.delete("/:expenseId", async (req, res) => {
     return res.status(204).send();
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ error: "Failed to delete the expense record." });
+    return res.status(500).json({ error: "Failed to delete the data." });
   }
 });
 

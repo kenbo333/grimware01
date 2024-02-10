@@ -1,10 +1,7 @@
 import { SelectForm } from "@/components/forms/InputForm";
-import React, { useEffect, useState } from "react";
-import ProjectModalCompany from "./ProjectModalCompany";
-import { apiClient } from "../../../../lib/apiClient";
-import { toast } from "react-toastify";
-import { useFetch, useFetchAll } from "@/components/containers/useFetchData";
-import { Love_Light } from "next/font/google";
+import React, { useState } from "react";
+import ProjectCompanyModal from "./ProjectCompanyModal";
+import { useFetchMulti } from "@/components/containers/useFetchData";
 
 const PJStakeholder = (props) => {
   const { formUtils, sel, primeCompanyId } = props;
@@ -21,10 +18,9 @@ const PJStakeholder = (props) => {
     `/projectCompanies/subs/${sel}`,
   ];
 
-  const { data, isLoading, isError } = useFetchAll(urls);
+  const { data, isLoading, isError, mutate } = useFetchMulti(urls);
   if (isError) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
-
   const [ownCompany, primeCompany, purchases, subs] = data;
   const purchaseIds = purchases.map((purchase) => purchase.fk_companyId);
   const subIds = subs.map((sub) => sub.fk_companyId);
@@ -40,6 +36,12 @@ const PJStakeholder = (props) => {
     primeBranches.find(
       (primeBranch) => primeBranch.id === formData.fk_companyBranchId_prime
     )?.companyEmployee || [];
+
+  //モーダル保存後､更新
+  if (modalOpen === "edit") {
+    mutate();
+    setModalOpen("");
+  }
 
   return (
     <div className="tab-pane active my-3">
@@ -206,7 +208,7 @@ const PJStakeholder = (props) => {
             ))}
           </ul>
           {modalOpen === "purchase" && (
-            <ProjectModalCompany
+            <ProjectCompanyModal
               modalOpenState={modalOpenState}
               sel={sel}
               ids={purchaseIds}
@@ -233,7 +235,7 @@ const PJStakeholder = (props) => {
             ))}
           </ul>
           {modalOpen === "sub" && (
-            <ProjectModalCompany
+            <ProjectCompanyModal
               modalOpenState={modalOpenState}
               sel={sel}
               ids={subIds}

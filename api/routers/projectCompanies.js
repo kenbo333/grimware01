@@ -3,6 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 //---------create-------------------------------------------
+//bulk
 const bulkInsert = async (model, req, res) => {
   const { fk_projectId, companyIds } = req.body;
   const data = companyIds.map((id) => ({
@@ -24,6 +25,17 @@ router.post("/purchases/bulk", (req, res) =>
 );
 router.post("/subs/bulk", (req, res) => bulkInsert("projectSub", req, res));
 
+//post
+router.post("/subs", async (req, res) => {
+  try {
+    const newItem = await prisma.projectSub.create({ data: req.body });
+    return res.status(201).json(newItem);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to create a new data." });
+  }
+});
+
 //--------get---------------------------------------------------------------
 const findAll = async (model, req, res) => {
   const projectId = req.params.projectId;
@@ -37,6 +49,12 @@ const findAll = async (model, req, res) => {
         company: {
           select: {
             name: true,
+            companyBranch: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
       },
@@ -53,6 +71,20 @@ router.get("/purchases/:projectId", (req, res) =>
 );
 router.get("/subs/:projectId", (req, res) => findAll("projectSub", req, res));
 
+//--------update---------------------------------------------------------------
+router.put("/subs/:projectId", async (req, res) => {
+  try {
+    const updateItem = await prisma.projectSub.update({
+      where: { id: req.params.projectId },
+      data: req.body,
+    });
+    return res.status(200).json(updateItem);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to update the data." });
+  }
+});
+
 //--------delete---------------------------------------------------------------
 const deleteMany = async (model, req, res) => {
   const projectId = req.params.projectId;
@@ -66,7 +98,7 @@ const deleteMany = async (model, req, res) => {
     return res.status(204).send();
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to delete the project." });
+    return res.status(500).json({ error: "Failed to delete the data." });
   }
 };
 

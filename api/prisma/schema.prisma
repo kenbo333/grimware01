@@ -28,7 +28,7 @@ model Company {
   projectPurchase ProjectPurchase[]
   projectSub      ProjectSub[]
   dailyReport     DailyReport[]
-  Project         Project[]
+  project         Project[]
 }
 
 model CompanyBranch {
@@ -221,7 +221,7 @@ model Project {
   fk_companyBranchId_prime     String            @default("")
   fk_companyEmployeeId_prime   String            @default("")
   fk_companyBranchId_billing   String            @default("") //請求先
-  projectId                    String            @unique
+  projectNumber                String            @unique
   name                         String            @default("")
   name_kana                    String            @default("")
   shortName                    String            @default("")
@@ -248,38 +248,38 @@ model Project {
   projectPurchase              ProjectPurchase[]
   projectSub                   ProjectSub[]
   monthlyReport                MonthlyReport[]
-  Company                      Company?          @relation(fields: [companyId], references: [id])
+  company                      Company?          @relation(fields: [companyId], references: [id])
   companyId                    String?
 }
 
 model ProjectPurchase {
-  id           String   @id @default(uuid())
-  fk_projectId String?
-  project      Project? @relation(fields: [fk_projectId], references: [id])
-  fk_companyId String?
-  company      Company? @relation(fields: [fk_companyId], references: [id])
+  id           String  @id @default(uuid())
+  fk_projectId String
+  project      Project @relation(fields: [fk_projectId], references: [id])
+  fk_companyId String
+  company      Company @relation(fields: [fk_companyId], references: [id])
 }
 
 model ProjectSub {
-  id           String   @id @default(uuid())
-  fk_projectId String?
-  project      Project? @relation(fields: [fk_projectId], references: [id])
-  fk_companyId String?
-  company      Company? @relation(fields: [fk_companyId], references: [id])
+  id           String  @id @default(uuid())
+  fk_projectId String
+  project      Project @relation(fields: [fk_projectId], references: [id])
+  fk_companyId String
+  company      Company @relation(fields: [fk_companyId], references: [id])
 }
 
 model MonthlyReport {
-  id                   String          @id @default(uuid())
+  id                   String             @id @default(uuid())
   fk_projectId         String
-  project              Project         @relation(fields: [fk_projectId], references: [id])
+  project              Project            @relation(fields: [fk_projectId], references: [id])
   closingDate          String
-  invoiceDate          String          @default("")
-  invoiceAmount        Int             @default(0)
-  invoiceAmountWithTax Int             @default(0)
-  invoiceDueDate1      String          @default("") //入金予定日
-  invoiceDueDate2      String          @default("")
-  paymentDate1         String          @default("")
-  paymentDate2         String          @default("")
+  invoiceDate          String             @default("")
+  invoiceAmount        Int?
+  invoiceAmountWithTax Int?
+  invoiceDueDate1      String             @default("") //入金予定日
+  invoiceDueDate2      String             @default("")
+  paymentDate1         String             @default("")
+  paymentDate2         String             @default("")
   paymentCash1         Int?
   paymentCash2         Int?
   paymentNote1         Int?
@@ -289,6 +289,18 @@ model MonthlyReport {
   adjustmentAmount     Int?
   dailyReport          DailyReport[]
   expenseDetail        ExpenseDetail[]
+  monthlyReportSub     MonthlyReportSub[]
+}
+
+model MonthlyReportSub {
+  id                 String        @id @default(uuid())
+  fk_monthlyReportId String
+  monthlyReport      MonthlyReport @relation(fields: [fk_monthlyReportId], references: [id])
+  fk_companyId       String?
+  fk_companyBranchId String?
+  description        String?
+  paymentAmount      Int?
+  paymentDate        String?
 }
 
 //日報
@@ -349,8 +361,8 @@ model Expense {
   id                   String           @id @default(uuid())
   fk_companyEmployeeId String?
   companyEmployee      CompanyEmployee? @relation(fields: [fk_companyEmployeeId], references: [id])
-  isInProcess          Boolean          @default(false)
-  isSettled            Boolean          @default(false)
+  isInProcess          Boolean          @default(false) //申請中
+  isSettled            Boolean          @default(false) //完了
   advancePaymentDate   String           @default("")
   advancePaymentAmount String           @default("")
   yearMonth            String           @default("")
@@ -374,7 +386,7 @@ model ExpenseDetail {
 model Option {
   id                    String     @id @default("1")
   closingMonth          Int        @default(3) //決算月
-  SalesTaxRate          String     @default("") //消費税率
+  salesTaxRate          String     @default("") //消費税率
   allowanceDriving      String     @default("") //手当_運転
   allowanceBusinessTrip String     @default("") //手当_出張
   allowanceNightMeal    String     @default("") //手当_夜食

@@ -24,7 +24,7 @@ router.post("/:companyEmployeeId/employeeLicenses", async (req, res) => {
     return res.status(201).json(newItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to create employeeLicense." });
+    return res.status(500).json({ error: "Failed to create data." });
   }
 });
 
@@ -40,7 +40,7 @@ router.get("/:companyEmployeeId/employeeLicenses", async (req, res) => {
     return res.json(items);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to fetch employeeLicense." });
+    return res.status(500).json({ error: "Failed to fetch data." });
   }
 });
 
@@ -119,9 +119,7 @@ router.put(
       return res.status(200).json(updateItem);
     } catch (error) {
       console.error(error);
-      return res
-        .status(500)
-        .json({ error: "Failed to update the employeeLicense." });
+      return res.status(500).json({ error: "Failed to update the data." });
     }
   }
 );
@@ -155,9 +153,7 @@ router.delete(
       );
     } catch (error) {
       console.error(error);
-      return res
-        .status(500)
-        .json({ error: "Failed to delete the employeeLicense." });
+      return res.status(500).json({ error: "Failed to delete the data." });
     }
   }
 );

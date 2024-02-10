@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 //------create--------------------------------
 router.post("/", async (req, res) => {
   try {
-    const newItem = await prisma.car.create({ data: {} });
+    const newItem = await prisma.monthlyReportSub.create({ data: req.body });
     return res.status(201).json(newItem);
   } catch (error) {
     console.error(error);
@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
 //-----------read---------------------------
 router.get("/", async (req, res) => {
   try {
-    const items = await prisma.car.findMany({
+    const items = await prisma.monthlyReportSub.findMany({
       where: queryObject(req.query),
     });
     return res.status(200).json(items);
@@ -27,12 +27,24 @@ router.get("/", async (req, res) => {
   }
 });
 
-//-----update--------------------------------------
+//------------update------------------------------
 router.put("/:id", async (req, res) => {
   try {
-    const updateItem = await prisma.car.update({
+    const keys = ["paymentAmount"]; //int型にしたいキーの配列
+    let updatedBody = { ...req.body };
+    keys.forEach((key) => {
+      if (updatedBody[key] !== undefined) {
+        const intValue = parseInt(updatedBody[key], 10);
+        if (isNaN(intValue)) {
+          console.error(`Invalid input for '${key}'.`);
+        } else {
+          updatedBody[key] = intValue;
+        }
+      }
+    });
+    const updateItem = await prisma.monthlyReportSub.update({
       where: { id: req.params.id },
-      data: req.body,
+      data: updatedBody,
     });
     return res.status(200).json(updateItem);
   } catch (error) {
@@ -44,7 +56,7 @@ router.put("/:id", async (req, res) => {
 //------delete-----------------------
 router.delete("/:id", async (req, res) => {
   try {
-    await prisma.car.delete({ where: { id: req.params.id } });
+    await prisma.monthlyReportSub.delete({ where: { id: req.params.id } });
     return res.status(204).send();
   } catch (error) {
     console.error(error);

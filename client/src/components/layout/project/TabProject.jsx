@@ -39,8 +39,8 @@ const TabProject = (props) => {
   const checkAndCreateMonthlyReports = async () => {
     try {
       //月報データ取得
-      const response = await apiClient.get(`/projects/${sel}/monthlyReports`);
-      const monthlyReports = response.data;
+      const response = await apiClient.get(`/projects/${sel}`);
+      const monthlyReports = response.data.monthlyReport;
       //既存の月報締日の配列
       const closingDates = monthlyReports.map((item) => item.closingDate);
       //inputに対しての月報締日の配列
@@ -77,8 +77,9 @@ const TabProject = (props) => {
   const handleSave = async () => {
     try {
       const newFormData = endEdit();
+      if (newFormData.ownProjectStartDate !== initialData.ownProjectStartDate)
+        await checkAndCreateMonthlyReports();
       await saveData(`/projects/${sel}`, newFormData);
-      await checkAndCreateMonthlyReports();
       router.replace(router.asPath);
     } catch (error) {
       console.error(error);
@@ -93,7 +94,7 @@ const TabProject = (props) => {
   return (
     <div>
       <div className="d-flex justify-content-between mt-2">
-        <div className="h4">{project.projectId}</div>
+        <div className="h4">{project.projectNumber}</div>
         <div className="h5">{primeCompany.closingDay}日締</div>
       </div>
       <div className="h2" style={{ color: "#599429" }}>

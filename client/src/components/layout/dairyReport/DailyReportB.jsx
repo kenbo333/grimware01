@@ -1,5 +1,5 @@
 import useInfoListItemLogic from "@/components/containers/infoListItemLogic";
-import { useFetchAll } from "@/components/containers/useFetchData";
+import { useFetchMulti } from "@/components/containers/useFetchData";
 import InfoListButton from "@/components/ui/InfoListButton";
 import React from "react";
 
@@ -47,12 +47,12 @@ const DailyReportB = (props) => {
 
   const urls = [
     "/companies?isPrime=true",
-    `/monthlyReports?sel=${sel}`,
+    `/monthlyReports?strDate=${sel}`,
     "/option",
     "/cars",
     `/paidLeaves?expirationDate_gte=${sel}`,
   ];
-  const { data, error, isLoading } = useFetchAll(urls);
+  const { data, error, isLoading } = useFetchMulti(urls);
   if (error) return <div>Failed to load data.</div>;
   if (isLoading) return <div>Loading...</div>;
   const [companies, monthlyReports, option, cars, paidLeaves] = data;

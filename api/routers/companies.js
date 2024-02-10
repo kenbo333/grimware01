@@ -10,7 +10,7 @@ const createEntity = async (model, data, res) => {
     return res.status(201).json(newEntity);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to create entity" });
+    return res.status(500).json({ error: "Failed to create data" });
   }
 };
 
@@ -109,7 +109,7 @@ const updateEntity = async (model, id, data, res) => {
     return res.status(200).json(updatedEntity);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to update entity" });
+    return res.status(500).json({ error: "Failed to update data" });
   }
 };
 
@@ -141,7 +141,7 @@ const deleteEntity = async (model, id, res) => {
     return res.status(204).send();
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to delete entity" });
+    return res.status(500).json({ error: "Failed to delete data" });
   }
 };
 

@@ -7,14 +7,13 @@ import React from "react";
 
 export const getServerSideProps = (context) => {
   const { projectId } = context.params;
-  return getData(`/projects/${projectId}/monthlyReports`);
+  return getData(`/projects/${projectId}`);
 };
 
 const monthlyReports = (props) => {
+  const { monthlyReport: monthlyReports } = props.data;
   const router = useRouter();
   const { sel } = router.query;
-  const reports = props.data;
-  // console.log(props.data);
 
   return (
     <div>
@@ -23,15 +22,15 @@ const monthlyReports = (props) => {
 
       <div className="container-lg">
         <div className="row">
-          {reports && (
+          {monthlyReports && (
             <div className="col-4">
-              <ItemList items={reports} type="monthlyReport" sel={sel} />
+              <ItemList items={monthlyReports} type="monthlyReport" sel={sel} />
             </div>
           )}
 
           {sel && (
             <div className="col-8">
-              <TabMonthlyReport reports={reports} sel={sel} />
+              <TabMonthlyReport project={props.data} sel={sel} />
             </div>
           )}
         </div>

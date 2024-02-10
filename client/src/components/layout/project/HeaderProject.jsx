@@ -3,7 +3,7 @@ import { usePathManager } from "@/components/containers/handleItem";
 import { apiClient } from "../../../../lib/apiClient";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { ProjectModalCreate } from "./ProjectModalCreate";
+import { ProjectCreateModal } from "./ProjectCreateModal";
 
 export const HeaderProject = (props) => {
   const { items, setIsCreate } = props;
@@ -13,11 +13,10 @@ export const HeaderProject = (props) => {
   // const isStatus = query.isStatus === "false";
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const isModalOpenState = { isModalOpen, setIsModalOpen };
 
   //削除
   const deleteItem = async () => {
-    // if (!window.confirm("削除してもよろしいですか？")) return;
+    if (!window.confirm("削除してもよろしいですか？")) return;
     const url = "/projects";
 
     try {
@@ -40,9 +39,9 @@ export const HeaderProject = (props) => {
           新規作成
         </button>
         {isModalOpen && (
-          <ProjectModalCreate
+          <ProjectCreateModal
             items={items}
-            isModalOpenState={isModalOpenState}
+            setIsModalOpen={setIsModalOpen}
             setIsCreate={setIsCreate}
           />
         )}

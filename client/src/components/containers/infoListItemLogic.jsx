@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 
 const useInfoListItemLogic = (sel, type) => {
   const { url, query, body } = API_ENDPOINTS[type];
-
   const [items, setItems] = useState([]);
 
   const handleCreate = async () => {

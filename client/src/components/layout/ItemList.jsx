@@ -28,7 +28,7 @@ export const ItemList = (props) => {
     branch: ["name"],
     employee: ["lastName", "firstName"],
     car: ["name"],
-    project: ["projectId", "name"],
+    project: ["projectNumber", "name"],
     monthlyReport: ["closingDate"],
   };
 

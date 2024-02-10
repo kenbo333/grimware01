@@ -12,7 +12,7 @@ const branchPermitNoticesRoute = require("./routers/companyBranches/branchPermit
 const employeeLicensesRoute = require("./routers/companyEmployees/employeeLicenses");
 const projectsRoute = require("./routers/projects");
 const optionRoute = require("./routers/option");
-const generateProjectIdRoute = require("./routers/generateProjectId");
+const generateProjectNumberRoute = require("./routers/generateProjectNumber");
 const projectCompaniesRoute = require("./routers/projectCompanies");
 const dailiesRoute = require("./routers/dailies");
 const dailyReportsRoute = require("./routers/dailyReports");
@@ -20,6 +20,7 @@ const monthlyReportsRoute = require("./routers/monthlyReports");
 const expensesRoute = require("./routers/expenses");
 const expenseDetailsRoute = require("./routers/expenseDetails");
 const paidLeavesRoute = require("./routers/companyEmployees/paidLeaves");
+const MonthlyReportSubsRoute = require("./routers/monthlyReportSubs");
 
 // スケジューラのインポート
 const scheduler = require("./scheduler/scheduler");
@@ -47,13 +48,14 @@ app.use("/api/companyEmployees", employeeLicensesRoute);
 app.use("/api/paidLeaves", paidLeavesRoute);
 app.use("/api/projects", projectsRoute);
 app.use("/api/option", optionRoute);
-app.use("/api/generateProjectId", generateProjectIdRoute);
+app.use("/api/generateProjectNumber", generateProjectNumberRoute);
 app.use("/api/projectCompanies", projectCompaniesRoute);
 app.use("/api/dailies", dailiesRoute);
 app.use("/api/dailyReports", dailyReportsRoute);
 app.use("/api/monthlyReports", monthlyReportsRoute);
 app.use("/api/expenses", expensesRoute);
 app.use("/api/expenseDetails", expenseDetailsRoute);
+app.use("/api/monthlyReportSubs", MonthlyReportSubsRoute);
 
 // サーバーの起動
 app.listen(PORT, () => console.log(`Server is running on Port ${PORT}`));

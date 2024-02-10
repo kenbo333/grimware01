@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
     return res.status(201).json(newItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to create remark." });
+    return res.status(500).json({ error: "Failed to create data." });
   }
 });
 
@@ -38,7 +38,7 @@ router.get("/", async (req, res) => {
     return res.json(items);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to fetch remark." });
+    return res.status(500).json({ error: "Failed to fetch data." });
   }
 });
 
@@ -112,7 +112,7 @@ router.put("/:remarkId", upload.single("file"), async (req, res) => {
     return res.status(200).json(updateItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to update the remark." });
+    return res.status(500).json({ error: "Failed to update the data." });
   }
 });
 
@@ -141,7 +141,7 @@ router.delete("/:remarkId", async (req, res) => {
     );
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to delete the remark." });
+    return res.status(500).json({ error: "Failed to delete the data." });
   }
 });
 

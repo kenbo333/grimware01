@@ -11,6 +11,23 @@ import DailyReportC from "@/components/layout/dairyReport/DailyReportC";
 
 export const getServerSideProps = (context) => getData("/dailies");
 
+//日付表記を変更
+const convertDateToDay = (dateString) => {
+  // 日付の分割
+  const [year, month, day] = dateString
+    .split("-")
+    .map((num) => parseInt(num, 10));
+  // Date オブジェクトの作成
+  const date = new Date(year, month - 1, day); // 月は0から始まるので、1を引く
+  // 曜日の取得
+  const dayNames = ["日", "月", "火", "水", "木", "金", "土"];
+  const dayName = dayNames[date.getDay()];
+  // 新しい形式で組み立て
+  return `${year}/${month.toString().padStart(2, "0")}/${day
+    .toString()
+    .padStart(2, "0")}(${dayName})`;
+};
+
 const Dailies = (props) => {
   const router = useRouter();
   const { sel } = router.query;
@@ -34,23 +51,6 @@ const Dailies = (props) => {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  //日付表記を変更
-  const convertDateToDay = (dateString) => {
-    // 日付の分割
-    const [year, month, day] = dateString
-      .split("-")
-      .map((num) => parseInt(num, 10));
-    // Date オブジェクトの作成
-    const date = new Date(year, month - 1, day); // 月は0から始まるので、1を引く
-    // 曜日の取得
-    const dayNames = ["日", "月", "火", "水", "木", "金", "土"];
-    const dayName = dayNames[date.getDay()];
-    // 新しい形式で組み立て
-    return `${year}/${month.toString().padStart(2, "0")}/${day
-      .toString()
-      .padStart(2, "0")}(${dayName})`;
   };
 
   return (

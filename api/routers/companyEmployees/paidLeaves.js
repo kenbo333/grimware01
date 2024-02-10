@@ -10,9 +10,7 @@ router.post("/", async (req, res) => {
     return res.status(201).json(newItem);
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ error: "Failed to create a new paidLeaves." });
+    return res.status(500).json({ error: "Failed to create a new data." });
   }
 });
 
@@ -33,7 +31,7 @@ router.get("/", async (req, res) => {
     return res.status(200).json(items);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to fetch paidLeaves." });
+    return res.status(500).json({ error: "Failed to fetch data." });
   }
 });
 

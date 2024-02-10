@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
     return res.status(201).json(newItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to create a new option." });
+    return res.status(500).json({ error: "Failed to create a new data." });
   }
 });
 
@@ -35,7 +35,7 @@ router.get("/", async (req, res) => {
     return res.status(200).json(items);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to fetch option." });
+    return res.status(500).json({ error: "Failed to fetch data." });
   }
 });
 
@@ -49,7 +49,7 @@ router.put("/:optionId", async (req, res) => {
     return res.status(200).json(updateItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to update the option." });
+    return res.status(500).json({ error: "Failed to update the data." });
   }
 });
 
@@ -62,7 +62,7 @@ router.put("/:optionId/projType1/:projType1Id", async (req, res) => {
     return res.status(200).json(updateItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to update the option." });
+    return res.status(500).json({ error: "Failed to update the data." });
   }
 });
 
@@ -75,7 +75,7 @@ router.put("/:optionId/projType2/:projType2Id", async (req, res) => {
     return res.status(200).json(updateItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to update the option." });
+    return res.status(500).json({ error: "Failed to update the data." });
   }
 });
 

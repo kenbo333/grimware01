@@ -23,9 +23,8 @@ const RadioGroup = ({ data, selectedValue, onChange, prefix }) => (
   </div>
 );
 
-export const ProjectModalCreate = (props) => {
-  const { items, isModalOpenState, setIsCreate } = props;
-  const { isModalOpen, setIsModalOpen } = isModalOpenState;
+export const ProjectCreateModal = (props) => {
+  const { items, setIsModalOpen, setIsCreate } = props;
   const [createForm, setCreateForm] = useState("");
   const [projType1, setProjType1] = useState({});
   const [projType2, setProjType2] = useState({});
@@ -72,7 +71,7 @@ export const ProjectModalCreate = (props) => {
 
     try {
       const newFormData = endEdit();
-      const response = await apiClient.post("/generateProjectId", {
+      const response = await apiClient.post("/generateProjectNumber", {
         selectType: selectType1 + selectType2,
         closingMonth,
         newFormData,
@@ -121,10 +120,7 @@ export const ProjectModalCreate = (props) => {
 
   return (
     <div>
-      <div
-        className={`modal ${isModalOpen ? "d-block show" : ""}`}
-        tabIndex="-1"
-      >
+      <div className="modal d-block show" tabIndex="-1">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
@@ -247,9 +243,7 @@ export const ProjectModalCreate = (props) => {
           </div>
         </div>
       </div>
-      {isModalOpen && (
-        <div className={`modal-backdrop ${isModalOpen ? "show" : ""}`}></div>
-      )}
+      <div className="modal-backdrop show"></div>
     </div>
   );
 };

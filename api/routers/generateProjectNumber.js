@@ -14,11 +14,11 @@ const getFiscalYear = (closingMonth) => {
 
 const getNextProjectNumber = async (prefix) => {
   const lastProject = await prisma.project.findFirst({
-    where: { projectId: { startsWith: prefix } },
-    orderBy: { projectId: "desc" },
+    where: { projectNumber: { startsWith: prefix } },
+    orderBy: { projectNumber: "desc" },
   });
 
-  return lastProject ? parseInt(lastProject.projectId.slice(-4)) + 1 : 1;
+  return lastProject ? parseInt(lastProject.projectNumber.slice(-4)) + 1 : 1;
 };
 
 //------create----------------------------------------------------------------
@@ -32,10 +32,12 @@ router.post("/", async (req, res) => {
   try {
     const prefix = getFiscalYear(closingMonth) + selectType;
     const nextNumber = await getNextProjectNumber(prefix);
-    const newProjectId = `${prefix}${nextNumber.toString().padStart(4, "0")}`;
+    const newProjectNumber = `${prefix}${nextNumber
+      .toString()
+      .padStart(4, "0")}`;
 
     const newItem = await prisma.project.create({
-      data: { projectId: newProjectId, ...newFormData },
+      data: { projectNumber: newProjectNumber, ...newFormData },
     });
 
     return res.json(newItem);

@@ -1,24 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { apiClient } from "../../../../lib/apiClient";
-import { useFetch } from "@/components/containers/useFetchData";
+import { useFetchSingle } from "@/components/containers/useFetchData";
 
 const apiConfig = {
   purchase: {
     endpoint: "purchases",
-    queryParam: "isPurchase=true",
+    queryParam: "&isPurchase=true",
+    title: "取引する仕入会社",
   },
   sub: {
     endpoint: "subs",
-    queryParam: "isSub=true",
+    queryParam: "&isSub=true",
+    title: "入場する下請会社",
   },
 };
 
-const ProjectModalCompany = (props) => {
+const ProjectCompanyModal = (props) => {
   const { modalOpenState, sel, ids } = props;
   const { modalOpen, setModalOpen } = modalOpenState;
   const [selectedCompanyIds, setSelectedCompanyIds] = useState(ids);
 
-  const { endpoint, queryParam } = apiConfig[modalOpen];
+  const { endpoint, queryParam, title } = apiConfig[modalOpen];
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
@@ -45,17 +47,17 @@ const ProjectModalCompany = (props) => {
     data: companies,
     error,
     isLoading,
-  } = useFetch(`/companies?${queryParam}`);
+  } = useFetchSingle(`/companies?isStatus=true&isOwn=false${queryParam}`);
   if (error) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
 
   return (
-    <>
-      <div className={`modal ${modalOpen ? "d-block show" : ""}`} tabIndex="-1">
+    <div>
+      <div className="modal d-block show" tabIndex="-1">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">取引する仕入会社</h5>
+              <h5 className="modal-title">{title}</h5>
               <button
                 type="button"
                 className="btn-close"
@@ -98,11 +100,9 @@ const ProjectModalCompany = (props) => {
           </div>
         </div>
       </div>
-      {modalOpen && (
-        <div className={`modal-backdrop ${modalOpen ? "show" : ""}`}></div>
-      )}
-    </>
+      <div className="modal-backdrop show"></div>
+    </div>
   );
 };
 
-export default ProjectModalCompany;
+export default ProjectCompanyModal;

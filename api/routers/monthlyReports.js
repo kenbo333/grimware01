@@ -2,32 +2,22 @@ const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-const getReportStartDate = (dateString) => {
-  let date = new Date(dateString);
-
-  if (isNaN(date)) {
-    throw new Error("Invalid date");
+const getOneMonthAfter = (sel) => {
+  // 入力された日付の形式を 'yyyy/mm/dd' から 'yyyy-mm-dd' に変更
+  let formattedSel = sel.replace(/\//g, "-");
+  // Date オブジェクトを作成
+  let date = new Date(formattedSel);
+  let originalMonth = date.getMonth();
+  let originalDay = date.getDate();
+  // 1か月加算
+  date.setMonth(originalMonth + 1);
+  let newMonth = date.getMonth();
+  // 加算後の月が2ヶ月進んでしまっている場合（例えば、1月31日から2月がないため3月になる場合）
+  if ((newMonth - originalMonth) % 12 > 1) {
+    // 前の月の最終日に設定
+    date = new Date(date.getFullYear(), newMonth, 0);
   }
-
-  // 前月の同じ日を取得
-  date.setMonth(date.getMonth() - 1);
-  let targetDay = new Date(dateString).getDate();
-
-  // 前月の最終日を取得
-  let lastDayOfPreviousMonth = new Date(
-    date.getFullYear(),
-    date.getMonth() + 1,
-    0
-  ).getDate();
-
-  // 前月に同じ日が存在しない場合、最終日を設定
-  if (targetDay > lastDayOfPreviousMonth) {
-    date.setDate(lastDayOfPreviousMonth);
-  } else {
-    date.setDate(targetDay);
-  }
-
-  // yyyy-mm-dd 形式で返す
+  // yyyy-mm-dd 形式で結果を返す
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const day = date.getDate().toString().padStart(2, "0");
@@ -37,15 +27,13 @@ const getReportStartDate = (dateString) => {
 
 //-----------read---------------------------
 router.get("/", async (req, res) => {
-  const { sel } = req.query;
-  const startDate = getReportStartDate(sel);
-
+  const { strDate } = req.query;
   try {
     const items = await prisma.monthlyReport.findMany({
       where: {
         closingDate: {
-          gte: startDate, // closingDate が startDate 以上
-          lte: sel, // closingDate が sel (締め切り日) 以下
+          gte: strDate,
+          lt: getOneMonthAfter(strDate),
         },
       },
       include: {
@@ -60,7 +48,21 @@ router.get("/", async (req, res) => {
     return res.status(200).json(items);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to fetch monthlyReports." });
+    return res.status(500).json({ error: "Failed to fetch data." });
+  }
+});
+
+//------------update------------------------------
+router.put("/:id", async (req, res) => {
+  try {
+    const updateItem = await prisma.monthlyReport.update({
+      where: { id: req.params.id },
+      data: req.body,
+    });
+    return res.status(200).json(updateItem);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to update the data." });
   }
 });
 

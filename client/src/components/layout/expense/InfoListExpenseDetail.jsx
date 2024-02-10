@@ -1,9 +1,12 @@
 import useInfoListItemLogic from "@/components/containers/infoListItemLogic";
 import InfoListButton from "@/components/ui/InfoListButton";
-import React from "react";
+import React, { useState } from "react";
+import MonthlyReportSelect from "../modal/MonthlyReportSelect";
 
 const InfoListExpenseDetail = (props) => {
   const { sel, expenseAccounts } = props;
+  const [modalIndex, setModalIndex] = useState(null);
+
   const {
     items,
     handleCreate,
@@ -15,7 +18,9 @@ const InfoListExpenseDetail = (props) => {
     handleCheck,
   } = useInfoListItemLogic(sel, "EXPENSE_DETAIL");
 
-  // console.log(items);
+  //monthlyReportIdをprojectNameを取得
+  const mReports = items.map((d) => d.monthlyReport).filter(Boolean);
+  // console.log(mReports);
 
   return (
     <div>
@@ -29,9 +34,6 @@ const InfoListExpenseDetail = (props) => {
         </button>
         {/* <div className="row h6">
           <div className="col-3">日付/備考</div>
-          <div className="col-3">内容</div>
-          <div className="col-3">距離</div>
-          <div className="col-3">金額</div>
         </div> */}
       </div>
 
@@ -53,19 +55,39 @@ const InfoListExpenseDetail = (props) => {
                 />
               </div>
               <div className="col-4 px-1">
-                <input
-                  type="text"
+                {/* <input
                   className="form-control"
-                  name="fk_monthlyReportId"
-                  data-index={index.toString()}
-                  value={item.fk_monthlyReportId || ""}
                   disabled={!item.isEditing}
-                  onChange={handleChange}
-                />
+                  value={item.fk_monthlyReportId || ""}
+                  onClick={() => setModalIndex(index)}
+                /> */}
+
+                <select
+                  className="form-select"
+                  onClick={() => setModalIndex(index)}
+                  value={item.fk_monthlyReportId || ""}
+                  disabled={!item.isEditing || !item.date}
+                >
+                  <option value={item.fk_monthlyReportId}>
+                    {
+                      mReports.find(
+                        (mReport) => mReport?.id === item.fk_monthlyReportId
+                      )?.project.name
+                    }
+                  </option>
+                </select>
+                {modalIndex === index && (
+                  <MonthlyReportSelect
+                    strDate={item.date}
+                    index={index}
+                    setModalIndex={setModalIndex}
+                    handleChange={handleChange}
+                  />
+                )}
               </div>
+
               <div className="col-2 px-1">
                 <input
-                  type="text"
                   className="form-control"
                   name="amount"
                   data-index={index.toString()}

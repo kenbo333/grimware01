@@ -10,9 +10,7 @@ router.post("/", async (req, res) => {
     return res.status(201).json(newItem);
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ error: "Failed to create a new dailyReport." });
+    return res.status(500).json({ error: "Failed to create a new data." });
   }
 });
 
@@ -21,11 +19,19 @@ router.get("/", async (req, res) => {
   try {
     const items = await prisma.dailyReport.findMany({
       where: queryObject(req.query),
+      include: {
+        companyEmployee: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
     });
     return res.status(200).json(items);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to fetch dailyReports." });
+    return res.status(500).json({ error: "Failed to fetch data." });
   }
 });
 
@@ -37,6 +43,7 @@ router.put("/:id", async (req, res) => {
       fk_carId,
       fk_companyEmployeeId,
       fk_paidLeaveId,
+      companyEmployee, //配列を除去
       ...otherData
     } = req.body;
 
@@ -91,7 +98,7 @@ router.put("/:id", async (req, res) => {
     return res.status(200).json(updateItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to update the dailyReport." });
+    return res.status(500).json({ error: "Failed to update the data." });
   }
 });
 
@@ -102,9 +109,7 @@ router.delete("/:id", async (req, res) => {
     return res.status(204).send();
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ error: "Failed to delete the dailyReport record." });
+    return res.status(500).json({ error: "Failed to delete the data." });
   }
 });
 

@@ -10,9 +10,7 @@ router.post("/", async (req, res) => {
     return res.status(201).json(newItem);
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ error: "Failed to create a new expenseDetail." });
+    return res.status(500).json({ error: "Failed to create a new data." });
   }
 });
 
@@ -21,27 +19,34 @@ router.get("", async (req, res) => {
   try {
     const items = await prisma.expenseDetail.findMany({
       where: queryObject(req.query),
+      include: {
+        monthlyReport: {
+          select: {
+            id: true,
+            project: { select: { name: true } },
+          },
+        },
+      },
     });
     return res.status(200).json(items);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to fetch expenseDetails." });
+    return res.status(500).json({ error: "Failed to fetch data." });
   }
 });
 
 //------update-------------------------------------------------
 router.put("/:id", async (req, res) => {
+  const { monthlyReport, ...other } = req.body;
   try {
     const updateItem = await prisma.expenseDetail.update({
       where: { id: req.params.id },
-      data: req.body,
+      data: other,
     });
     return res.status(200).json(updateItem);
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ error: "Failed to update the expenseDetail record." });
+    return res.status(500).json({ error: "Failed to update the data." });
   }
 });
 
@@ -52,9 +57,7 @@ router.delete("/:id", async (req, res) => {
     return res.status(204).send();
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ error: "Failed to delete the expenseDetail record." });
+    return res.status(500).json({ error: "Failed to delete the data." });
   }
 });
 

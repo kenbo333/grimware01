@@ -35,7 +35,6 @@ const Expenses = (props) => {
   const { expenses, emps, expenseAccounts } = props;
   const router = useRouter();
   const { sel } = router.query;
-
   const expense = expenses.find((e) => e.id === sel) || {};
 
   //オブジェクトから配列を除去
@@ -69,7 +68,6 @@ const Expenses = (props) => {
   const handleSave = async () => {
     const updateData = formUtils.endEdit();
     await saveData(`/expenses/${sel}`, updateData);
-    // const isStatic = car.isStatus === formData.isStatus;
     pathChange(sel, false);
   };
 

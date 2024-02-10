@@ -1,7 +1,7 @@
 import useInfoListItemLogic from "@/components/containers/infoListItemLogic";
 import InfoListButton from "@/components/ui/InfoListButton";
 import React from "react";
-import { useFetchAll } from "@/components/containers/useFetchData";
+import { useFetchMulti } from "@/components/containers/useFetchData";
 
 const DailyReportA = (props) => {
   const { sel } = props;
@@ -33,11 +33,11 @@ const DailyReportA = (props) => {
 
   const urls = [
     "/companies?isPrime=true",
-    `/monthlyReports?sel=${sel}`,
+    `/monthlyReports?strDate=${sel}`,
     "/option",
-    "/cars",
+    "/cars?isStatus=true",
   ];
-  const { data, error, isLoading } = useFetchAll(urls);
+  const { data, error, isLoading } = useFetchMulti(urls);
   if (error) return <div>Failed to load data.</div>;
   if (isLoading) return <div>Loading...</div>;
   const [companies, monthlyReports, option, cars] = data;
@@ -129,7 +129,7 @@ const DailyReportA = (props) => {
                     value={m.id}
                     data-value0={m.project.distance}
                   >
-                    {m.project.name}
+                    {m.project.name + " " + m.closingDate}
                   </option>
                 ))}
               </select>

@@ -44,4 +44,10 @@ export const API_ENDPOINTS = {
     query: (sel) => `?fk_companyEmployeeId=${sel}`,
     body: (sel) => ({ fk_companyEmployeeId: sel }),
   },
+
+  MONTHLY_REPORTS_SUBS: {
+    url: `${baseURL}/monthlyReportSubs`,
+    query: (sel) => `?fk_monthlyReportId=${sel}`,
+    body: (sel) => ({ fk_monthlyReportId: sel }),
+  },
 };

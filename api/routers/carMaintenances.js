@@ -10,9 +10,7 @@ router.post("/", async (req, res) => {
     return res.status(201).json(newItem);
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ error: "Failed to create a new carMaintenance." });
+    return res.status(500).json({ error: "Failed to create a new data." });
   }
 });
 
@@ -25,7 +23,7 @@ router.get("/", async (req, res) => {
     return res.status(200).json(items);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to fetch carMaintenances." });
+    return res.status(500).json({ error: "Failed to fetch data." });
   }
 });
 
@@ -39,9 +37,7 @@ router.put("/:id", async (req, res) => {
     return res.status(200).json(updateItem);
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ error: "Failed to update the carMaintenance." });
+    return res.status(500).json({ error: "Failed to update the data." });
   }
 });
 
@@ -52,9 +48,7 @@ router.delete("/:id", async (req, res) => {
     return res.status(204).send();
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ error: "Failed to delete the carMaintenance." });
+    return res.status(500).json({ error: "Failed to delete the data." });
   }
 });
 

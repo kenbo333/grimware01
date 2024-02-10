@@ -9,7 +9,7 @@ router.post("/", async (req, res) => {
     return res.status(201).json(newItem);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to create a new daily." });
+    return res.status(500).json({ error: "Failed to create a new data." });
   }
 });
 
@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
     return res.status(200).json(items);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to fetch dailies." });
+    return res.status(500).json({ error: "Failed to fetch data." });
   }
 });
 

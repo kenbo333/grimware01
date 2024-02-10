@@ -1,24 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { apiClient } from "../../../../lib/apiClient";
+import React from "react";
 import { HalfFrom } from "@/components/forms/InputForm";
 import Link from "next/link";
+import { useFetchSingle } from "@/components/containers/useFetchData";
 
 const PJMonthlyReport = (props) => {
   const { sel, formUtils } = props;
 
-  const [monRepStates, setMonRepStates] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await apiClient.get(`/projects/${sel}/monthlyReports`);
-        setMonRepStates(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, [sel]);
+  const { data, error, isLoading } = useFetchSingle(`/projects/${sel}`);
+  if (error) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
+  const monthlyReports = data.monthlyReport;
 
   return (
     <div className="tab-pane active my-3">
@@ -57,10 +48,12 @@ const PJMonthlyReport = (props) => {
       <hr />
 
       <div>
-        {monRepStates.map((monRep, i) => (
-          <div key={i}>
-            <Link href={`/projects/${sel}/monthlyReports?sel=${monRep.id}`}>
-              {monRep.closingDate}
+        {monthlyReports.map((monthlyReport) => (
+          <div key={monthlyReport.id}>
+            <Link
+              href={`/projects/${sel}/monthlyReports?sel=${monthlyReport.id}`}
+            >
+              {monthlyReport.closingDate}
             </Link>
           </div>
         ))}
