@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const { queryObject } = require("../conditions");
+const convertToIntOrNull = require("../utils/dataConversionUtils");
 const prisma = new PrismaClient();
 
 //---------create--------------------------------
@@ -26,6 +27,11 @@ router.get("/", async (req, res) => {
             lastName: true,
           },
         },
+        monthlyReport: {
+          select: {
+            project: { select: { name: true } },
+          },
+        },
       },
     });
     return res.status(200).json(items);
@@ -44,8 +50,20 @@ router.put("/:id", async (req, res) => {
       fk_companyEmployeeId,
       fk_paidLeaveId,
       companyEmployee, //配列を除去
-      ...otherData
+      monthlyReport, //配列を除去
+      ...updatedBody
     } = req.body;
+
+    const intKeys = [
+      "day",
+      "night",
+      "overtime",
+      "lateOvertime",
+      "distance",
+      "driving",
+      "etcFees",
+    ];
+    convertToIntOrNull(updatedBody, intKeys);
 
     //燃料代の計算
     let calcFuelCost = null;
@@ -57,7 +75,7 @@ router.put("/:id", async (req, res) => {
       const fuelUnitPrice = option[car.fuelType];
       //op:燃料単価 × 距離 × 運転÷ car:燃費
       calcFuelCost =
-        (fuelUnitPrice * req.body.distance * req.body.driving) /
+        (fuelUnitPrice * updatedBody.distance * updatedBody.driving) /
         car.fuelConsumption;
     }
 
@@ -70,19 +88,19 @@ router.put("/:id", async (req, res) => {
       const op = await prisma.option.findFirst();
       //日勤 + 夜勤 + 残業 + 深夜残業 + 運転手当 + 出張手当 + 夜食手当
       calcLaborCost = Math.ceil(
-        emp.laborCostDayShift * (Number(req.body.day) || 0) +
-          emp.laborCostNightShift * (Number(req.body.night) || 0) +
-          emp.laborCostOvertime * (Number(req.body.overtime) || 0) +
-          emp.laborCostLateOvertime * (Number(req.body.lateOvertime) || 0) +
-          op.allowanceDriving * (Number(req.body.driving) || 0) +
-          op.allowanceBusinessTrip * (Number(req.body.isBusinessTrip) || 0) +
-          op.allowanceNightMeal * (Number(req.body.isNightMeal) || 0)
+        emp.laborCostDayShift * (updatedBody.day || 0) +
+          emp.laborCostNightShift * (updatedBody.night || 0) +
+          emp.laborCostOvertime * (updatedBody.overtime || 0) +
+          emp.laborCostLateOvertime * (updatedBody.lateOvertime || 0) +
+          op.allowanceDriving * (updatedBody.driving || 0) +
+          op.allowanceBusinessTrip * +updatedBody.isBusinessTrip +
+          op.allowanceNightMeal * +updatedBody.isNightMeal
       );
     }
 
     //空文字列の場合、nullを代入してdataまとめる
     const updateData = {
-      ...otherData,
+      ...updatedBody,
       fk_monthlyReportId: fk_monthlyReportId || null,
       fk_carId: fk_carId || null,
       fk_companyEmployeeId: fk_companyEmployeeId || null,

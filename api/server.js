@@ -4,6 +4,7 @@ const cors = require("cors");
 // ルーターのインポート
 const companiesRoute = require("./routers/companies");
 const companyBranchesRoute = require("./routers/companyBranches/companyBranches");
+const companyEmployeesRoute = require("./routers/companyEmployees/companyEmployees");
 const carsRoute = require("./routers/cars");
 const carMaintenancesRoute = require("./routers/carMaintenances");
 const remarksRoute = require("./routers/remarks");
@@ -21,6 +22,7 @@ const expensesRoute = require("./routers/expenses");
 const expenseDetailsRoute = require("./routers/expenseDetails");
 const paidLeavesRoute = require("./routers/companyEmployees/paidLeaves");
 const MonthlyReportSubsRoute = require("./routers/monthlyReportSubs");
+const purchaseDetailsRoute = require("./routers/purchaseDetails");
 
 // スケジューラのインポート
 const scheduler = require("./scheduler/scheduler");
@@ -39,6 +41,7 @@ app.use(express.urlencoded({ extended: true }));
 // ルートの設定
 app.use("/api/companies", companiesRoute);
 app.use("/api/companyBranches", companyBranchesRoute);
+app.use("/api/companyEmployees", companyEmployeesRoute);
 app.use("/api/cars", carsRoute);
 app.use("/api/carMaintenances", carMaintenancesRoute);
 app.use("/api/remarks", remarksRoute);
@@ -56,6 +59,7 @@ app.use("/api/monthlyReports", monthlyReportsRoute);
 app.use("/api/expenses", expensesRoute);
 app.use("/api/expenseDetails", expenseDetailsRoute);
 app.use("/api/monthlyReportSubs", MonthlyReportSubsRoute);
+app.use("/api/purchaseDetails", purchaseDetailsRoute);
 
 // サーバーの起動
 app.listen(PORT, () => console.log(`Server is running on Port ${PORT}`));

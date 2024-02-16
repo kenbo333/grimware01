@@ -1,9 +1,11 @@
 import useInfoListItemLogic from "@/components/containers/infoListItemLogic";
-import React from "react";
+import React, { useState } from "react";
 import { useFetchMulti } from "@/components/containers/useFetchData";
+import MonthlyReportSelect from "../modal/MonthlyReportSelect";
 
 const DailyReportC = (props) => {
   const { sel } = props;
+  const [modalIndex, setModalIndex] = useState(null);
 
   const {
     items,
@@ -13,6 +15,8 @@ const DailyReportC = (props) => {
     handleEdit,
     handleCancel,
     handleChange,
+    handleCheck,
+    modalSelect,
   } = useInfoListItemLogic(sel, "DAILY_REPORT");
 
   const getCompanyEmployeesOptions = ({ fk_companyId }) => {
@@ -28,16 +32,11 @@ const DailyReportC = (props) => {
 
   const formatCost = (cost) => (cost ? `${cost.toLocaleString()} 円` : "-");
 
-  const urls = [
-    "/companies?isPrime=true",
-    `/monthlyReports?strDate=${sel}`,
-    "/option",
-    "/cars",
-  ];
+  const urls = ["/companies?isSub=true&isStatus=true"];
   const { data, error, isLoading } = useFetchMulti(urls);
   if (error) return <div>Failed to load data.</div>;
   if (isLoading) return <div>Loading...</div>;
-  const [companies, monthlyReports, option, cars] = data;
+  const [companies] = data;
 
   return (
     <div className="tab-pane active my-3">
@@ -63,7 +62,7 @@ const DailyReportC = (props) => {
                 className="form-select form-select-sm"
                 name="fk_companyId"
                 data-index={index.toString()}
-                value={item.fk_companyId || ""}
+                value={item.fk_companyId ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               >
@@ -80,7 +79,7 @@ const DailyReportC = (props) => {
                 className="form-select form-select-sm"
                 name="fk_companyEmployeeId"
                 data-index={index.toString()}
-                value={item.fk_companyEmployeeId || ""}
+                value={item.fk_companyEmployeeId ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               >
@@ -89,27 +88,27 @@ const DailyReportC = (props) => {
               </select>
             </div>
 
-            {/* プロジェクト選択 */}
             <div className="col-4 px-1">
               <select
                 className="form-select form-select-sm"
-                name="fk_monthlyReportId"
-                data-index={index.toString()}
-                value={item.fk_monthlyReportId || ""}
+                id={item.id}
+                onClick={() => setModalIndex(index)}
+                value={item.fk_monthlyReportId ?? ""}
                 disabled={!item.isEditing}
-                onChange={(e) => lookupSelect(e, "distance")}
+                onChange={() => {}} //ダミー
               >
-                <option value=""></option>
-                {monthlyReports.map((m) => (
-                  <option
-                    key={m.id}
-                    value={m.id}
-                    data-value0={m.project.distance}
-                  >
-                    {m.project.name}
-                  </option>
-                ))}
+                <option value={item.fk_monthlyReportId ?? ""}>
+                  {item.monthlyReport?.project.name}
+                </option>
               </select>
+              {modalIndex === index && (
+                <MonthlyReportSelect
+                  strDate={sel}
+                  index={index}
+                  setModalIndex={setModalIndex}
+                  modalSelect={modalSelect}
+                />
+              )}
             </div>
           </div>
 

@@ -55,7 +55,6 @@ const InfoListCarMaintenance = (props) => {
               </div>
               <div className="col-3 px-1">
                 <input
-                  type="text"
                   className="form-control"
                   name="content"
                   data-index={index.toString()}
@@ -66,22 +65,20 @@ const InfoListCarMaintenance = (props) => {
               </div>
               <div className="col-3 px-1">
                 <input
-                  type="text"
                   className="form-control"
                   name="odometer"
                   data-index={index.toString()}
-                  value={item.odometer}
+                  value={item.odometer ?? ""}
                   disabled={!item.isEditing}
                   onChange={handleChange}
                 />
               </div>
               <div className="col-3 ps-1">
                 <input
-                  type="text"
                   className="form-control"
                   name="cost"
                   data-index={index.toString()}
-                  value={item.cost}
+                  value={item.cost ?? ""}
                   disabled={!item.isEditing}
                   onChange={handleChange}
                 />

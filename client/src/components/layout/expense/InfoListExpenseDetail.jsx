@@ -16,11 +16,8 @@ const InfoListExpenseDetail = (props) => {
     handleCancel,
     handleChange,
     handleCheck,
+    modalSelect,
   } = useInfoListItemLogic(sel, "EXPENSE_DETAIL");
-
-  //monthlyReportIdをprojectNameを取得
-  const mReports = items.map((d) => d.monthlyReport).filter(Boolean);
-  // console.log(mReports);
 
   return (
     <div>
@@ -49,31 +46,21 @@ const InfoListExpenseDetail = (props) => {
                   className="form-control"
                   name="date"
                   data-index={index.toString()}
-                  value={item.date || ""}
+                  value={item.date ?? ""}
                   disabled={!item.isEditing}
                   onChange={handleChange}
                 />
               </div>
               <div className="col-4 px-1">
-                {/* <input
-                  className="form-control"
-                  disabled={!item.isEditing}
-                  value={item.fk_monthlyReportId || ""}
-                  onClick={() => setModalIndex(index)}
-                /> */}
-
                 <select
                   className="form-select"
+                  id={item.id}
                   onClick={() => setModalIndex(index)}
-                  value={item.fk_monthlyReportId || ""}
+                  value={item.fk_monthlyReportId ?? ""}
                   disabled={!item.isEditing || !item.date}
                 >
                   <option value={item.fk_monthlyReportId}>
-                    {
-                      mReports.find(
-                        (mReport) => mReport?.id === item.fk_monthlyReportId
-                      )?.project.name
-                    }
+                    {item.monthlyReport?.project.name}
                   </option>
                 </select>
                 {modalIndex === index && (
@@ -81,7 +68,7 @@ const InfoListExpenseDetail = (props) => {
                     strDate={item.date}
                     index={index}
                     setModalIndex={setModalIndex}
-                    handleChange={handleChange}
+                    modalSelect={modalSelect}
                   />
                 )}
               </div>
@@ -91,7 +78,7 @@ const InfoListExpenseDetail = (props) => {
                   className="form-control"
                   name="amount"
                   data-index={index.toString()}
-                  value={item.amount || ""}
+                  value={item.amount ?? ""}
                   disabled={!item.isEditing}
                   onChange={handleChange}
                 />
@@ -125,7 +112,7 @@ const InfoListExpenseDetail = (props) => {
                   data-index={index.toString()}
                   name="account"
                   onChange={handleChange}
-                  value={item.account || ""}
+                  value={item.account ?? ""}
                   disabled={!item.isEditing}
                 >
                   <option value=""></option>

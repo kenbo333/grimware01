@@ -80,16 +80,18 @@ const useInfoListItemLogic = (sel, type) => {
     setItems(newItems);
   };
 
-  const lookupSelect = (e, ...fieldNames) => {
-    //optionにdata-value[index]と設定 indexはfieldNamesの配列
+  const modalSelect = (e, fieldName) => {
+    //data-valueを設定しjsonで送る
     const index = parseInt(e.target.dataset.index, 10);
     const { name, value } = e.target;
-    const selectedOption = e.target.selectedOptions[0].dataset;
     const newItems = [...items];
     newItems[index][name] = value;
-    fieldNames.forEach((fieldName, i) => {
-      newItems[index][fieldName] = selectedOption[`value${i}`];
-    });
+    newItems[index][fieldName] = JSON.parse(e.target.dataset.value);
+    if (newItems[index].hasOwnProperty("distance")) {
+      newItems[index].distance = JSON.parse(
+        e.target.dataset.value
+      ).project.distance;
+    }
     setItems(newItems);
   };
 
@@ -123,8 +125,9 @@ const useInfoListItemLogic = (sel, type) => {
     handleCancel,
     handleChange,
     handleCheck,
-    lookupSelect,
+    modalSelect,
     lookupCheckbox,
+    modalSelect,
   };
 };
 

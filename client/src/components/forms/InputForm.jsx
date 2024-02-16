@@ -17,7 +17,7 @@ export const NameFrom = (props) => {
           type="text"
           className="form-control"
           id={nameKey}
-          value={formData[nameKey] || ""}
+          value={formData[nameKey] ?? ""}
           onChange={handleChange}
           disabled={!formData.isEditing}
         />
@@ -46,7 +46,7 @@ export const HalfFrom = (props) => {
           type={type}
           className="form-control"
           id={nameKey}
-          value={formData[nameKey] || ""}
+          value={formData[nameKey] ?? ""}
           onChange={handleChange}
           disabled={!formData.isEditing}
         />
@@ -77,7 +77,7 @@ export const NameFrom_kana = (props) => {
             type="text"
             className="form-control"
             id={nameKey_kana}
-            value={formData[nameKey_kana] || ""}
+            value={formData[nameKey_kana] ?? ""}
             onChange={handleChange}
             disabled={!formData.isEditing}
           />
@@ -143,7 +143,7 @@ export const FullNameForm = (props) => {
             type="text"
             className="form-control"
             id={fields.lastName_kana}
-            value={formData[fields.lastName_kana] || ""}
+            value={formData[fields.lastName_kana] ?? ""}
             onChange={handleChange}
             disabled={!formData.isEditing}
           />
@@ -153,7 +153,7 @@ export const FullNameForm = (props) => {
             type="text"
             className="form-control"
             id={fields.firstName_kana}
-            value={formData[fields.firstName_kana] || ""}
+            value={formData[fields.firstName_kana] ?? ""}
             onChange={handleChange}
             disabled={!formData.isEditing}
           />
@@ -169,7 +169,7 @@ export const FullNameForm = (props) => {
             type="text"
             className="form-control"
             id={fields.lastName}
-            value={formData[fields.lastName] || ""}
+            value={formData[fields.lastName] ?? ""}
             onChange={handleChange}
             disabled={!formData.isEditing}
           />
@@ -179,7 +179,7 @@ export const FullNameForm = (props) => {
             type="text"
             className="form-control"
             id={fields.firstName}
-            value={formData[fields.firstName] || ""}
+            value={formData[fields.firstName] ?? ""}
             onChange={handleChange}
             disabled={!formData.isEditing}
           />
@@ -210,7 +210,7 @@ export const SelectForm = (props) => {
           className="form-select"
           id={nameKey}
           onChange={handleChange}
-          value={formData[nameKey] || ""}
+          value={formData[nameKey] ?? ""}
           disabled={!formData.isEditing}
         >
           {isAllowEmpty && <option value=""></option>}
@@ -244,7 +244,7 @@ export const StartEndForm = (props) => {
           type="date"
           className="form-control"
           id={startKey}
-          value={formData[startKey] || ""}
+          value={formData[startKey] ?? ""}
           onChange={handleChange}
           disabled={!formData.isEditing}
         />
@@ -254,7 +254,7 @@ export const StartEndForm = (props) => {
           type="date"
           className="form-control"
           id={endKey}
-          value={formData[endKey] || ""}
+          value={formData[endKey] ?? ""}
           onChange={handleChange}
           disabled={!formData.isEditing}
         />

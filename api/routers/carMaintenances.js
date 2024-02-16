@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const { queryObject } = require("../conditions");
+const convertToIntOrNull = require("../utils/dataConversionUtils");
 const prisma = new PrismaClient();
 
 //------create--------------------------------
@@ -30,9 +31,13 @@ router.get("/", async (req, res) => {
 //------------update------------------------------
 router.put("/:id", async (req, res) => {
   try {
+    const intKeys = ["odometer", "cost"];
+    let updatedBody = { ...req.body };
+    convertToIntOrNull(updatedBody, intKeys);
+
     const updateItem = await prisma.carMaintenance.update({
       where: { id: req.params.id },
-      data: req.body,
+      data: updatedBody,
     });
     return res.status(200).json(updateItem);
   } catch (error) {

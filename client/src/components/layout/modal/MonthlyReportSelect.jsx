@@ -2,7 +2,7 @@ import React from "react";
 import { useFetchSingle } from "@/components/containers/useFetchData";
 
 const MonthlyReportSelect = (props) => {
-  const { strDate, handleChange, index, setModalIndex } = props;
+  const { strDate, modalSelect, index, setModalIndex } = props;
 
   const {
     data: monthlyReports,
@@ -36,8 +36,15 @@ const MonthlyReportSelect = (props) => {
                     name="fk_monthlyReportId"
                     data-index={index}
                     value={monthlyReport.id}
+                    //表示用にmonthlyReportを追加
+                    data-value={JSON.stringify({
+                      project: {
+                        name: monthlyReport.project.name,
+                        distance: monthlyReport.project.distance,
+                      },
+                    })}
                     onClick={(e) => {
-                      handleChange(e);
+                      modalSelect(e, "monthlyReport");
                       setModalIndex(null);
                     }}
                   >

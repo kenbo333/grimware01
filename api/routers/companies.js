@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const { queryObject } = require("../conditions");
+const convertToIntOrNull = require("../utils/dataConversionUtils");
 const prisma = new PrismaClient();
 
 //------create------------------------------------------
@@ -126,8 +127,25 @@ router.put("/:companyId/branches/:branchId", (req, res) => {
 // 社員情報アップデート
 router.put(
   "/:companyId/branches/:branchId/employees/:employeeId",
-  (req, res) => {
-    updateEntity(prisma.companyEmployee, req.params.employeeId, req.body, res);
+  async (req, res) => {
+    try {
+      const intKeys = [
+        "laborCostDayShift",
+        "laborCostNightShift",
+        "laborCostOvertime",
+        "laborCostLateOvertime",
+      ]; //int型にしたいキーの配列
+      let updatedBody = { ...req.body };
+      convertToIntOrNull(updatedBody, intKeys);
+      const updateItem = await prisma.companyEmployee.update({
+        where: { id: req.params.employeeId },
+        data: updatedBody,
+      });
+      return res.status(200).json(updateItem);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Failed to update the data." });
+    }
   }
 );
 

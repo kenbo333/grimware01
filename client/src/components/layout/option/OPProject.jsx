@@ -26,7 +26,7 @@ const LocalFrom = (props) => {
             type={type}
             className="form-control"
             id={nameKey}
-            value={formData[nameKey] || ""}
+            value={formData[nameKey] ?? ""}
             onChange={handleChange}
             disabled={!formData.isEditing}
           />
@@ -126,7 +126,7 @@ const OPProject = (props) => {
             <div className="mb-4">
               <LocalFrom
                 title="消費税率"
-                nameKey="SalesTaxRate"
+                nameKey="salesTaxRate"
                 span="%"
                 formUtils={formUtils}
               />

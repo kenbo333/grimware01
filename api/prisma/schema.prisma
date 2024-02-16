@@ -29,6 +29,7 @@ model Company {
   projectSub      ProjectSub[]
   dailyReport     DailyReport[]
   project         Project[]
+  purchaseDetail  PurchaseDetail[]
 }
 
 model CompanyBranch {
@@ -47,6 +48,7 @@ model CompanyBranch {
   companyEmployee    CompanyEmployee[]
   branchBankAccount  BranchBankAccount[]
   branchPermitNotice BranchPermitNotice[]
+  purchaseDetail     PurchaseDetail[]
 }
 
 model CompanyEmployee {
@@ -96,10 +98,10 @@ model CompanyEmployee {
   emgPostcode            String            @default("")
   emgAddress1            String            @default("")
   emgAddress2            String            @default("")
-  laborCostDayShift      String            @default("") //日勤
-  laborCostNightShift    String            @default("") //夜勤
-  laborCostOvertime      String            @default("") //残業
-  laborCostLateOvertime  String            @default("") //深夜残業
+  laborCostDayShift      Int? //日勤原価
+  laborCostNightShift    Int? //夜勤原価
+  laborCostOvertime      Int? //残業原価
+  laborCostLateOvertime  Int? //深夜残業原価
   company                Company           @relation(fields: [fk_companyId], references: [id])
   companyBranch          CompanyBranch     @relation(fields: [fk_companyBranchId], references: [id])
   remark                 Remark[]
@@ -116,7 +118,7 @@ model Car {
   frameNumber           String           @default("")
   model                 String           @default("")
   fuelType              String           @default("") //油種
-  fuelConsumption       String           @default("") //燃費
+  fuelConsumption       Int? //燃費
   carNumber             String           @default("")
   firstRegistration     String           @default("") //初年度登録
   etcNumber             String           @default("")
@@ -146,8 +148,8 @@ model CarMaintenance {
   id       String @id @default(uuid())
   fk_carId String
   date     String @default("")
-  odometer String @default("")
-  cost     String @default("")
+  odometer Int?
+  cost     Int?
   content  String @default("")
   car      Car    @relation(fields: [fk_carId], references: [id])
 }
@@ -230,25 +232,23 @@ model Project {
   postcode                     String            @default("")
   address1                     String            @default("")
   address2                     String            @default("")
-  distance                     String            @default("")
+  distance                     Int?
   tel                          String            @default("")
   projectStartDate             String            @default("")
   projectEndDate               String            @default("")
   ownProjectStartDate          String            @default("")
   ownProjectEndDate            String            @default("")
-  estimateAmount               Int               @default(0) //見積金額
-  contractAmount               Int               @default(0) //請負金額
-  contractAmountWithTax        Int               @default(0) //請負税込
+  estimateAmount               Int? //見積金額
+  contractAmount               Int? //請負金額
+  contractAmountWithTax        Int? //請負税込
   isOrderLost                  Boolean           @default(false) //失注
   isConstructed                Boolean           @default(false) //工事完了
   isPaid                       Boolean           @default(false) //入金完了
-  laborCostWeekday             Int               @default(0) //請求人工単価平日
-  laborCostHoliday             Int               @default(0) //請求人工単価休日
   remark                       Remark[]
   projectPurchase              ProjectPurchase[]
   projectSub                   ProjectSub[]
   monthlyReport                MonthlyReport[]
-  company                      Company?          @relation(fields: [companyId], references: [id])
+  Company                      Company?          @relation(fields: [companyId], references: [id])
   companyId                    String?
 }
 
@@ -298,9 +298,9 @@ model MonthlyReportSub {
   monthlyReport      MonthlyReport @relation(fields: [fk_monthlyReportId], references: [id])
   fk_companyId       String?
   fk_companyBranchId String?
-  description        String?
+  description        String        @default("")
   paymentAmount      Int?
-  paymentDate        String?
+  paymentDate        String        @default("")
 }
 
 //日報
@@ -327,15 +327,15 @@ model DailyReport {
   startTime            String           @default("")
   endTime              String           @default("")
   breakTime            String           @default("")
-  day                  String           @default("")
-  night                String           @default("")
-  overtime             String           @default("")
-  lateOvertime         String           @default("")
+  day                  Float?
+  night                Float?
+  overtime             Float?
+  lateOvertime         Float?
   isBusinessTrip       Boolean          @default(false) //出張
   isNightMeal          Boolean          @default(false) //夜食
-  driving              String           @default("") //運転
-  etcFees              String           @default("")
-  distance             String           @default("")
+  driving              Int? //運転
+  etcFees              Int?
+  distance             Int?
   isDayOff             Boolean          @default(false) //休日
   isSpecialLeave       Boolean          @default(false) //特別給
   isParentalLeave      Boolean          @default(false) //育児休
@@ -347,6 +347,7 @@ model DailyReport {
   calcLaborCost        Int? //労務原価
 }
 
+//有休休暇
 model PaidLeave {
   id                   String          @id @default(uuid())
   fk_companyEmployeeId String
@@ -357,6 +358,25 @@ model PaidLeave {
   dailyReport          DailyReport[]
 }
 
+//仕入明細
+model PurchaseDetail {
+  id                 String        @id @default(uuid())
+  fk_companyId       String
+  company            Company       @relation(fields: [fk_companyId], references: [id])
+  fk_companyBranchId String
+  companyBranch      CompanyBranch @relation(fields: [fk_companyBranchId], references: [id])
+  fk_projectId       String
+  date               String
+  projectNumber      String
+  name               String?
+  model              String?
+  unitPrice          Float
+  quantity           Float
+  totalPrice         Float
+  remark             String?
+}
+
+//経費
 model Expense {
   id                   String           @id @default(uuid())
   fk_companyEmployeeId String?
@@ -364,7 +384,7 @@ model Expense {
   isInProcess          Boolean          @default(false) //申請中
   isSettled            Boolean          @default(false) //完了
   advancePaymentDate   String           @default("")
-  advancePaymentAmount String           @default("")
+  advancePaymentAmount Int?
   yearMonth            String           @default("")
   expenseDetail        ExpenseDetail[]
 }
@@ -376,9 +396,9 @@ model ExpenseDetail {
   fk_monthlyReportId String?
   monthlyReport      MonthlyReport? @relation(fields: [fk_monthlyReportId], references: [id])
   date               String         @default("")
-  amount             String         @default("")
+  amount             Int?
   account            String         @default("")
-  description        String         @default("")
+  // description        String         @default("")
   isCredit           Boolean        @default(false)
 }
 
@@ -386,13 +406,13 @@ model ExpenseDetail {
 model Option {
   id                    String     @id @default("1")
   closingMonth          Int        @default(3) //決算月
-  salesTaxRate          String     @default("") //消費税率
-  allowanceDriving      String     @default("") //手当_運転
-  allowanceBusinessTrip String     @default("") //手当_出張
-  allowanceNightMeal    String     @default("") //手当_夜食
-  fuelRegular           String     @default("") //レギュラー
-  fuelPremium           String     @default("") //ハイオク
-  fuelDiesel            String     @default("") //軽油
+  salesTaxRate          Int? //消費税率
+  allowanceDriving      Int? //手当_運転
+  allowanceBusinessTrip Int? //手当_出張
+  allowanceNightMeal    Int? //手当_夜食
+  fuelRegular           Int? //レギュラー
+  fuelPremium           Int? //ハイオク
+  fuelDiesel            Int? //軽油 
   projType1             ProjType1?
   projType2             ProjType2?
   expenseAccount        String[]   @default([])

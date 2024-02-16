@@ -57,7 +57,7 @@ const MRSub = (props) => {
                 className="form-select"
                 name="fk_companyId"
                 data-index={index.toString()}
-                value={item.fk_companyId || ""}
+                value={item.fk_companyId ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               >
@@ -74,7 +74,7 @@ const MRSub = (props) => {
                 className="form-select"
                 name="fk_companyBranchId"
                 data-index={index.toString()}
-                value={item.fk_companyBranchId || ""}
+                value={item.fk_companyBranchId ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               >
@@ -94,7 +94,7 @@ const MRSub = (props) => {
                 className="form-control"
                 name="paymentAmount"
                 data-index={index.toString()}
-                value={item.paymentAmount || ""}
+                value={item.paymentAmount ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               />
@@ -107,7 +107,7 @@ const MRSub = (props) => {
                 className="form-control"
                 name="description"
                 data-index={index.toString()}
-                value={item.description || ""}
+                value={item.description ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               />

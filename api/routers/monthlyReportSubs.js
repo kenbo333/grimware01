@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const { queryObject } = require("../conditions");
+const convertToIntOrNull = require("../utils/dataConversionUtils");
 const prisma = new PrismaClient();
 
 //------create--------------------------------
@@ -30,18 +31,10 @@ router.get("/", async (req, res) => {
 //------------update------------------------------
 router.put("/:id", async (req, res) => {
   try {
-    const keys = ["paymentAmount"]; //int型にしたいキーの配列
+    const intKeys = ["paymentAmount"];
     let updatedBody = { ...req.body };
-    keys.forEach((key) => {
-      if (updatedBody[key] !== undefined) {
-        const intValue = parseInt(updatedBody[key], 10);
-        if (isNaN(intValue)) {
-          console.error(`Invalid input for '${key}'.`);
-        } else {
-          updatedBody[key] = intValue;
-        }
-      }
-    });
+    convertToIntOrNull(updatedBody, intKeys);
+
     const updateItem = await prisma.monthlyReportSub.update({
       where: { id: req.params.id },
       data: updatedBody,

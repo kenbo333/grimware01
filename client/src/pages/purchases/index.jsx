@@ -3,8 +3,8 @@ import Company from "@/components/pages/Company";
 
 export const getServerSideProps = async (context) => {
   const { isStatus } = context.query;
-  const statusQuery = isStatus === "false" ? "&isStatus=false" : "";
-  const apiUrl = `/companies?isPurchase=true${statusQuery}`;
+  const statusQuery = isStatus === "false" ? "false" : "true";
+  const apiUrl = `/companies?isPurchase=true&isStatus=${statusQuery}`;
 
   return getData(apiUrl);
 };

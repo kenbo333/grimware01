@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
+const convertToIntOrNull = require("../utils/dataConversionUtils");
 const prisma = new PrismaClient();
 
 //------create--------------------------------
@@ -19,7 +20,6 @@ router.post("/:projectId/monthlyReports/bulk", async (req, res) => {
     closingDate: date,
     fk_projectId: req.params.projectId,
   }));
-
   try {
     const newItem = await prisma.monthlyReport.createMany({ data });
     return res.status(201).json(newItem);
@@ -83,9 +83,18 @@ router.get("/:projectId", async (req, res) => {
 //-----update--------------------------------------
 router.put("/:projectId", async (req, res) => {
   try {
+    const intKeys = [
+      "estimateAmount",
+      "contractAmount",
+      "contractAmountWithTax",
+      "distance",
+    ];
+    let updatedBody = { ...req.body };
+    convertToIntOrNull(updatedBody, intKeys);
+
     const updateItem = await prisma.project.update({
       where: { id: req.params.projectId },
-      data: req.body,
+      data: updatedBody,
     });
     return res.status(200).json(updateItem);
   } catch (error) {

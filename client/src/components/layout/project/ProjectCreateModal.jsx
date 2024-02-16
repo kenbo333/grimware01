@@ -108,7 +108,9 @@ export const ProjectCreateModal = (props) => {
         setProjType1(type1);
         setProjType2(type2);
         setClosingMonth(response.data.closingMonth);
-        const resPrimes = await apiClient.get("/companies?isPrime=true");
+        const resPrimes = await apiClient.get(
+          "/companies?isPrime=true&isStatus=true"
+        );
         setPrimes(resPrimes.data);
       } catch (error) {
         console.error(error);

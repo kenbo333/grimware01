@@ -59,7 +59,6 @@ const MRAccounting = (props) => {
         </div>
         <div className="col-6">
           <div>原価金額(計算)</div>
-          <div>請求希望額(計算)</div>
         </div>
       </div>
 

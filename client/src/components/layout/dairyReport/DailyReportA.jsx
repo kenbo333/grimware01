@@ -1,12 +1,12 @@
 import useInfoListItemLogic from "@/components/containers/infoListItemLogic";
 import InfoListButton from "@/components/ui/InfoListButton";
-import React from "react";
+import React, { useState } from "react";
 import { useFetchMulti } from "@/components/containers/useFetchData";
+import MonthlyReportSelect from "../modal/MonthlyReportSelect";
 
 const DailyReportA = (props) => {
   const { sel } = props;
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-  // const isModalOpenState = { isModalOpen, setIsModalOpen };
+  const [modalIndex, setModalIndex] = useState(null);
 
   const {
     items,
@@ -17,13 +17,12 @@ const DailyReportA = (props) => {
     handleCancel,
     handleChange,
     handleCheck,
-    lookupSelect,
+    modalSelect,
   } = useInfoListItemLogic(sel, "DAILY_REPORT");
 
   const getCompanyEmployeesOptions = ({ fk_companyId }) => {
     const company = companies.find((c) => c.id === fk_companyId);
     if (!company) return [];
-
     return company.companyEmployee.map((emp) => (
       <option key={emp.id} value={emp.id}>
         {`${emp.lastName} ${emp.firstName}`}
@@ -32,15 +31,14 @@ const DailyReportA = (props) => {
   };
 
   const urls = [
-    "/companies?isPrime=true",
-    `/monthlyReports?strDate=${sel}`,
+    "/companies?isSub=true&isStatus=true",
     "/option",
     "/cars?isStatus=true",
   ];
   const { data, error, isLoading } = useFetchMulti(urls);
   if (error) return <div>Failed to load data.</div>;
   if (isLoading) return <div>Loading...</div>;
-  const [companies, monthlyReports, option, cars] = data;
+  const [companies, option, cars] = data;
 
   return (
     <div className="tab-pane active my-3">
@@ -86,7 +84,7 @@ const DailyReportA = (props) => {
                 className="form-select form-select-sm"
                 name="fk_companyId"
                 data-index={index.toString()}
-                value={item.fk_companyId || ""}
+                value={item.fk_companyId ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               >
@@ -103,7 +101,7 @@ const DailyReportA = (props) => {
                 className="form-select form-select-sm"
                 name="fk_companyEmployeeId"
                 data-index={index.toString()}
-                value={item.fk_companyEmployeeId || ""}
+                value={item.fk_companyEmployeeId ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               >
@@ -112,45 +110,28 @@ const DailyReportA = (props) => {
               </select>
             </div>
 
-            {/* プロジェクト選択 */}
             <div className="col-4 px-1">
               <select
                 className="form-select form-select-sm"
-                name="fk_monthlyReportId"
-                data-index={index.toString()}
-                value={item.fk_monthlyReportId || ""}
+                id={item.id}
+                onClick={() => setModalIndex(index)}
+                value={item.fk_monthlyReportId ?? ""}
                 disabled={!item.isEditing}
-                onChange={(e) => lookupSelect(e, "distance")}
+                onChange={() => {}} //ダミー
               >
-                <option value=""></option>
-                {monthlyReports.map((m) => (
-                  <option
-                    key={m.id}
-                    value={m.id}
-                    data-value0={m.project.distance}
-                  >
-                    {m.project.name + " " + m.closingDate}
-                  </option>
-                ))}
+                <option value={item.fk_monthlyReportId ?? ""}>
+                  {item.monthlyReport?.project.name}
+                </option>
               </select>
-            </div>
-            {/* <div className="col-4 px-1">
-                <input
-                  type="text"
-                  className="form-control form-control-sm"
-                  value={item.fk_monthlyReport || ""}
-                  onClick={() => setIsModalOpen(true)}
-                  readOnly
-                />
-              </div> */}
-            {/* {isModalOpen && (
+              {modalIndex === index && (
                 <MonthlyReportSelect
-                  isModalOpenState={isModalOpenState}
-                  sel={sel}
-                  item={item}
-                  handleClick={handleClick}
+                  strDate={sel}
+                  index={index}
+                  setModalIndex={setModalIndex}
+                  modalSelect={modalSelect}
                 />
-              )} */}
+              )}
+            </div>
           </div>
 
           <div className="row mb-1">
@@ -160,7 +141,7 @@ const DailyReportA = (props) => {
                 className="form-control form-control-sm"
                 data-index={index}
                 name="startTime"
-                value={item.startTime || ""}
+                value={item.startTime ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               />
@@ -172,61 +153,56 @@ const DailyReportA = (props) => {
                 data-index={index}
                 name="endTime"
                 disabled={!item.isEditing}
-                value={item.endTime || ""}
+                value={item.endTime ?? ""}
                 onChange={handleChange}
               />
             </div>
             <div className="col-1 px-1">
               <input
-                type="text"
                 className="form-control form-control-sm"
                 data-index={index}
                 name="breakTime"
                 disabled={!item.isEditing}
-                value={item.breakTime || ""}
+                value={item.breakTime ?? ""}
                 onChange={handleChange}
               />
             </div>
             <div className="col-1 px-1">
               <input
-                type="text"
                 className="form-control form-control-sm"
                 data-index={index}
                 name="day"
-                value={item.day || ""}
+                value={item.day ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               />
             </div>
             <div className="col-1 px-1">
               <input
-                type="text"
                 className="form-control form-control-sm"
                 data-index={index}
                 name="night"
-                value={item.night || ""}
+                value={item.night ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               />
             </div>
             <div className="col-1 px-1">
               <input
-                type="text"
                 className="form-control form-control-sm"
                 data-index={index}
                 name="overtime"
-                value={item.overtime || ""}
+                value={item.overtime ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               />
             </div>
             <div className="col-1 px-1">
               <input
-                type="text"
                 className="form-control form-control-sm"
                 data-index={index}
                 name="lateOvertime"
-                value={item.lateOvertime || ""}
+                value={item.lateOvertime ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               />
@@ -265,7 +241,7 @@ const DailyReportA = (props) => {
                 className="form-select form-select-sm"
                 name="fk_carId"
                 data-index={index.toString()}
-                value={item.fk_carId || ""}
+                value={item.fk_carId ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               >
@@ -283,7 +259,7 @@ const DailyReportA = (props) => {
                 className="form-select form-select-sm"
                 name="driving"
                 data-index={index.toString()}
-                value={item.driving || ""}
+                value={item.driving ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               >
@@ -294,22 +270,20 @@ const DailyReportA = (props) => {
             </div>
             <div className="col-2 px-1">
               <input
-                type="text"
                 className="form-control form-control-sm"
                 data-index={index}
                 name="etcFees"
-                value={item.etcFees || ""}
+                value={item.etcFees ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               />
             </div>
             <div className="col-2 px-1">
               <input
-                type="text"
                 className="form-control form-control-sm"
                 data-index={index}
                 name="distance"
-                value={item.distance || ""}
+                value={item.distance ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               />
@@ -323,7 +297,7 @@ const DailyReportA = (props) => {
                 className="form-select form-select-sm"
                 name="option1"
                 data-index={index.toString()}
-                value={item.option1 || ""}
+                value={item.option1 ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               >
@@ -340,7 +314,7 @@ const DailyReportA = (props) => {
                 className="form-select form-select-sm"
                 name="option2"
                 data-index={index.toString()}
-                value={item.option2 || ""}
+                value={item.option2 ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               >

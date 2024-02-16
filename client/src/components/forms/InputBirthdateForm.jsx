@@ -40,7 +40,7 @@ export const BirthdateForm = (props) => {
             className="form-select"
             id="birthYear"
             onChange={handleChange}
-            value={birthYear || ""}
+            value={birthYear ?? ""}
             disabled={!formData.isEditing}
           >
             <option value=""></option>
@@ -56,7 +56,7 @@ export const BirthdateForm = (props) => {
             className="form-select"
             id="birthMonth"
             onChange={handleChange}
-            value={birthMonth || ""}
+            value={birthMonth ?? ""}
             disabled={!formData.isEditing}
           >
             <option value=""></option>
@@ -72,7 +72,7 @@ export const BirthdateForm = (props) => {
             className="form-select"
             id="birthDay"
             onChange={handleChange}
-            value={birthDay || ""}
+            value={birthDay ?? ""}
             disabled={!formData.isEditing}
           >
             <option value=""></option>

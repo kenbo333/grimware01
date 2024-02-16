@@ -10,7 +10,7 @@ const tabs = ["会計", "日報", "仕入", "外注", "経費"];
 
 const TabMonthlyReport = (props) => {
   const { project, sel } = props;
-  const [activeTab, setActiveTab] = useState("外注");
+  const [activeTab, setActiveTab] = useState("会計");
 
   // console.log(project);
 

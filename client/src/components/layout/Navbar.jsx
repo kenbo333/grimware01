@@ -31,6 +31,9 @@ const Navbar = () => {
         <div className="p-2 bd-highlight">
           <Link href="/option">オプション</Link>
         </div>
+        <div className="p-2 bd-highlight">
+          <Link href="/purchaseImport">仕入インポート</Link>
+        </div>
       </div>
     </nav>
   );

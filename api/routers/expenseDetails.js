@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
 const { queryObject } = require("../conditions");
+const convertToIntOrNull = require("../utils/dataConversionUtils");
 const prisma = new PrismaClient();
 
 //---------create--------------------------------
@@ -26,6 +27,11 @@ router.get("", async (req, res) => {
             project: { select: { name: true } },
           },
         },
+        expense: {
+          select: {
+            companyEmployee: { select: { firstName: true, lastName: true } },
+          },
+        },
       },
     });
     return res.status(200).json(items);
@@ -37,11 +43,14 @@ router.get("", async (req, res) => {
 
 //------update-------------------------------------------------
 router.put("/:id", async (req, res) => {
-  const { monthlyReport, ...other } = req.body;
   try {
+    const intKeys = ["amount"]; //int型にしたいキーの配列
+    let { monthlyReport, expense, ...updatedBody } = req.body;
+    convertToIntOrNull(updatedBody, intKeys);
+
     const updateItem = await prisma.expenseDetail.update({
       where: { id: req.params.id },
-      data: other,
+      data: updatedBody,
     });
     return res.status(200).json(updateItem);
   } catch (error) {

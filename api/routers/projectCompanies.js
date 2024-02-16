@@ -3,14 +3,12 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 //---------create-------------------------------------------
-//bulk
 const bulkInsert = async (model, req, res) => {
   const { fk_projectId, companyIds } = req.body;
   const data = companyIds.map((id) => ({
     fk_companyId: id,
     fk_projectId,
   }));
-
   try {
     const items = await prisma[model].createMany({ data });
     return res.status(200).json(items);
@@ -25,7 +23,6 @@ router.post("/purchases/bulk", (req, res) =>
 );
 router.post("/subs/bulk", (req, res) => bulkInsert("projectSub", req, res));
 
-//post
 router.post("/subs", async (req, res) => {
   try {
     const newItem = await prisma.projectSub.create({ data: req.body });

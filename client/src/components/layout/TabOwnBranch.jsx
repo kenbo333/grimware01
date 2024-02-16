@@ -22,7 +22,7 @@ const TabOwnBranch = (props) => {
     handleCreate,
     companyId,
     sel,
-  } = useTabBranch("primes", branches, isCreateState);
+  } = useTabBranch("ownCompany", branches, isCreateState);
 
   return (
     <div>

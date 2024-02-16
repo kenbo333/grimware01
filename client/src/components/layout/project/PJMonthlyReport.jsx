@@ -19,30 +19,22 @@ const PJMonthlyReport = (props) => {
             title="見積金額(税抜)"
             nameKey="estimateAmount"
             formUtils={formUtils}
-            type="text"
           />
           <HalfFrom
             title="請負金額(税抜)"
             nameKey="contractAmount"
             formUtils={formUtils}
-            type="text"
           />
           <HalfFrom
             title="見積金額(税込)"
             nameKey="contractAmountWithTax"
             formUtils={formUtils}
-            type="text"
           />
         </div>
         <div className="col-6">
           <div>{`入金残金`}</div>
           <div>{`請求残金`}</div>
-          <div className="my-2"></div>
-          <div>請求人工単価平日</div>
-          <div>請求人工単価休日</div>
         </div>
-
-        <div className="row"></div>
       </div>
 
       <hr />
