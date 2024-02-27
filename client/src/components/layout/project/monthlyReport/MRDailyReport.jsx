@@ -1,9 +1,9 @@
 import { useFetchSingle } from "@/components/containers/useFetchData";
+import { formatAsYen } from "@/utils/formatting";
 import React from "react";
 
 const MRDailyReport = (props) => {
   const { sel } = props;
-
   const {
     data: dailyReports,
     error,
@@ -11,6 +11,8 @@ const MRDailyReport = (props) => {
   } = useFetchSingle(`/dailyReports?fk_monthlyReportId=${sel}`);
   if (error) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
+
+  // console.log(dailyReports);
 
   return (
     <div className="tab-pane active my-3">
@@ -24,17 +26,20 @@ const MRDailyReport = (props) => {
         <div className="col-3"></div>
         <div className="col-3 h5">{dailyReports.length}</div>
         <div className="col-3 h5">
-          {dailyReports
-            .reduce((acc, cur) => acc + cur.calcLaborCost, 0)
-            .toLocaleString() + "円"}
-        </div>
-        <div className="col-3 h5">
-          {dailyReports
-            .reduce(
-              (acc, cur) => acc + cur.calcFuelCost + parseInt(cur.etcFees || 0),
+          {formatAsYen(
+            dailyReports.reduce(
+              (acc, { calcLaborCost }) => acc + calcLaborCost,
               0
             )
-            .toLocaleString() + "円"}
+          )}
+        </div>
+        <div className="col-3 h5">
+          {formatAsYen(
+            dailyReports.reduce(
+              (acc, { calcFuelCost, etcFees }) => acc + calcFuelCost + etcFees,
+              0
+            )
+          )}
         </div>
       </div>
 
@@ -42,15 +47,13 @@ const MRDailyReport = (props) => {
 
       {dailyReports.map((dailyReport) => (
         <div key={dailyReport.id} className="row">
-          <div className="col-3">{dailyReport.fk_dailyId}</div>
-          <div className="col-3">{`${dailyReport.companyEmployee.lastName} ${dailyReport.companyEmployee.firstName}`}</div>
-          <div className="col-3">
-            {dailyReport.calcLaborCost.toLocaleString() + "円"}
+          <div className="col-3 small">{dailyReport.fk_dailyId}</div>
+          <div className="col-3 small">{`${dailyReport.companyEmployee.lastName} ${dailyReport.companyEmployee.firstName}`}</div>
+          <div className="col-3 small">
+            {formatAsYen(dailyReport.calcLaborCost)}
           </div>
-          <div className="col-3">
-            {(
-              dailyReport.calcFuelCost + parseInt(dailyReport.etcFees || 0)
-            ).toLocaleString() + "円"}
+          <div className="col-3 small">
+            {formatAsYen(dailyReport.calcFuelCost + dailyReport.etcFees)}
           </div>
         </div>
       ))}

@@ -3,6 +3,7 @@ import { apiClient } from "../../../lib/apiClient";
 
 const fetcher = async (url) => {
   const response = await apiClient.get(url);
+  // console.log("api取得");
   return response.data;
 };
 
@@ -11,6 +12,7 @@ export const useFetchSingle = (url) => {
   const { data, error, isLoading, mutate } = useSWR(url, fetcher);
   return { data, error, isLoading, mutate };
 };
+// const { data, error, isLoading, mutate } = useFetchSingle();
 // if (error) return <div>failed to load</div>;
 // if (isLoading) return <div>loading...</div>;
 
@@ -25,6 +27,8 @@ export const useFetchMulti = (urls) => {
     isError: error,
     mutate,
   };
+  // const { data, isLoading, isError } = useFetchMulti(urls);
   // if (isError) return <div>failed to load</div>;
   // if (isLoading) return <div>loading...</div>;
+  // const [] = data;
 };

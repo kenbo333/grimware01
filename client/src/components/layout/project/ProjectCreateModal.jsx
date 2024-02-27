@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { apiClient } from "../../../../lib/apiClient";
-import { NameFrom, NameFrom_kana, SelectForm } from "../../forms/InputForm";
+import { NameFrom, NameForm_kana, SelectForm } from "../../forms/InputForm";
 import { useFormEditor, usePathManager } from "../../containers/handleItem";
 
 const RadioGroup = ({ data, selectedValue, onChange, prefix }) => (
@@ -168,7 +168,7 @@ export const ProjectCreateModal = (props) => {
                     prefix="projType2"
                   />
                   <div className="mb-2">
-                    <NameFrom_kana
+                    <NameForm_kana
                       title="名称"
                       nameKey="name"
                       formUtils={formUtils}

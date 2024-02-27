@@ -1,4 +1,4 @@
-import { NameFrom, NameFrom_kana } from "../forms/InputForm";
+import { NameFrom, NameForm_kana } from "../forms/InputForm";
 import { SelectStatus } from "../forms/SelectStatus";
 import { AddressForm } from "../forms/InputAddressForm";
 import { ButtonEdit } from "../ui/ButtonEdit";
@@ -43,7 +43,7 @@ const TabSubBranch = (props) => {
         {activeTab === "詳細" && (
           <div className="tab-pane active my-3">
             <div className="mb-2">
-              <NameFrom_kana
+              <NameForm_kana
                 title="店社名"
                 nameKey="name"
                 formUtils={formUtils}

@@ -9,15 +9,12 @@ import { useState } from "react";
 export const getServerSideProps = (context) => getData("/projects");
 
 const Project = (props) => {
+  const projects = props.data;
   const router = useRouter();
   const { sel, isStatus } = router.query;
   const [isCreate, setIsCreate] = useState(false);
   const isCreateState = { isCreate, setIsCreate };
 
-  // const cars = props.cars.filter((item) =>
-  //   isStatus === undefined ? item.isStatus : !item.isStatus
-  // );
-  const projects = props.data;
   // console.log(projects);
 
   return (

@@ -50,4 +50,10 @@ export const API_ENDPOINTS = {
     query: (sel) => `?fk_monthlyReportId=${sel}`,
     body: (sel) => ({ fk_monthlyReportId: sel }),
   },
+
+  PURCHASE_DETAILS: {
+    url: `${baseURL}/purchaseDetails`,
+    query: (sel) => `?projectNumber=${sel}`,
+    body: (sel) => ({ projectNumber: sel }),
+  },
 };

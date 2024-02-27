@@ -2,6 +2,7 @@ import useInfoListItemLogic from "@/components/containers/infoListItemLogic";
 import React, { useState } from "react";
 import { useFetchMulti } from "@/components/containers/useFetchData";
 import MonthlyReportSelect from "../modal/MonthlyReportSelect";
+import { formatAsYen } from "@/utils/formatting";
 
 const DailyReportC = (props) => {
   const { sel } = props;
@@ -30,7 +31,7 @@ const DailyReportC = (props) => {
     ));
   };
 
-  const formatCost = (cost) => (cost ? `${cost.toLocaleString()} 円` : "-");
+  const formatCost = (cost) => (cost ? formatAsYen(cost) : "-");
 
   const urls = ["/companies?isSub=true&isStatus=true"];
   const { data, error, isLoading } = useFetchMulti(urls);

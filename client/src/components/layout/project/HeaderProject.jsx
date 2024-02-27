@@ -29,7 +29,7 @@ export const HeaderProject = (props) => {
   };
 
   return (
-    <div className="bg-secondary">
+    <div className="bg-secondary bg-gradient">
       <div className="d-flex justify-content-end">
         <button
           type="button"

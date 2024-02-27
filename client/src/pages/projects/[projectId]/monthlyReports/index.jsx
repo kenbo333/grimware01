@@ -10,10 +10,13 @@ export const getServerSideProps = (context) => {
   return getData(`/projects/${projectId}`);
 };
 
-const monthlyReports = (props) => {
-  const { monthlyReport: monthlyReports } = props.data;
+const MonthlyReports = (props) => {
+  const project = props.data;
+  const { monthlyReport: monthlyReports } = project;
   const router = useRouter();
   const { sel } = router.query;
+
+  // console.log(props.data);
 
   return (
     <div>
@@ -30,7 +33,7 @@ const monthlyReports = (props) => {
 
           {sel && (
             <div className="col-8">
-              <TabMonthlyReport project={props.data} sel={sel} />
+              <TabMonthlyReport project={project} sel={sel} />
             </div>
           )}
         </div>
@@ -39,4 +42,4 @@ const monthlyReports = (props) => {
   );
 };
 
-export default monthlyReports;
+export default MonthlyReports;

@@ -2,38 +2,38 @@ import Link from "next/link";
 
 const Navbar = () => {
   return (
-    <nav className="navbar navbar-light bg-light">
-      <div className="d-flex flex-row bd-highlight">
-        <div className="p-2 bd-highlight">
-          <Link href="/ownCompany">自社</Link>
-        </div>
-        <div className="p-2 bd-highlight">
-          <Link href="/primes">元請会社</Link>
-        </div>
-        <div className="p-2 bd-highlight">
-          <Link href="/subs">下請会社</Link>
-        </div>
-        <div className="p-2 bd-highlight">
-          <Link href="/purchases">仕入会社</Link>
-        </div>
-        <div className="p-2 bd-highlight">
-          <Link href="/cars">車両</Link>
-        </div>
-        <div className="p-2 bd-highlight">
-          <Link href="/projects">プロジェクト</Link>
-        </div>
-        <div className="p-2 bd-highlight">
-          <Link href="/dailies">日報</Link>
-        </div>
-        <div className="p-2 bd-highlight">
-          <Link href="/expenses">経費</Link>
-        </div>
-        <div className="p-2 bd-highlight">
-          <Link href="/option">オプション</Link>
-        </div>
-        <div className="p-2 bd-highlight">
-          <Link href="/purchaseImport">仕入インポート</Link>
-        </div>
+    <nav className="navbar navbar-dark bg-dark">
+      <div className="d-flex flex-row">
+        <Link href="/ownCompany" className="p-2 text-white fw-bold">
+          自社
+        </Link>
+        <Link href="/primes" className="p-2 text-white fw-bold">
+          元請会社
+        </Link>
+        <Link href="/subs" className="p-2 text-white fw-bold">
+          下請会社
+        </Link>
+        <Link href="/purchases" className="p-2 text-white fw-bold">
+          仕入会社
+        </Link>
+        <Link href="/cars" className="p-2 text-white fw-bold">
+          車両
+        </Link>
+        <Link href="/projects" className="p-2 text-white fw-bold">
+          プロジェクト
+        </Link>
+        <Link href="/dailies" className="p-2 text-white fw-bold">
+          日報
+        </Link>
+        <Link href="/expenses" className="p-2 text-white fw-bold">
+          経費
+        </Link>
+        <Link href="/option" className="p-2 text-white fw-bold">
+          オプション
+        </Link>
+        <Link href="/purchaseImport" className="p-2 text-white fw-bold">
+          仕入インポート
+        </Link>
       </div>
     </nav>
   );

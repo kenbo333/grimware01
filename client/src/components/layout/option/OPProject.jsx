@@ -1,5 +1,5 @@
 import { useFormEditor, useSaveData } from "@/components/containers/handleItem";
-import { HalfFrom, NameFrom } from "@/components/forms/InputForm";
+import { HalfForm, NameFrom } from "@/components/forms/InputForm";
 import NavTabs from "@/components/forms/NavTabs";
 import { ButtonEdit } from "@/components/ui/ButtonEdit";
 import React, { useState } from "react";

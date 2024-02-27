@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { PrismaClient } = require("@prisma/client");
-const { queryObject } = require("../../conditions");
+// const { queryObject } = require("../utils/conditions");
 const prisma = new PrismaClient();
 
 // //------create--------------------------------

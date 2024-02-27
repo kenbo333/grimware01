@@ -2,6 +2,7 @@ import React from "react";
 import useInfoListItemLogic from "@/components/containers/infoListItemLogic";
 import InfoListButton from "@/components/ui/InfoListButton";
 import { useFetchSingle } from "@/components/containers/useFetchData";
+import { formatAsYen } from "@/utils/formatting";
 
 const MRSub = (props) => {
   const { sel, projectId } = props;
@@ -43,7 +44,12 @@ const MRSub = (props) => {
         </div>
         <div className="row h6">
           <div className="col-5">工事項目</div>
-          <div className="col-7">備考</div>
+          <div className="col-4">備考</div>
+          <div className="col-3">
+            {formatAsYen(
+              items.reduce((acc, cur) => acc + cur.paymentAmount, 0)
+            )}
+          </div>
         </div>
       </div>
 

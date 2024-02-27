@@ -38,7 +38,6 @@ const InfoListBranchBankAccount = (props) => {
             <div className="row">
               <div className="col-4 pe-1">
                 <input
-                  type="text"
                   className="form-control"
                   name="bankName"
                   data-index={index.toString()}
@@ -49,7 +48,6 @@ const InfoListBranchBankAccount = (props) => {
               </div>
               <div className="col-3 px-1">
                 <input
-                  type="text"
                   className="form-control"
                   name="branchName"
                   data-index={index.toString()}
@@ -60,7 +58,6 @@ const InfoListBranchBankAccount = (props) => {
               </div>
               <div className="col-2 px-1">
                 <input
-                  type="text"
                   className="form-control"
                   name="accountType"
                   data-index={index.toString()}
@@ -71,7 +68,6 @@ const InfoListBranchBankAccount = (props) => {
               </div>
               <div className="col-3 ps-1">
                 <input
-                  type="text"
                   className="form-control"
                   name="accountNumber"
                   data-index={index.toString()}
@@ -85,7 +81,6 @@ const InfoListBranchBankAccount = (props) => {
             <div className="row">
               <div className="col-12">
                 <input
-                  type="text"
                   className="form-control"
                   name="remark"
                   data-index={index.toString()}

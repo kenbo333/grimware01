@@ -27,7 +27,7 @@ export const NameFrom = (props) => {
 };
 
 //-------------------------------------------------------------------
-export const HalfFrom = (props) => {
+export const HalfForm = (props) => {
   const { title, type, nameKey, formUtils } = props;
   const { formData, updateObject } = formUtils;
 
@@ -56,7 +56,7 @@ export const HalfFrom = (props) => {
 };
 
 //-------------------------------------------------------------------
-export const NameFrom_kana = (props) => {
+export const NameForm_kana = (props) => {
   const { title, nameKey, formUtils } = props;
   const { formData, updateObject } = formUtils;
   const nameKey_kana = `${nameKey}_kana`;
@@ -234,6 +234,28 @@ export const StartEndForm = (props) => {
     const { id, value } = event.target;
     updateObject(id, value);
   };
+
+  const handleEndDateChange = (event) => {
+    const { id, value } = event.target;
+    updateObject(id, value);
+    // isConstructedがtrueの場合、isConstructedをfalseにリセット
+    if (formData.isConstructed) {
+      updateObject("isConstructed", false);
+    }
+  };
+
+  const isEndDateBeforeOrToday = () => {
+    if (title !== "自社工期" || formData.isConstructed) return false;
+    // formDataから終了日を取得し、Dateオブジェクトを作成
+    const endDate = new Date(formData.ownProjectEndDate);
+    endDate.setHours(0, 0, 0, 0); // 時刻情報をクリア
+    // 現在の日付を取得し、時刻情報をクリア
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    // endDateがtodayと同じかそれ以前であればtrue、それ以外であればfalse
+    return endDate <= today;
+  };
+
   return (
     <div className="row">
       <label className="col-form-label col-sm-2" htmlFor={startKey}>
@@ -255,10 +277,19 @@ export const StartEndForm = (props) => {
           className="form-control"
           id={endKey}
           value={formData[endKey] ?? ""}
-          onChange={handleChange}
+          onChange={handleEndDateChange}
           disabled={!formData.isEditing}
         />
       </div>
+      {isEndDateBeforeOrToday() && (
+        <button
+          type="button"
+          className="btn btn-success col-sm me-3"
+          onClick={() => updateObject("isConstructed", true)}
+        >
+          工事完了
+        </button>
+      )}
     </div>
   );
 };

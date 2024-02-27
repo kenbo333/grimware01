@@ -1,4 +1,5 @@
 import { useFetchSingle } from "@/components/containers/useFetchData";
+import { formatAsYen } from "@/utils/formatting";
 import React from "react";
 
 const MRExpenseDetail = (props) => {
@@ -21,9 +22,7 @@ const MRExpenseDetail = (props) => {
         <div className="col-2">
           <div>金額</div>
           <div>
-            {details
-              .reduce((acc, cur) => acc + cur.amount, 0)
-              .toLocaleString() + "円"}
+            {formatAsYen(details.reduce((acc, { amount }) => acc + amount, 0))}
           </div>
         </div>
         <div className="col-3">摘要</div>
@@ -36,7 +35,7 @@ const MRExpenseDetail = (props) => {
           <div className="col-2 small">{detail.date}</div>
           <div className="col-3 small">{`${detail.expense.companyEmployee.lastName} ${detail.expense.companyEmployee.firstName}`}</div>
           <div className="col-2 small">{detail.account}</div>
-          <div className="col-2 small">{detail.amount}</div>
+          <div className="col-2 small">{formatAsYen(detail.amount)}</div>
           <div className="col-3 small">備考</div>
         </div>
       ))}

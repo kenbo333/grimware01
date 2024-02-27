@@ -1,4 +1,4 @@
-import { FullNameForm, NameFrom_kana } from "../forms/InputForm";
+import { FullNameForm, NameForm_kana } from "../forms/InputForm";
 import { TransactionType } from "../forms/InputCheckboxForm";
 import InfoListBranch from "./InfoListBranch";
 import { InfoListEmployeeBranch } from "./InfoListEmployee";
@@ -41,7 +41,7 @@ const TabPrimeCompany = (props) => {
         {activeTab === "詳細" && (
           <div className="tab-pane active my-3">
             <div className="mb-2">
-              <NameFrom_kana
+              <NameForm_kana
                 title="会社名"
                 nameKey="name"
                 formUtils={formUtils}

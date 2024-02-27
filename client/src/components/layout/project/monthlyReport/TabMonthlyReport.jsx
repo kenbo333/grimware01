@@ -5,11 +5,12 @@ import MRAccounting from "./MRAccounting";
 import MRDailyReport from "./MRDailyReport";
 import MRSub from "./MRSub";
 import MRExpenseDetail from "./MRExpenseDetail";
+import MRPurchaseDetail from "./MRPurchaseDetail";
 
 const tabs = ["会計", "日報", "仕入", "外注", "経費"];
 
 const TabMonthlyReport = (props) => {
-  const { project, sel } = props;
+  const { project, monthlyCosts, sel } = props;
   const [activeTab, setActiveTab] = useState("会計");
 
   // console.log(project);
@@ -37,13 +38,19 @@ const TabMonthlyReport = (props) => {
       <div className="tab-content">
         {/* 会計 */}
         {activeTab === "会計" && (
-          <MRAccounting formUtils={formUtils} sel={sel} />
+          <MRAccounting formUtils={formUtils} monthlyCosts={monthlyCosts} />
         )}
 
         {/* 日報 */}
         {activeTab === "日報" && <MRDailyReport sel={sel} />}
 
         {/* 仕入 */}
+        {activeTab === "仕入" && (
+          <MRPurchaseDetail
+            projectNumber={project.projectNumber}
+            closingDate={monthlyReport.closingDate}
+          />
+        )}
 
         {/* 外注 */}
         {activeTab === "外注" && <MRSub sel={sel} projectId={project.id} />}

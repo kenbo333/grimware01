@@ -3,7 +3,7 @@ import {
   SelectForm,
   FullNameForm,
   NameFrom,
-  HalfFrom,
+  HalfForm,
 } from "../forms/InputForm";
 import { BirthdateForm } from "../forms/InputBirthdateForm";
 import { AddressForm } from "../forms/InputAddressForm";
@@ -97,7 +97,7 @@ const TabSubEmployee = (props) => {
           <div className="tab-pane active my-3">
             <div className="row">
               <div className="col-6">
-                <HalfFrom
+                <HalfForm
                   title="入社日"
                   nameKey="entryDate"
                   type="date"
@@ -123,7 +123,7 @@ const TabSubEmployee = (props) => {
             </div>
             <div className="row mb-2">
               <div className="col-6">
-                <HalfFrom
+                <HalfForm
                   title="経験年数"
                   nameKey="yearsOfExperience"
                   type="text"
@@ -134,7 +134,7 @@ const TabSubEmployee = (props) => {
 
             <div className="row">
               <div className="col-6">
-                <HalfFrom
+                <HalfForm
                   title="定健診日"
                   nameKey="routineCheckupDate"
                   type="date"
@@ -142,7 +142,7 @@ const TabSubEmployee = (props) => {
                 />
               </div>
               <div className="col-6">
-                <HalfFrom
+                <HalfForm
                   title="定病院名"
                   nameKey="routineCheckupHospital"
                   type="text"
@@ -153,7 +153,7 @@ const TabSubEmployee = (props) => {
 
             <div className="row mb-2">
               <div className="col-6">
-                <HalfFrom
+                <HalfForm
                   title="特健診日"
                   nameKey="specialCheckupDate"
                   type="date"
@@ -161,7 +161,7 @@ const TabSubEmployee = (props) => {
                 />
               </div>
               <div className="col-6">
-                <HalfFrom
+                <HalfForm
                   title="特病院名"
                   nameKey="specialCheckupHospital"
                   type="text"
@@ -205,7 +205,7 @@ const TabSubEmployee = (props) => {
 
             <div className="row">
               <div className="col-6">
-                <HalfFrom
+                <HalfForm
                   title="既往症"
                   nameKey="medicalHistory"
                   type="text"

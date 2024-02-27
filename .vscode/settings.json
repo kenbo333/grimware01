@@ -1,4 +1,13 @@
 {
-  "cSpell.words": ["Birthdate", "emps", "fkey", "pers", "pkey", "toastify"],
+  "cSpell.words": [
+    "Birthdate",
+    "chartjs",
+    "emps",
+    "Financials",
+    "fkey",
+    "pers",
+    "pkey",
+    "toastify"
+  ],
   "cSpell.enableFiletypes": ["prisma"]
 }

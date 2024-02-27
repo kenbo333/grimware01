@@ -248,8 +248,9 @@ model Project {
   projectPurchase              ProjectPurchase[]
   projectSub                   ProjectSub[]
   monthlyReport                MonthlyReport[]
-  Company                      Company?          @relation(fields: [companyId], references: [id])
+  company                      Company?          @relation(fields: [companyId], references: [id])
   companyId                    String?
+  purchaseDetail               PurchaseDetail[]
 }
 
 model ProjectPurchase {
@@ -292,6 +293,7 @@ model MonthlyReport {
   monthlyReportSub     MonthlyReportSub[]
 }
 
+//外注支払
 model MonthlyReportSub {
   id                 String        @id @default(uuid())
   fk_monthlyReportId String
@@ -365,9 +367,9 @@ model PurchaseDetail {
   company            Company       @relation(fields: [fk_companyId], references: [id])
   fk_companyBranchId String
   companyBranch      CompanyBranch @relation(fields: [fk_companyBranchId], references: [id])
-  fk_projectId       String
   date               String
   projectNumber      String
+  project            Project       @relation(fields: [projectNumber], references: [projectNumber])
   name               String?
   model              String?
   unitPrice          Float
@@ -398,7 +400,6 @@ model ExpenseDetail {
   date               String         @default("")
   amount             Int?
   account            String         @default("")
-  // description        String         @default("")
   isCredit           Boolean        @default(false)
 }
 
