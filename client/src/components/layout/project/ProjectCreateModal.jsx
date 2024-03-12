@@ -71,6 +71,7 @@ export const ProjectCreateModal = (props) => {
 
     try {
       const newFormData = endEdit();
+      // console.log(newFormData);
       const response = await apiClient.post("/generateProjectNumber", {
         selectType: selectType1 + selectType2,
         closingMonth,

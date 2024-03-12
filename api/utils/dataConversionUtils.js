@@ -6,30 +6,19 @@
  *
  * @param {Object} data - 変換を適用するキーを含むオブジェクト。
  * @param {string[]} keys - 浮動小数点数に変換するキーの配列。
+ * @return {Object} 変換後のオブジェクト。
  */
 const convertToFloatOrNull = (data, keys) => {
   keys.forEach((key) => {
-    // 現在のキーの値を取得
-    const value = data[key];
-
-    // 値が空文字列またはnullの場合、nullに設定
-    if (value === "" || value === null) {
+    if (data[key] === "" || data[key] === null) {
       data[key] = null;
     } else {
-      // 値を浮動小数点数に変換
-      const floatValue = parseFloat(value);
-      // 変換が成功した場合（結果がNaNでない場合）、変換された値を設定
-      if (!isNaN(floatValue)) {
-        data[key] = floatValue;
-      } else {
-        // 変換に失敗した場合、エラーをログに記録し、nullに設定
-        console.error(
-          `Invalid input for '${key}', converting to float failed.`
-        );
-        data[key] = null;
-      }
+      const floatValue = parseFloat(data[key]);
+      data[key] = !isNaN(floatValue) ? floatValue : null;
     }
   });
+
+  return data;
 };
 
 module.exports = convertToFloatOrNull;

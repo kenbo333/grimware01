@@ -2,7 +2,7 @@ import useInfoListItemLogic from "@/components/containers/infoListItemLogic";
 import { useFetchMulti } from "@/components/containers/useFetchData";
 import InfoListButton from "@/components/ui/InfoListButton";
 import React, { useState } from "react";
-import MonthlyReportSelect from "../modal/MonthlyReportSelect";
+import MonthlyReportSelectModal from "../modal/MonthlyReportSelectModal";
 
 const DailyReportB = (props) => {
   const { sel } = props;
@@ -20,6 +20,7 @@ const DailyReportB = (props) => {
     modalSelect,
   } = useInfoListItemLogic(sel, "DAILY_REPORT");
 
+  // 氏名選択
   const getCompanyEmployeesOptions = ({ fk_companyId }) => {
     const company = companies.find((c) => c.id === fk_companyId);
     if (!company) return [];
@@ -30,12 +31,13 @@ const DailyReportB = (props) => {
     ));
   };
 
+  // 有休選択
   const optionsPaidLeaves = ({ fk_companyEmployeeId }) => {
     const empPaidLeaves = paidLeaves.filter(
       (p) => p.fk_companyEmployeeId === fk_companyEmployeeId
-    );
+    ); // 人物
+    // .filter((p) => p.grantDay > p.dailyReport.length); // 有休が残っている
     empPaidLeaves.sort((a, b) => a.grantDate.localeCompare(b.grantDate));
-
     return empPaidLeaves.map((e) => (
       <option key={e.id} value={e.id}>
         {e.grantDate}
@@ -51,6 +53,8 @@ const DailyReportB = (props) => {
   if (error) return <div>Failed to load data.</div>;
   if (isLoading) return <div>Loading...</div>;
   const [companies, paidLeaves] = data;
+
+  console.log(paidLeaves);
 
   return (
     <div className="tab-pane active my-3">
@@ -127,7 +131,7 @@ const DailyReportB = (props) => {
                   </option>
                 </select>
                 {modalIndex === index && (
-                  <MonthlyReportSelect
+                  <MonthlyReportSelectModal
                     strDate={sel}
                     index={index}
                     setModalIndex={setModalIndex}

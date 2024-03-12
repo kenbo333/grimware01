@@ -7,18 +7,23 @@ const prisma = new PrismaClient();
 router.get("/", async (req, res) => {
   const { strDate } = req.query;
   try {
+    // where条件を動的に構築
+    let whereCondition = {};
+    if (strDate) {
+      whereCondition.closingDate = {
+        gte: strDate,
+        lt: getOneMonthAfter(strDate),
+      };
+    }
     const items = await prisma.monthlyReport.findMany({
-      where: {
-        closingDate: {
-          gte: strDate,
-          lt: getOneMonthAfter(strDate),
-        },
-      },
+      where: whereCondition,
       include: {
         project: {
           select: {
             name: true,
             distance: true,
+            projectNumber: true,
+            primeCompany: { select: { name: true } },
           },
         },
       },

@@ -2,11 +2,14 @@ import useInfoListItemLogic from "@/components/containers/infoListItemLogic";
 import InfoListButton from "@/components/ui/InfoListButton";
 import React, { useState } from "react";
 import { useFetchMulti } from "@/components/containers/useFetchData";
-import MonthlyReportSelect from "../modal/MonthlyReportSelect";
+import MonthlyReportSelectModal from "../modal/MonthlyReportSelectModal";
+import PaidLeaveSelectModal from "./PaidLeaveSelectModal";
 
 const DailyReportA = (props) => {
   const { sel } = props;
   const [modalIndex, setModalIndex] = useState(null);
+
+  const [modalIndexPaidLeave, setModalIndexPaidLeave] = useState(null);
 
   const {
     items,
@@ -20,6 +23,7 @@ const DailyReportA = (props) => {
     modalSelect,
   } = useInfoListItemLogic(sel, "DAILY_REPORT");
 
+  // 氏名選択
   const getCompanyEmployeesOptions = ({ fk_companyId }) => {
     const company = companies.find((c) => c.id === fk_companyId);
     if (!company) return [];
@@ -39,6 +43,8 @@ const DailyReportA = (props) => {
   if (error) return <div>Failed to load data.</div>;
   if (isLoading) return <div>Loading...</div>;
   const [companies, option, cars] = data;
+
+  // console.log(items);
 
   return (
     <div className="tab-pane active my-3">
@@ -71,6 +77,13 @@ const DailyReportA = (props) => {
           <div className="col-2">運転</div>
           <div className="col-2">ETC代</div>
           <div className="col-2">距離</div>
+        </div>
+        <div className="row h6 text-center">
+          <div className="col-1 px-0">休日</div>
+          <div className="col-1 px-0">有休</div>
+          <div className="col-1 px-0">特別休</div>
+          <div className="col-1 px-0">育児休</div>
+          <div className="col-1 px-0">介護休</div>
         </div>
       </div>
 
@@ -113,18 +126,18 @@ const DailyReportA = (props) => {
             <div className="col-4 px-1">
               <select
                 className="form-select form-select-sm"
-                id={item.id}
+                name="fk_monthlyReportId" // ダミー
                 onClick={() => setModalIndex(index)}
                 value={item.fk_monthlyReportId ?? ""}
                 disabled={!item.isEditing}
-                onChange={() => {}} //ダミー
+                onChange={() => {}} // ダミー
               >
                 <option value={item.fk_monthlyReportId ?? ""}>
                   {item.monthlyReport?.project.name}
                 </option>
               </select>
               {modalIndex === index && (
-                <MonthlyReportSelect
+                <MonthlyReportSelectModal
                   strDate={sel}
                   index={index}
                   setModalIndex={setModalIndex}
@@ -291,7 +304,7 @@ const DailyReportA = (props) => {
           </div>
 
           {/* オプション選択 */}
-          <div className="row mb-1">
+          <div className="row mb-3">
             <div className="col-3 px-1">
               <select
                 className="form-select form-select-sm"
@@ -325,6 +338,84 @@ const DailyReportA = (props) => {
                   </option>
                 ))}
               </select>
+            </div>
+          </div>
+
+          <div className="row mb-1">
+            <div className="col-1 px-1 d-flex justify-content-center align-items-center">
+              <div className="form-check form-switch">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  data-index={index}
+                  name="isDayOff"
+                  checked={item.isDayOff}
+                  disabled={!item.isEditing}
+                  onChange={handleCheck}
+                />
+              </div>
+            </div>
+            <div className="col-4 px-1">
+              <select
+                className="form-select form-select-sm"
+                name="fk_paidLeaveId" // ダミー
+                onClick={() => setModalIndexPaidLeave(index)}
+                value={item.fk_paidLeaveId ?? ""}
+                disabled={!item.isEditing}
+                onChange={() => {}} // ダミー
+              >
+                <option value={item.fk_paidLeaveId}>
+                  {item.paidLeave?.grantDate}
+                </option>
+              </select>
+              {modalIndexPaidLeave === index && (
+                <PaidLeaveSelectModal
+                  strDate={sel}
+                  index={index}
+                  setModalIndexPaidLeave={setModalIndexPaidLeave}
+                  modalSelect={modalSelect}
+                  fk_companyEmployeeId={item.fk_companyEmployeeId}
+                />
+              )}
+            </div>
+            <div className="col-1 px-1 d-flex justify-content-center align-items-center">
+              <div className="form-check form-switch">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  data-index={index}
+                  name="isSpecialLeave"
+                  checked={item.isSpecialLeave}
+                  disabled={!item.isEditing}
+                  onChange={handleCheck}
+                />
+              </div>
+            </div>
+            <div className="col-1 px-1 d-flex justify-content-center align-items-center">
+              <div className="form-check form-switch">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  data-index={index}
+                  name="isParentalLeave"
+                  checked={item.isParentalLeave}
+                  disabled={!item.isEditing}
+                  onChange={handleCheck}
+                />
+              </div>
+            </div>
+            <div className="col-1 px-1 d-flex justify-content-center align-items-center">
+              <div className="form-check form-switch">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  data-index={index}
+                  name="isCaregivingLeave"
+                  checked={item.isCaregivingLeave}
+                  disabled={!item.isEditing}
+                  onChange={handleCheck}
+                />
+              </div>
             </div>
           </div>
 

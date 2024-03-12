@@ -80,19 +80,28 @@ const useInfoListItemLogic = (sel, type) => {
     setItems(newItems);
   };
 
-  const modalSelect = (e, fieldName) => {
-    //data-valueを設定しjsonで送る
+  const modalSelect = (e, objKey) => {
+    // 第二引数は表示しているjsonに追加させる。data-valueでセット。
     const index = parseInt(e.target.dataset.index, 10);
     const { name, value } = e.target;
     const newItems = [...items];
-    newItems[index][name] = value;
-    newItems[index][fieldName] = JSON.parse(e.target.dataset.value);
-    if (newItems[index].hasOwnProperty("distance")) {
-      newItems[index].distance = JSON.parse(
-        e.target.dataset.value
-      ).project.distance;
+
+    newItems[index][name] = value === "" ? null : value;
+    // valueが空文字("")の時はobjKeyにnullを設定し、そうでなければJSON.parseを使う
+    if (value === "") {
+      newItems[index][objKey] = null;
+    } else if (e.target.dataset.value) {
+      // dataset.valueが存在する場合、JSON.parseで解析して設定
+      newItems[index][objKey] = JSON.parse(e.target.dataset.value);
+      // nameが"fk_monthlyReportId"かつ、objKeyが関連する情報（例：project）を持っている場合
+      if (
+        name === "fk_monthlyReportId" &&
+        newItems[index][objKey].project &&
+        newItems[index][objKey].project.distance !== undefined
+      ) {
+        newItems[index].distance = newItems[index][objKey].project.distance;
+      }
     }
-    setItems(newItems);
   };
 
   const lookupCheckbox = (e) => {

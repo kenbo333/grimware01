@@ -1,7 +1,7 @@
 import useInfoListItemLogic from "@/components/containers/infoListItemLogic";
 import React, { useState } from "react";
 import { useFetchMulti } from "@/components/containers/useFetchData";
-import MonthlyReportSelect from "../modal/MonthlyReportSelect";
+import MonthlyReportSelectModal from "../modal/MonthlyReportSelectModal";
 import { formatAsYen } from "@/utils/formatting";
 
 const DailyReportC = (props) => {
@@ -103,7 +103,7 @@ const DailyReportC = (props) => {
                 </option>
               </select>
               {modalIndex === index && (
-                <MonthlyReportSelect
+                <MonthlyReportSelectModal
                   strDate={sel}
                   index={index}
                   setModalIndex={setModalIndex}

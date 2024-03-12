@@ -36,7 +36,7 @@ const Dailies = (props) => {
 
   const { pathChange } = usePathManager();
 
-  const tabs = ["A", "B", "計算"];
+  const tabs = ["A", "計算"];
   const [activeTab, setActiveTab] = useState("A");
 
   //今日の日付作成
@@ -109,7 +109,7 @@ const Dailies = (props) => {
               />
 
               {activeTab === "A" && <DailyReportA sel={sel} />}
-              {activeTab === "B" && <DailyReportB sel={sel} />}
+              {/* {activeTab === "B" && <DailyReportB sel={sel} />} */}
               {activeTab === "計算" && <DailyReportC sel={sel} />}
             </div>
           )}

@@ -47,7 +47,7 @@ const MRAccounting = (props) => {
 
   // 入金差額
   const paymentDifference = parseFloat(
-    (parseFloat(formUtils.formData.invoiceAmount) || 0) -
+    (parseFloat(formUtils.formData.invoiceAmountWithTax) || 0) -
       (parseFloat(formUtils.formData.paymentCash1) || 0) -
       (parseFloat(formUtils.formData.paymentCash2) || 0) -
       (parseFloat(formUtils.formData.paymentNote1) || 0) -

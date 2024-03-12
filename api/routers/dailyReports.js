@@ -32,6 +32,8 @@ router.get("/", async (req, res) => {
             project: { select: { name: true } },
           },
         },
+        company: { select: { name: true } },
+        paidLeave: { select: { grantDate: true } },
       },
     });
     return res.status(200).json(items);
@@ -51,6 +53,8 @@ router.put("/:id", async (req, res) => {
       fk_paidLeaveId,
       companyEmployee, //配列を除去
       monthlyReport, //配列を除去
+      company, //配列を除去
+      paidLeave, //配列を除去
       ...updatedBody
     } = req.body;
 

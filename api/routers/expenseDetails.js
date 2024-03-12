@@ -33,6 +33,7 @@ router.get("", async (req, res) => {
           },
         },
       },
+      // take: 5,
     });
     return res.status(200).json(items);
   } catch (error) {

@@ -41,9 +41,9 @@ const TabProject = (props) => {
   const router = useRouter();
 
   // オブジェクトから配列を除去
-  const { primeCompany, ...initialData } = project;
+  const { primeCompany, chiefCompanyEmployee, ...initialData } = project;
 
-  const [activeTab, setActiveTab] = useState("勘定");
+  const [activeTab, setActiveTab] = useState("詳細");
 
   // inputの表示とオブジェクトの更新
   const formUtils = useFormEditor(initialData);

@@ -35,6 +35,23 @@ const Navbar = () => {
           仕入インポート
         </Link>
       </div>
+      <div className="d-flex flex-row">
+        <Link href="/lists/projects" className="p-2 text-white fw-bold">
+          プロジェクトリスト
+        </Link>
+        <Link href="/lists/dailyReports" className="p-2 text-white fw-bold">
+          勤怠一覧
+        </Link>
+        <Link href="/lists/expenseDetails" className="p-2 text-white fw-bold">
+          経費一覧
+        </Link>
+        <Link href="/lists/monthlyReports" className="p-2 text-white fw-bold">
+          出納一覧
+        </Link>
+        <Link href="/lists/purchaseDetails" className="p-2 text-white fw-bold">
+          仕入一覧
+        </Link>
+      </div>
     </nav>
   );
 };

@@ -1,5 +1,5 @@
 export const formatAsYen = (amount) => {
-  if (amount === null) return "";
+  if (!amount) return;
 
   return `¥${amount.toLocaleString()}`;
 };

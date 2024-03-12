@@ -5,18 +5,21 @@ import { useFetchMulti } from "@/components/containers/useFetchData";
 import { formatAsYen } from "@/utils/formatting";
 
 // 請求割合を計算するためのヘルパー関数
-const calculateBillingRate = (totalInvoiceAmount, contractAmount) =>
-  contractAmount > 0 ? (totalInvoiceAmount / contractAmount) * 100 : 0;
+const calculateBillingRate = (cumulativeInvoiceAmount, contractAmount) =>
+  contractAmount > 0 ? (cumulativeInvoiceAmount / contractAmount) * 100 : 0;
 
 // 月次レポート行をレンダリングするサブコンポーネント
 const MonthlyReportRow = ({
   monthlyReport,
-  totalInvoiceAmount,
+  cumulativeInvoiceAmount,
   contractAmount,
   monthlyCost,
   sel,
 }) => {
-  const billingRate = calculateBillingRate(totalInvoiceAmount, contractAmount);
+  const billingRate = calculateBillingRate(
+    cumulativeInvoiceAmount,
+    contractAmount
+  );
   return (
     <div className="row" key={monthlyReport.id}>
       <div className="col-3 small">
@@ -42,7 +45,16 @@ const PJMonthlyReport = (props) => {
   const [project, monthlyCosts] = data;
 
   const contractAmount = formUtils.formData.contractAmount || 0; // 請負金額
-  let totalInvoiceAmount = 0; // 累積請求金額の初期化
+  let cumulativeInvoiceAmount = 0; // 累積請求金額の初期化
+
+  // 請求残金(税抜)
+  const remainingInvoiceAmount = () => {
+    const totalInvoiceAmount = project.monthlyReport.reduce(
+      (acc, cur) => acc + cur.invoiceAmount,
+      0
+    );
+    return formatAsYen(formUtils.formData.contractAmount - totalInvoiceAmount);
+  };
 
   return (
     <div className="tab-pane active my-3">
@@ -59,14 +71,13 @@ const PJMonthlyReport = (props) => {
             formUtils={formUtils}
           />
           <HalfForm
-            title="見積金額(税込)"
+            title="請負金額(税込)"
             nameKey="contractAmountWithTax"
             formUtils={formUtils}
           />
         </div>
         <div className="col-6">
-          <div>{`入金残金`}</div>
-          <div>{`請求残金`}</div>
+          <div>{`請求残金(税抜) ${remainingInvoiceAmount()}`}</div>
         </div>
       </div>
       <hr />
@@ -79,7 +90,7 @@ const PJMonthlyReport = (props) => {
       </div>
 
       {project.monthlyReport.map((monthlyReport) => {
-        totalInvoiceAmount += monthlyReport.invoiceAmount; // 累積請求金額の更新
+        cumulativeInvoiceAmount += monthlyReport.invoiceAmount; // 累積請求金額の更新
         // 月報配列の締日が同じ原価オブジェクトを返す
         const monthlyCost = monthlyCosts.find(
           ({ closingDate }) => closingDate === monthlyReport.closingDate
@@ -88,7 +99,7 @@ const PJMonthlyReport = (props) => {
           <MonthlyReportRow
             key={monthlyReport.id}
             monthlyReport={monthlyReport}
-            totalInvoiceAmount={totalInvoiceAmount}
+            cumulativeInvoiceAmount={cumulativeInvoiceAmount}
             contractAmount={contractAmount}
             monthlyCost={monthlyCost}
             sel={sel}

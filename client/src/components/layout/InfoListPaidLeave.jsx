@@ -1,5 +1,6 @@
 import React from "react";
 import useInfoListItemLogic from "../containers/infoListItemLogic";
+import InfoListButton from "../ui/InfoListButton";
 
 const splitArrayIntoRows = (array, rowSize = 5, totalSize = 20) => {
   // 配列を指定サイズに満たす
@@ -7,7 +8,6 @@ const splitArrayIntoRows = (array, rowSize = 5, totalSize = 20) => {
     ...array,
     ...new Array(Math.max(totalSize - array.length, 0)).fill(""),
   ];
-
   // 配列を行サイズごとに分割
   return Array.from(
     { length: Math.ceil(paddedArray.length / rowSize) },
@@ -31,6 +31,10 @@ const InfoListPaidLeave = (props) => {
 
   return (
     <div className="tab-pane active my-3">
+      <button type="button" className="btn btn-success" onClick={handleCreate}>
+        新規作成
+      </button>
+
       <div className="row h6">
         <div className="col-3">付与日</div>
         <div className="col-3">失効日</div>
@@ -50,7 +54,7 @@ const InfoListPaidLeave = (props) => {
                 className="form-control"
                 name="grantDate"
                 data-index={index.toString()}
-                value={item.grantDate}
+                value={item.grantDate ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               />
@@ -61,7 +65,7 @@ const InfoListPaidLeave = (props) => {
                 className="form-control"
                 name="expirationDate"
                 data-index={index.toString()}
-                value={item.expirationDate}
+                value={item.expirationDate ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               />
@@ -71,7 +75,7 @@ const InfoListPaidLeave = (props) => {
                 className="form-control"
                 name="grantDay"
                 data-index={index.toString()}
-                value={item.grantDay}
+                value={item.grantDay ?? ""}
                 disabled={!item.isEditing}
                 onChange={handleChange}
               />
@@ -99,6 +103,14 @@ const InfoListPaidLeave = (props) => {
               ))}
             </tbody>
           </table>
+
+          <InfoListButton
+            isEditing={item.isEditing}
+            onEdit={() => handleEdit(index)}
+            onSave={() => handleSave(index)}
+            onCancel={() => handleCancel(index)}
+            onDelete={() => handleDelete(index)}
+          />
         </div>
       ))}
     </div>

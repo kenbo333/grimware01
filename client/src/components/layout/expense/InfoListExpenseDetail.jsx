@@ -1,7 +1,7 @@
 import useInfoListItemLogic from "@/components/containers/infoListItemLogic";
 import InfoListButton from "@/components/ui/InfoListButton";
 import React, { useState } from "react";
-import MonthlyReportSelect from "../modal/MonthlyReportSelect";
+import MonthlyReportSelectModal from "../modal/MonthlyReportSelectModal";
 
 const InfoListExpenseDetail = (props) => {
   const { sel, expenseAccounts } = props;
@@ -64,7 +64,7 @@ const InfoListExpenseDetail = (props) => {
                   </option>
                 </select>
                 {modalIndex === index && (
-                  <MonthlyReportSelect
+                  <MonthlyReportSelectModal
                     strDate={item.date}
                     index={index}
                     setModalIndex={setModalIndex}

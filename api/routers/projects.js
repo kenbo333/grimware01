@@ -50,6 +50,7 @@ router.get("/", async (req, res) => {
             closingDay: true,
           },
         },
+        chiefCompanyEmployee: { select: { firstName: true, lastName: true } },
       },
     });
     return res.status(200).json(items);

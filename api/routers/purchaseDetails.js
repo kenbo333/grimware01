@@ -21,9 +21,9 @@ router.get("/", async (req, res) => {
     const items = await prisma.purchaseDetail.findMany({
       where: queryObject(req.query),
       include: {
-        company: {
-          select: { name: true },
-        },
+        company: { select: { name: true } },
+        companyBranch: { select: { name: true } },
+        project: { select: { name: true } },
       },
     });
     return res.status(200).json(items);

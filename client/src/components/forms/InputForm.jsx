@@ -244,12 +244,11 @@ export const StartEndForm = (props) => {
     }
   };
 
+  // 工事完了の表示
   const isEndDateBeforeOrToday = () => {
-    if (title !== "自社工期" || formData.isConstructed) return false;
-    // formDataから終了日を取得し、Dateオブジェクトを作成
+    if (title !== "自社工期") return false;
     const endDate = new Date(formData.ownProjectEndDate);
     endDate.setHours(0, 0, 0, 0); // 時刻情報をクリア
-    // 現在の日付を取得し、時刻情報をクリア
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     // endDateがtodayと同じかそれ以前であればtrue、それ以外であればfalse
@@ -281,14 +280,23 @@ export const StartEndForm = (props) => {
           disabled={!formData.isEditing}
         />
       </div>
-      {isEndDateBeforeOrToday() && (
+      {/* {isEndDateBeforeOrToday() && (
         <button
           type="button"
           className="btn btn-success col-sm me-3"
+          disabled={!formData.isEditing}
           onClick={() => updateObject("isConstructed", true)}
         >
           工事完了
         </button>
+      )} */}
+      {isEndDateBeforeOrToday() && (
+        <div className="col">
+          <input type="checkbox" className="btn-check" id="btn-check" />
+          <label className="btn btn-dark" htmlFor="btn-check">
+            工事完了(仮)
+          </label>
+        </div>
       )}
     </div>
   );
