@@ -8,8 +8,8 @@ const prisma = new PrismaClient();
 router.post("/", async (req, res) => {
   try {
     const newItem = await prisma.paidLeave.create({ data: req.body });
-    console.log(req.body);
-    return res.status(201).json(newItem);
+    // dailyReport:[]を追加したオブジェクトを返す
+    return res.status(201).json({ ...newItem, dailyReport: [] });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Failed to create a new data." });

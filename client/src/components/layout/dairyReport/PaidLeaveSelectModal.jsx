@@ -17,17 +17,20 @@ const PaidLeaveSelectModal = (props) => {
   if (isLoading) return <div>loading...</div>;
 
   const paidLeaves = data.filter((datum) => {
-    // dailyReport内でfk_dailyIdの値とstrDateが同じ要素があるか確認
-    const hasMatchingStrDate = datum.dailyReport.some(
-      (report) => report.fk_dailyId === report.strDate
+    // 有休の中に日報当日があるか
+    const isMatchingStrDate = datum.dailyReport.some(
+      (report) => report.fk_dailyId === strDate
     );
-    // 上記の条件またはgrantDayがdailyReportのlengthより大きい場合にdatumを返す
-    return hasMatchingStrDate || datum.grantDay > datum.dailyReport.length;
+    // 期限内であるかつ、有休が残っているか
+    const isWithinDateRange =
+      new Date(strDate) >= new Date(datum.grantDate) &&
+      new Date(strDate) <= new Date(datum.expirationDate);
+    const hasRemainingLeaves = datum.grantDay > datum.dailyReport.length;
+    // 上記の条件で表示
+    return isMatchingStrDate || (isWithinDateRange && hasRemainingLeaves);
   });
 
-  console.log(paidLeaves);
-
-  // return;
+  // console.log(paidLeaves);
 
   return (
     <div
@@ -79,7 +82,7 @@ const PaidLeaveSelectModal = (props) => {
                   setModalIndexPaidLeave(null);
                 }}
               >
-                キャンセル
+                取り消し
               </button>
             </div>
           </div>

@@ -229,7 +229,7 @@ const TabOwnEmployee = (props) => {
             <div className="mb-2">
               <AddressForm formUtils={formUtils} />
             </div>
-            <div className="mb-2">
+            <div className="mb-4">
               <NameFrom title="TEL" nameKey="homePhone" formUtils={formUtils} />
               <NameFrom
                 title="phone"
@@ -244,27 +244,47 @@ const TabOwnEmployee = (props) => {
             </div>
 
             <div className="row mb-2">
+              <div className="col form-check form-switch">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="isAutoDailyReportCreate"
+                  disabled={!formUtils.formData.isEditing}
+                  checked={formUtils.formData.isAutoDailyReportCreate}
+                  onChange={(e) => formUtils.updateCheckbox(e.target.id)}
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor="isAutoDailyReportCreate"
+                >
+                  日報自動作成
+                </label>
+              </div>
+            </div>
+
+            <div className="row mb-2">
               <div className="col-6">
+                <div className="h5 text-center">原価</div>
                 <HalfForm
-                  title="日勤原価"
+                  title="日勤"
                   nameKey="laborCostDayShift"
                   formUtils={formUtils}
                   type="text"
                 />
                 <HalfForm
-                  title="深夜原価"
+                  title="深夜"
                   nameKey="laborCostNightShift"
                   formUtils={formUtils}
                   type="text"
                 />
                 <HalfForm
-                  title="残業原価"
+                  title="残業"
                   nameKey="laborCostOvertime"
                   formUtils={formUtils}
                   type="text"
                 />
                 <HalfForm
-                  title="深夜残業原価"
+                  title="深夜残業"
                   nameKey="laborCostLateOvertime"
                   formUtils={formUtils}
                   type="text"
@@ -302,7 +322,7 @@ const TabOwnEmployee = (props) => {
                   id="isEmgAddressSame"
                   disabled={!formUtils.formData.isEditing}
                   checked={formUtils.formData.isEmgAddressSame}
-                  onClick={(e) => formUtils.updateCheckbox(e.target.id)}
+                  onChange={(e) => formUtils.updateCheckbox(e.target.id)}
                 />
                 <label className="form-check-label" htmlFor="isEmgAddressSame">
                   本人と同住所

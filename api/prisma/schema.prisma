@@ -97,7 +97,7 @@ model CompanyEmployee {
   emgPostcode             String            @default("")
   emgAddress1             String            @default("")
   emgAddress2             String            @default("")
-  isAutoDailyReportCreate Boolean           @default(false)
+  isAutoDailyReportCreate Boolean           @default(false) //自動日報作成
   laborCostDayShift       Int? //日勤原価
   laborCostNightShift     Int? //夜勤原価
   laborCostOvertime       Int? //残業原価
